@@ -49,7 +49,6 @@
             return (uint)(new ComputerInfo().AvailablePhysicalMemory >> 20);
         }
 
-
         /// <summary>
         ///     获取x86 or x64
         /// </summary>
