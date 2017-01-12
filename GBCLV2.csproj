@@ -73,35 +73,6 @@
     <Compile Include="Controls\ModManage.xaml.cs">
       <DependentUpon>ModManage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="KMCCC\Authentication\AuthenticationInfo.cs" />
-    <Compile Include="KMCCC\Authentication\IAuthenticator.cs" />
-    <Compile Include="KMCCC\Authentication\OfflineAuthenticator.cs" />
-    <Compile Include="KMCCC\Authentication\WarpedAuhenticator.cs" />
-    <Compile Include="KMCCC\Authentication\Yggdrasil.cs" />
-    <Compile Include="KMCCC\Launcher\LaunchArguments.cs" />
-    <Compile Include="KMCCC\Launcher\LauncherCore.cs" />
-    <Compile Include="KMCCC\Launcher\LauncherCoreInternal.cs" />
-    <Compile Include="KMCCC\Launcher\LaunchHandle.cs" />
-    <Compile Include="KMCCC\Launcher\LaunchHandleExtensions.cs" />
-    <Compile Include="KMCCC\Launcher\Reporter.cs" />
-    <Compile Include="KMCCC\Launcher\Version.cs" />
-    <Compile Include="KMCCC\LitJson\IJsonWrapper.cs" />
-    <Compile Include="KMCCC\LitJson\JsonData.cs" />
-    <Compile Include="KMCCC\LitJson\JsonException.cs" />
-    <Compile Include="KMCCC\LitJson\JsonMapper.cs" />
-    <Compile Include="KMCCC\LitJson\JsonMockWrapper.cs" />
-    <Compile Include="KMCCC\LitJson\JsonPropertyName.cs" />
-    <Compile Include="KMCCC\LitJson\JsonReader.cs" />
-    <Compile Include="KMCCC\LitJson\JsonWriter.cs" />
-    <Compile Include="KMCCC\LitJson\Lexer.cs" />
-    <Compile Include="KMCCC\LitJson\ParserToken.cs" />
-    <Compile Include="KMCCC\Modules\JVersion\JVersion.cs" />
-    <Compile Include="KMCCC\Modules\JVersion\JVersionLocator.cs" />
-    <Compile Include="KMCCC\Modules\Yggdrasil\YggdrasilClient.cs" />
-    <Compile Include="KMCCC\Modules\Zip\ZipArchive.cs" />
-    <Compile Include="KMCCC\Tools\SystemTools.cs" />
-    <Compile Include="KMCCC\Tools\UsefulTools.cs" />
-    <Compile Include="KMCCC\Tools\ZipTools.cs" />
     <Compile Include="Pages\DownloadPage.xaml.cs">
       <DependentUpon>DownloadPage.xaml</DependentUpon>
     </Compile>
@@ -177,7 +148,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="KMCCC\README.md" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -216,6 +186,7 @@
   <ItemGroup>
     <Resource Include="images\mod.png" />
   </ItemGroup>
+  <Import Project="..\KMCCC\KMCCC.Shared\KMCCC.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
