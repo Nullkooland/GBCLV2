@@ -1,0 +1,39 @@
+﻿<Page x:Class="GBCLV2.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Controls="clr-namespace:GBCLV2.Controls"
+      Style="{StaticResource Page_Style}"
+      Title="SkinPage">
+
+    <Grid>
+        <TabControl Height="325" VerticalAlignment="Bottom" Margin="3" BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
+            <TabItem Header="/images/launch.png" Tag="启动设置">
+                <Controls:LaunchSettings x:Name="launch_settings"/>
+            </TabItem>
+
+            <TabItem Header="/images/mod.png" Tag="mod管理">
+                <Controls:ModManage/>
+            </TabItem>
+            
+            <TabItem Header="/images/resourcepack.png" Tag="资源包">
+
+            </TabItem>
+
+            <TabItem Header="/images/delete.png" Tag="日了假狗">
+                
+            </TabItem>
+
+            <TabItem Header="/images/about.png" Tag="关于">
+
+            </TabItem>
+        </TabControl>
+
+        <Button Style="{StaticResource Button_Style}" Click="Go_Back" ToolTip="返回" 
+                Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="0" Margin="7">
+            <Button.Background>
+                <ImageBrush ImageSource="/images/back.png"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Page>

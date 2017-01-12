@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCB7A1CD-FA61-4B81-8234-4E532B1A6DB7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GBCLV2</RootNamespace>
+    <AssemblyName>GBCLV2</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GBCLV2.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>enderman.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Config.cs" />
+    <Compile Include="Controls\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModManage.xaml.cs">
+      <DependentUpon>ModManage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="KMCCC\Authentication\AuthenticationInfo.cs" />
+    <Compile Include="KMCCC\Authentication\IAuthenticator.cs" />
+    <Compile Include="KMCCC\Authentication\OfflineAuthenticator.cs" />
+    <Compile Include="KMCCC\Authentication\WarpedAuhenticator.cs" />
+    <Compile Include="KMCCC\Authentication\Yggdrasil.cs" />
+    <Compile Include="KMCCC\Launcher\LaunchArguments.cs" />
+    <Compile Include="KMCCC\Launcher\LauncherCore.cs" />
+    <Compile Include="KMCCC\Launcher\LauncherCoreInternal.cs" />
+    <Compile Include="KMCCC\Launcher\LaunchHandle.cs" />
+    <Compile Include="KMCCC\Launcher\LaunchHandleExtensions.cs" />
+    <Compile Include="KMCCC\Launcher\Reporter.cs" />
+    <Compile Include="KMCCC\Launcher\Version.cs" />
+    <Compile Include="KMCCC\LitJson\IJsonWrapper.cs" />
+    <Compile Include="KMCCC\LitJson\JsonData.cs" />
+    <Compile Include="KMCCC\LitJson\JsonException.cs" />
+    <Compile Include="KMCCC\LitJson\JsonMapper.cs" />
+    <Compile Include="KMCCC\LitJson\JsonMockWrapper.cs" />
+    <Compile Include="KMCCC\LitJson\JsonPropertyName.cs" />
+    <Compile Include="KMCCC\LitJson\JsonReader.cs" />
+    <Compile Include="KMCCC\LitJson\JsonWriter.cs" />
+    <Compile Include="KMCCC\LitJson\Lexer.cs" />
+    <Compile Include="KMCCC\LitJson\ParserToken.cs" />
+    <Compile Include="KMCCC\Modules\JVersion\JVersion.cs" />
+    <Compile Include="KMCCC\Modules\JVersion\JVersionLocator.cs" />
+    <Compile Include="KMCCC\Modules\Yggdrasil\YggdrasilClient.cs" />
+    <Compile Include="KMCCC\Modules\Zip\ZipArchive.cs" />
+    <Compile Include="KMCCC\Tools\SystemTools.cs" />
+    <Compile Include="KMCCC\Tools\UsefulTools.cs" />
+    <Compile Include="KMCCC\Tools\ZipTools.cs" />
+    <Compile Include="Pages\DownloadPage.xaml.cs">
+      <DependentUpon>DownloadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LaunchSettings.xaml.cs">
+      <DependentUpon>LaunchSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SkinPage.xaml.cs">
+      <DependentUpon>SkinPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowBlurHelper.cs" />
+    <Page Include="Controls\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModManage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DownloadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Controls\LaunchSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SkinPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="KMCCC\README.md" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="enderman.ico" />
+    <Resource Include="images\about.png" />
+    <Resource Include="images\back.png" />
+    <Resource Include="images\bomb.png" />
+    <Resource Include="images\close.png" />
+    <Resource Include="images\delete.png" />
+    <Resource Include="images\download.png" />
+    <Resource Include="images\minimize.png" />
+    <Resource Include="images\open.png" />
+    <Resource Include="images\openfolder.png" />
+    <Resource Include="images\pictures.png" />
+    <Resource Include="images\resourcepack.png" />
+    <Resource Include="images\settings.png" />
+    <Resource Include="images\skin.png" />
+    <Resource Include="images\wrench.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\enderman.ico" />
+    <Resource Include="images\frog.png" />
+    <Resource Include="images\left.png" />
+    <Resource Include="images\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\launch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\mod.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
