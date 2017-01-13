@@ -14,17 +14,13 @@
             <TabItem Header="/images/mod.png" Tag="mod管理">
                 <Controls:ModManage/>
             </TabItem>
-            
+
             <TabItem Header="/images/resourcepack.png" Tag="资源包">
 
             </TabItem>
 
-            <TabItem Header="/images/delete.png" Tag="日了假狗">
-                
-            </TabItem>
-
             <TabItem Header="/images/about.png" Tag="关于">
-
+                <Controls:About/>
             </TabItem>
         </TabControl>
 

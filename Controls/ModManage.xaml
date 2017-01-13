@@ -67,21 +67,21 @@
     <Button x:Name="refresh_button" Style="{StaticResource Button_Style}" ToolTip="刷新" Grid.Row="0" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
         <Button.Background>
-            <ImageBrush ImageSource="/images/refresh.png"/>
+            <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
         </Button.Background>
     </Button>
 
     <Button x:Name="delete_button" Style="{StaticResource Button_Style}" ToolTip="删除选中mod" Grid.Row="1" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
         <Button.Background>
-            <ImageBrush ImageSource="/images/delete.png"/>
+            <ImageBrush ImageSource="/GBCLV2;component/images/delete.png"/>
         </Button.Background>
     </Button>
 
     <Button x:Name="openfolder_button" Style="{StaticResource Button_Style}" ToolTip="打开mods文件夹" Grid.Row="2" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
         <Button.Background>
-            <ImageBrush ImageSource="/images/openfolder.png"/>
+            <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>
         </Button.Background>
     </Button>
 
