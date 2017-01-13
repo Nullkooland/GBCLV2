@@ -2,26 +2,26 @@
 using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace GBCLV2.Controls
 {
-    public partial class ModManage : UserControl
+    public partial class ModManage : Grid
     {
         private class Mod
         {
-            public bool IsEnabled { get; set; }
-            public string Path { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Version { get; set; }
-            public string MCVersion { get; set; }
-            public string Url { get; set; }
+            public bool IsEnabled       { get; set; }
+            public string FileName          { get; set; }
+            public string Name          { get; set; }
+            public string Description   { get; set; }
+            public string Url           { get; set; }
         }
 
         private ObservableCollection<Mod> CurrentMods = new ObservableCollection<Mod>();
@@ -30,9 +30,22 @@ namespace GBCLV2.Controls
         public ModManage()
         {
             InitializeComponent();
+
             ModList.ItemsSource = CurrentMods;
+            ModList.Items.SortDescriptions.Add(new SortDescription("IsEnabled",ListSortDirection.Descending));
+
             Task.Run(() => GetModsFromDisk());
-            refresh_button.Click += (s, e) => GetModsFromDisk();
+
+            refresh_button.Click    += (s, e) => GetModsFromDisk();
+            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
+            delete_button.Click     += (s, e) => DeleteModsAsync();
+            ModList.PreviewKeyDown  += (s, e) =>
+            {
+                if(e.Key == System.Windows.Input.Key.Delete)
+                {
+                    DeleteModsAsync();
+                }
+            };
         }
 
         private void GetModsFromDisk()
@@ -44,15 +57,15 @@ namespace GBCLV2.Controls
             foreach (string dir in Directory.EnumerateFiles(ModsDir)
             .Where(dir => dir.EndsWith(".jar") || dir.EndsWith(".zip") || dir.EndsWith(".disabled")))
             {
-                LoadMod(dir);
+                LoadModInfo(dir);
             }
         }
 
-        private void LoadMod(string dir)
+        private void LoadModInfo(string dir)
         {
             Mod _mod = new Mod()
             {
-                Path = Path.GetFileNameWithoutExtension(dir),
+                FileName = Path.GetFileNameWithoutExtension(dir),
                 IsEnabled = dir.EndsWith(".disabled") ? false : true
             };
 
@@ -68,29 +81,9 @@ namespace GBCLV2.Controls
                         JsonData ModInfo = JsonMapper.ToObject(str.Substring(1, str.Length - 1));
                         archive.Dispose();
 
-                        foreach (string a in ModInfo.Keys)
-                            switch (a)
-                            {
-                                case "name":
-                                    _mod.Name = ModInfo[a].ToString();
-                                    break;
-
-                                case "version":
-                                    _mod.Version = ModInfo[a].ToString();
-                                    break;
-
-                                case "mcversion":
-                                    _mod.MCVersion = ModInfo[a].ToString();
-                                    break;
-
-                                case "description":
-                                    _mod.Description = ModInfo[a].ToString();
-                                    break;
-
-                                case "url":
-                                    _mod.Url = ModInfo[a].ToString();
-                                    break;
-                            }
+                        _mod.Name = ModInfo["name"]?.ToString();
+                        _mod.Description = ModInfo["description"]?.ToString();
+                        _mod.Url = ModInfo["url"]?.ToString();
 
                     }
                     catch
@@ -101,11 +94,37 @@ namespace GBCLV2.Controls
             }
 
             if (dir.EndsWith(".zip")) FileSystem.RenameFile(dir, _mod.Name + ".jar");
-            if (_mod.Name == null) _mod.Name = _mod.Path;
+            if (_mod.Name == null) _mod.Name = _mod.FileName;
 
             Dispatcher.BeginInvoke((Action)delegate ()
             {
                 CurrentMods.Add(_mod);
+            });
+        }
+
+        private void DeleteModsAsync()
+        {
+            if(ModList.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            string[] paths = new string[ModList.SelectedItems.Count];
+            int i = 0;
+
+            while (ModList.SelectedIndex != -1)
+            {
+                Mod _mod = ModList.SelectedItem as Mod;
+                paths[i++] = ModsDir + _mod.FileName + (_mod.IsEnabled ? ".jar" : ".disabled");
+                CurrentMods.Remove(_mod);
+            }
+
+            Task.Run(() =>
+            {
+                foreach(var path in paths)
+                {
+                    FileSystem.DeleteFile(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                }
             });
         }
 
@@ -122,29 +141,32 @@ namespace GBCLV2.Controls
 
             if (checkbox.IsChecked ?? false)
             {
-                FileSystem.RenameFile(ModsDir + _mod.Path + ".disabled", _mod.Path + ".jar");
-                _mod.IsEnabled = false;
+                FileSystem.RenameFile(ModsDir + _mod.FileName + ".disabled", _mod.FileName + ".jar");
+                _mod.IsEnabled = true;
             }
             else
             {
-                FileSystem.RenameFile(ModsDir + _mod.Path + ".jar", _mod.Path + ".disabled");
-                _mod.IsEnabled = true;
+                FileSystem.RenameFile(ModsDir + _mod.FileName + ".jar", _mod.FileName + ".disabled");
+                _mod.IsEnabled = false;
             }
+            ModList.Items.SortDescriptions.Clear();
+            ModList.Items.SortDescriptions.Add(new SortDescription("IsEnabled", ListSortDirection.Descending));
+
         }
 
         private void Drop_Mods(object sender, DragEventArgs e)
         {
             Task.Run(() =>
             {
-                foreach (string _file in e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[])
+                foreach (string file_path in e.Data.GetData(DataFormats.FileDrop) as string[])
                 {
-                    if (_file.EndsWith(".jar") || _file.EndsWith(".zip"))
+                    if (file_path.EndsWith(".jar") || file_path.EndsWith(".zip"))
                     {
-                        string path = ModsDir + Path.GetFileNameWithoutExtension(_file) + ".jar";
+                        string path = ModsDir + Path.GetFileNameWithoutExtension(file_path) + ".jar";
                         if (!File.Exists(path))
                         {
-                            LoadMod(_file);
-                            File.Copy(_file, path, true);
+                            LoadModInfo(file_path);
+                            File.Copy(file_path, path, true);
                         }
                     }
                 }

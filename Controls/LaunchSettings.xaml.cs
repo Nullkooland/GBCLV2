@@ -169,7 +169,7 @@ namespace GBCLV2.Controls
             if (VersionComboBox.SelectedIndex != -1)
             {
                 string Path = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
-                SystemTools.DeleteFileAsync(Path);
+                SystemTools.DeleteDirectoryAsync(Path);
 
                 App.Versions.RemoveAt(VersionComboBox.SelectedIndex);
                 VersionComboBox.SelectedIndex = 0;

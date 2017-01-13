@@ -59,13 +59,22 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Border CornerRadius="9" Background="#3FFFFFFF" Effect="{StaticResource Color_Shadow}"/>
+                            <Border x:Name="border" CornerRadius="9" Background="#3FFFFFFF" BorderBrush="Transparent" BorderThickness="1" Effect="{StaticResource Color_Shadow}"/>
                             <Track Name="PART_Track">
                                 <Track.Thumb>
-                                    <Thumb Template="{StaticResource MyThumb}" DragCompleted="Update_ThemeColorBrush"/>
+                                    <Thumb Template="{StaticResource MyThumb}" DragCompleted="Slider_Thumb_DragCompleted"/>
                                 </Track.Thumb>
                             </Track>
                         </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Theme_Brush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -89,9 +98,9 @@
             <RowDefinition Height="32"/>
             <RowDefinition Height="32"/>
             <RowDefinition Height="10"/>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="28"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -130,9 +139,11 @@
         <TextBlock Text="{Binding ElementName=Slider_G, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource TextBlock_Style}"/>
         <TextBlock Text="{Binding ElementName=Slider_B, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource TextBlock_Style}"/>
 
-        <CheckBox x:Name="Img_CheckBox" Content="使用图片背景" Grid.Row="6" Grid.Column="1" Width="106" Height="17" Margin="9,0" Effect="{StaticResource Color_Shadow}"/>
-        <CheckBox x:Name="SystemColor_CheckBox" Content="启动时使用系统主题色" Grid.Row="7" Grid.Column="1" Width="164" Height="17" Margin="9,0" Effect="{StaticResource Color_Shadow}"/>
+        <CheckBox x:Name="SystemColor_CheckBox" Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Width="164" Height="17" Margin="9,0" Effect="{StaticResource Color_Shadow}"/>
+        <TextBlock Text="预置颜色" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="75,0" Style="{StaticResource TextBlock_Style}"/>
+        <ComboBox x:Name="PresetColorList" Grid.Row="6" Grid.Column="1" Width="65" Height="23" HorizontalAlignment="Right" Margin="7,0" DisplayMemberPath="Name"/>
 
+        <CheckBox x:Name="Img_CheckBox" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Width="106" Height="17" Margin="9,0" Effect="{StaticResource Color_Shadow}"/>
         <TextBox x:Name ="Img_PathBox" FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"/>
 
     </Grid>

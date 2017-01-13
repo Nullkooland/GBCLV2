@@ -80,7 +80,7 @@
                                 <Rectangle Name="bg" Width="17" Height="17" StrokeThickness="1" Stroke="#BDFFFFFF"/>
                                 <Path Name="hook" Visibility="Collapsed" Width="16" Height="16" Data="M43,5 L20,40 20,40 0,20 6,15 18,26 37,7 43,5 z" Fill="White" Stretch="Uniform"/>
                             </Grid>
-                            <ContentPresenter Canvas.Left="20"/>
+                            <ContentPresenter Canvas.Left="20" IsHitTestVisible="False"/>
                         </Canvas>
                         <ControlTemplate.Triggers>
                             
@@ -225,16 +225,17 @@
                                               IsHitTestVisible="False"
                                               />
 
-                            <Popup x:Name="PART_Popup" 
+                            <Popup x:Name="PART_Popup" MaxHeight="150"
                                    Focusable="False" 
                                    AllowsTransparency="True" 
                                    IsOpen="{TemplateBinding IsDropDownOpen}" 
                                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
-                                
-                                <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                                    <Border Background="#CCFFFFFF" BorderBrush="#70BFBFBF" BorderThickness="1"/>
-                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                </Grid>
+                                <ScrollViewer>
+                                    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Border Background="#CCFFFFFF" BorderBrush="#70BFBFBF" BorderThickness="1"/>
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </Grid>
+                                </ScrollViewer>
                             </Popup>
                         </Grid>
                     </ControlTemplate>

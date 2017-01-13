@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using KMCCC.Authentication;
 using KMCCC.Launcher;
 using KMCCC.Tools;
+using System.Windows.Media;
 
 namespace GBCLV2.Pages
 {
@@ -22,7 +23,7 @@ namespace GBCLV2.Pages
         public MainPage()
         {
             InitializeComponent();
-            
+
             Loaded += (s, e) =>
             {
                 if (string.IsNullOrWhiteSpace(Config.UserName))
@@ -78,6 +79,10 @@ namespace GBCLV2.Pages
         private void Goto_SettingsPage(object sender, RoutedEventArgs e)
         {
             var settings_page = new SettingsPage();
+            if(Config.UseImageBackground)
+            {
+                settings_page.Background = new SolidColorBrush(Color.FromArgb(100,150,150,150));
+            }
             NavigationService.Navigate(settings_page);
         }
 
