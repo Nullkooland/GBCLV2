@@ -10,6 +10,20 @@
         <SolidColorBrush x:Key="Theme_Brush"/>
         <DropShadowEffect x:Key="Focused_Shadow" Opacity="0.3" BlurRadius="12" ShadowDepth="0" Color="{DynamicResource Theme_Color}" po:Freeze="True"/>
 
+        <Style TargetType="TextBlock" x:Key="Info_TextBlock_Style">
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="3,0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="{x:Type Page}" x:Key="Page_Style">
             <Setter Property="Width" Value="640"/>
             <Setter Property="Height" Value="360"/>
@@ -72,6 +86,11 @@
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Opacity="0.75" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
@@ -95,9 +114,9 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="hook" Storyboard.TargetProperty="Width"
-                                         Duration="0:0:0.2" From="0" To="16" AccelerationRatio="0.1" DecelerationRatio="0.5"/>
+                                         Duration="0:0:0.15" From="0" To="16" AccelerationRatio="0.25" DecelerationRatio="0.5"/>
                                             <DoubleAnimation Storyboard.TargetName="hook" Storyboard.TargetProperty="Height"
-                                         Duration="0:0:0.2" From="0" To="16" AccelerationRatio="0.1" DecelerationRatio="0.5"/>
+                                         Duration="0:0:0.15" From="0" To="16" AccelerationRatio="0.25" DecelerationRatio="0.5"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
@@ -271,34 +290,85 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Grid>
-                            <Border x:Name="border" Background="#10FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1"/>
-                            <Image Source="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="42"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" FontSize="18" Foreground="White"
-                                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="45,0,0,0"/>
+                            <Border x:Name="border" Grid.ColumnSpan="2" Background="#10FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1"/>
+                            <Image Source="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Width="30" Height="30" Grid.Column="0"/>
+                            <TextBlock Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                       Style="{DynamicResource Info_TextBlock_Style}" Grid.Column="1" />
+                            
                         </Grid>
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="White"/>
-                                <Setter TargetName="border" Property="Background" Value="#6BEFEFEF"/>
+                                <Setter TargetName="border" Property="Background" Value="#3DFFFFFF"/>
                                 <Setter Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="0" Opacity="0.75"/>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.75" Color="WhiteSmoke"/>
                                     </Setter.Value>
                                 </Setter>
 
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation From="0" To="9" Duration="0:0:0.15" Storyboard.TargetProperty="(Effect).(DropShadowEffect.BlurRadius)"/>
+                                            <DoubleAnimation From="0" To="12" Duration="0:0:0.2" Storyboard.TargetProperty="(Effect).(DropShadowEffect.BlurRadius)"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
 
                             </Trigger>
                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ScrollBar_ThumbStyle" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Rectangle x:Name="rect" Width="12" Fill="#90BDBDBD" RadiusX="6" RadiusY="6"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="rect" Property="Fill" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <ControlTemplate x:Key="ScrollBar_RepeatButton" TargetType="RepeatButton">
+            <Border Background="Transparent"/>
+        </ControlTemplate>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid>
+                            <Border Width="12" HorizontalAlignment="Center" CornerRadius="6" Background="#55555555"/>
+                            <Track HorizontalAlignment="Center" Name="PART_Track" Width="{TemplateBinding Width}" Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}"
+                                    Value="{TemplateBinding Value}"  IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}" Command="ScrollBar.LineUpCommand"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}" Command="ScrollBar.LineDownCommand"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollBar_ThumbStyle}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

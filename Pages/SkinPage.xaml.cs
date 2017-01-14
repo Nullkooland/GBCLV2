@@ -113,7 +113,7 @@ namespace GBCLV2.Pages
 
         private static List<MyColor> PresetColors = new List<MyColor>
         {
-            new MyColor{Name = "土豪金", Color="#7DE1963C"},
+            new MyColor{Name = "土豪金", Color="#7DEBAF5A"},
             new MyColor{Name = "竹林绿", Color="#AF00320F"},
             new MyColor{Name = "泰瑞绿", Color="#9600AC96"},
             new MyColor{Name = "上天蓝", Color="#8C50C8C8"},
@@ -127,8 +127,7 @@ namespace GBCLV2.Pages
             new MyColor{Name = "橙子橙", Color="#96FF6E0A"},
             new MyColor{Name = "草儿绿", Color="#96649105"},
             new MyColor{Name = "墨水蓝", Color="#B400284B"},
-            new MyColor{Name = "高冷灰", Color="#B41E282C"},
-            new MyColor{Name = "晒黢黑", Color="#CD161616"},
+            new MyColor{Name = "高冷黑", Color="#B41E282C"},
             new MyColor{Name = "吃土棕", Color="#D2563C18"},
         };
 

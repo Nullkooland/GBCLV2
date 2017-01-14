@@ -4,20 +4,6 @@
              xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              Height="282" Width="634">
 
-    <Grid.Resources>
-        <DropShadowEffect x:Key="Color_Shadow"  Opacity="0.75" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
-
-        <Style x:Key="TextBlock_Style" TargetType="TextBlock">
-            <Setter Property="IsHitTestVisible" Value="False"/>
-            <Setter Property="Padding" Value="2,0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Height" Value="22"/>
-            <Setter Property="Effect" Value="{StaticResource Color_Shadow}"/>
-        </Style>
-    </Grid.Resources>
-    
     <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
         <RowDefinition Height="30"/>
@@ -29,14 +15,14 @@
         <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Text="版本" Style="{StaticResource TextBlock_Style}" Grid.Row="1" Margin="10,0"/>
-    <TextBlock Text="Java路径" Style="{StaticResource TextBlock_Style}" Grid.Row="2" Margin="10,0"/>
-    <TextBlock Text="最大内存" Style="{StaticResource TextBlock_Style}" Grid.Row="3" Margin="10,0"/>
-    <TextBlock Text="MB" Style="{StaticResource TextBlock_Style}" Grid.Row="3" Margin="293,0"/>
-    <TextBlock Text="窗口大小" Style="{StaticResource TextBlock_Style}" Grid.Row="4" Margin="10,0"/>
-    <TextBlock Text="×" Style="{StaticResource TextBlock_Style}" Grid.Row="4" Margin="181,0"/>
-    <TextBlock x:Name="UserName_TextBlcok" Style="{StaticResource TextBlock_Style}" Grid.Row="5" Margin="10,0"/>
-    <TextBlock x:Name="PassWord_TextBlcok" Text="密码" Style="{StaticResource TextBlock_Style}" Grid.Row="6" Margin="10,0"/>
+    <TextBlock Text="版本" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="1" Margin="10,0"/>
+    <TextBlock Text="Java路径" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="10,0"/>
+    <TextBlock Text="最大内存" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="10,0"/>
+    <TextBlock Text="MB" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="293,0"/>
+    <TextBlock Text="窗口大小" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="10,0"/>
+    <TextBlock Text="×" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="181,0"/>
+    <TextBlock x:Name="UserName_TextBlcok" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="5" Margin="10,0"/>
+    <TextBlock x:Name="PassWord_TextBlcok" Text="密码" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="10,0"/>
 
     <ComboBox x:Name="VersionComboBox" Grid.Row="1" Width="500" Height="24" HorizontalAlignment="Left" Margin="90,0,0,0"
                 DisplayMemberPath="ID"/>

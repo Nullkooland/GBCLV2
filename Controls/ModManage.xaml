@@ -19,7 +19,7 @@
 
     <ListBox x:Name="ModList" Grid.RowSpan="6" Grid.Column="0"
                  FontSize="14" Height="276" Width="450" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                 Background="Transparent" BorderBrush="#80FFFFFF" 
+                 Background="Transparent" BorderThickness="0"
                  AllowDrop="True" Drop="Drop_Mods"
                  SelectionMode="Extended" SelectionChanged="ModList_SelectionChanged"
                  ScrollViewer.CanContentScroll="False">
@@ -37,10 +37,7 @@
                                               Content="{Binding FileName}"
                                               Height="17"
                                               HorizontalAlignment="Left"
-                                              Margin="2,0"
-                                              Effect="{DynamicResource Focused_Shadow}"
-                                              Click="RewriteExtension"
-                                              />
+                                              Click="RewriteExtension"/>
                             </Grid>
 
                             <ControlTemplate.Triggers>
