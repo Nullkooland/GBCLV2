@@ -25,7 +25,7 @@ namespace GBCLV2.Controls
             Offline_CheckBox.Checked += (s, e) => OfflineMode();
             Offline_CheckBox.Unchecked += (s, e) => OnlineMode();
 
-            JavaPathBox.Text = Config.JavaPath;
+            JavaPathBox.Text = App.Core.JavaPath;
             MaxMemoryBox.Text = Config.MaxMemory.ToString();
             WinWidthBox.Text = Config.WinWidth.ToString();
             WinHeightBox.Text = Config.WinHeight.ToString();
@@ -146,8 +146,8 @@ namespace GBCLV2.Controls
         {
             if (VersionComboBox.SelectedIndex != -1)
             {
-                string Path = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
-                System.Diagnostics.Process.Start("explorer.exe", Path);
+                string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
+                System.Diagnostics.Process.Start("explorer.exe", DirPath);
             }
         }
 
@@ -155,10 +155,10 @@ namespace GBCLV2.Controls
         {
             if (VersionComboBox.SelectedIndex != -1)
             {
-                string Path = string.Format(@"{0}\versions\{1}\{1}.json", App.Core.GameRootPath, versionID);
+                string JsonPath = string.Format(@"{0}\versions\{1}\{1}.json", App.Core.GameRootPath, versionID);
                 try
                 {
-                    System.Diagnostics.Process.Start(Path);
+                    System.Diagnostics.Process.Start(JsonPath);
                 }
                 catch { }
             }
@@ -168,8 +168,8 @@ namespace GBCLV2.Controls
         {
             if (VersionComboBox.SelectedIndex != -1)
             {
-                string Path = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
-                SystemTools.DeleteDirectoryAsync(Path);
+                string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
+                SystemTools.DeleteDirectoryAsync(DirPath);
 
                 App.Versions.RemoveAt(VersionComboBox.SelectedIndex);
                 VersionComboBox.SelectedIndex = 0;

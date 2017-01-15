@@ -186,6 +186,9 @@
   <ItemGroup>
     <Resource Include="images\mod.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\add.png" />
+  </ItemGroup>
   <Import Project="..\KMCCC\KMCCC.Shared\KMCCC.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

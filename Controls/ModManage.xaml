@@ -7,9 +7,9 @@
         <RowDefinition Height="40"/>
         <RowDefinition Height="40"/>
         <RowDefinition Height="40"/>
+        <RowDefinition Height="40"/>
         <RowDefinition/>
-        <RowDefinition/>
-        <RowDefinition/>
+        <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
@@ -18,11 +18,11 @@
     </Grid.ColumnDefinitions>
 
     <ListBox x:Name="ModList" Grid.RowSpan="6" Grid.Column="0"
-                 FontSize="14" Height="276" Width="450" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                 Background="Transparent" BorderThickness="0"
-                 AllowDrop="True" Drop="Drop_Mods"
+                 Height="276" Width="445" VerticalAlignment="Top" 
+                 Background="Transparent" BorderBrush="#80FFFFFF"
+                 AllowDrop="True" ScrollViewer.CanContentScroll="False"
                  SelectionMode="Extended" SelectionChanged="ModList_SelectionChanged"
-                 ScrollViewer.CanContentScroll="False">
+                 >
 
         <ListBox.ItemContainerStyle>
             <Style TargetType="ListBoxItem">
@@ -34,10 +34,12 @@
                                 <Border x:Name="border" BorderThickness="1" Background="Transparent" HorizontalAlignment="Stretch"/>
 
                                 <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
-                                              Content="{Binding FileName}"
-                                              Height="17"
-                                              HorizontalAlignment="Left"
-                                              Click="RewriteExtension"/>
+                                          Content="{Binding FileName}"
+                                          Height="17"
+                                          HorizontalAlignment="Left"
+                                          Margin="2,0"
+                                          Click="RewriteExtension"/>
+                                
                             </Grid>
 
                             <ControlTemplate.Triggers>
@@ -56,30 +58,43 @@
         </ListBox.ItemContainerStyle>
     </ListBox>
 
-    <TextBlock x:Name="DescriptionBox"
-            Width="170" MaxHeight="100" Grid.Row="5" Grid.Column="1"
-            FontSize="14" Foreground="White" TextWrapping="Wrap" TextBlock.TextTrimming="WordEllipsis"
-            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,5"/>
-
     <Button x:Name="refresh_button" Style="{StaticResource Button_Style}" ToolTip="刷新" Grid.Row="0" Grid.Column="1"
-                Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
         </Button.Background>
     </Button>
 
-    <Button x:Name="delete_button" Style="{StaticResource Button_Style}" ToolTip="删除选中mod" Grid.Row="1" Grid.Column="1"
-                Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
+    <Button Click="Add_New" Style="{StaticResource Button_Style}" ToolTip="添加新mod" Grid.Row="1" Grid.Column="1"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/add.png"/>
+        </Button.Background>
+    </Button>
+
+    <Button x:Name="delete_button" Style="{StaticResource Button_Style}" ToolTip="删除选中mod" Grid.Row="2" Grid.Column="1"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/delete.png"/>
         </Button.Background>
     </Button>
 
-    <Button x:Name="openfolder_button" Style="{StaticResource Button_Style}" ToolTip="打开mods文件夹" Grid.Row="2" Grid.Column="1"
-                Width="32" Height="32" HorizontalAlignment="Left" Margin="10,0">
+    <Button x:Name="openfolder_button" Style="{StaticResource Button_Style}" ToolTip="打开mods文件夹" Grid.Row="3" Grid.Column="1"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>
         </Button.Background>
     </Button>
+
+    <TextBlock x:Name="NameBox" TextOptions.TextFormattingMode="Display"
+            MaxWidth="180" Grid.Row="4" Grid.Column="1" Cursor="Hand"
+            FontSize="14" Foreground="White" TextWrapping="Wrap" TextBlock.TextTrimming="WordEllipsis"
+            HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0">
+    </TextBlock>
+    
+    <TextBlock x:Name="DescriptionBox" TextOptions.TextFormattingMode="Display"
+            Width="180" MaxHeight="110" Grid.Row="5" Grid.Column="1"
+            FontSize="12" Foreground="White" TextWrapping="Wrap" TextBlock.TextTrimming="WordEllipsis"
+            HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,3"/>
 
 </Grid>

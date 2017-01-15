@@ -68,6 +68,8 @@ namespace GBCLV2.Pages
             if(Result.Success)
             {
                 tb.Text = "(。-`ω´-) 启动中...";
+                LaunchButton.IsEnabled = false;
+                LaunchButton.Content = "启动中";
             }
             else
             {

@@ -18,14 +18,14 @@ namespace GBCLV2.Controls
         private class Mod
         {
             public bool IsEnabled       { get; set; }
-            public string FileName          { get; set; }
+            public string FileName      { get; set; }
             public string Name          { get; set; }
             public string Description   { get; set; }
             public string Url           { get; set; }
         }
 
         private ObservableCollection<Mod> CurrentMods = new ObservableCollection<Mod>();
-        private string ModsDir = Config.GameRootPath + @"\mods\";
+        private string ModsDir = App.Core.GameRootPath + @"\mods\";
 
         public ModManage()
         {
@@ -37,8 +37,10 @@ namespace GBCLV2.Controls
             Task.Run(() => GetModsFromDisk());
 
             refresh_button.Click    += (s, e) => GetModsFromDisk();
-            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
             delete_button.Click     += (s, e) => DeleteModsAsync();
+            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
+
+            ModList.Drop            += (s, e) => Copy_New(e.Data.GetData(DataFormats.FileDrop) as string[]);
             ModList.PreviewKeyDown  += (s, e) =>
             {
                 if(e.Key == System.Windows.Input.Key.Delete)
@@ -46,6 +48,9 @@ namespace GBCLV2.Controls
                     DeleteModsAsync();
                 }
             };
+
+            NameBox.MouseLeftButtonDown += (s, e) => 
+            System.Diagnostics.Process.Start((ModList.SelectedItem as Mod).Url);
         }
 
         private void GetModsFromDisk()
@@ -54,10 +59,14 @@ namespace GBCLV2.Controls
             {
                 CurrentMods.Clear();
             });
-            foreach (string dir in Directory.EnumerateFiles(ModsDir)
-            .Where(dir => dir.EndsWith(".jar") || dir.EndsWith(".zip") || dir.EndsWith(".disabled")))
+
+            if (Directory.Exists(ModsDir))
             {
-                LoadModInfo(dir);
+                foreach (string dir in Directory.EnumerateFiles(ModsDir)
+                .Where(dir => dir.EndsWith(".jar") || dir.EndsWith(".zip") || dir.EndsWith(".disabled")))
+                {
+                    LoadModInfo(dir);
+                }
             }
         }
 
@@ -131,7 +140,23 @@ namespace GBCLV2.Controls
         private void ModList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Mod _mod = ModList.SelectedItem as Mod;
-            DescriptionBox.Text = _mod?.Description;
+            NameBox.Text = _mod?.Name;
+            DescriptionBox.Text =  _mod?.Description;
+
+            if(string.IsNullOrEmpty(_mod?.Url))
+            {
+                NameBox.IsEnabled = false;
+                NameBox.TextDecorations = null;
+                NameBox.Foreground = System.Windows.Media.Brushes.White;
+            }
+            else
+            {
+                NameBox.IsEnabled = true;
+                NameBox.TextDecorations = TextDecorations.Underline;
+                NameBox.Foreground = System.Windows.Media.Brushes.DodgerBlue;
+
+            }
+
         }
 
         private void RewriteExtension(object sender, RoutedEventArgs e)
@@ -154,24 +179,49 @@ namespace GBCLV2.Controls
 
         }
 
-        private void Drop_Mods(object sender, DragEventArgs e)
+        private void Copy_New(string[] filePaths)
         {
             Task.Run(() =>
             {
-                foreach (string file_path in e.Data.GetData(DataFormats.FileDrop) as string[])
+                foreach (string path in filePaths)
                 {
-                    if (file_path.EndsWith(".jar") || file_path.EndsWith(".zip"))
+                    if (path.EndsWith(".jar") || path.EndsWith(".zip"))
                     {
-                        string path = ModsDir + Path.GetFileNameWithoutExtension(file_path) + ".jar";
-                        if (!File.Exists(path))
+                        using (var fs = new FileStream(path, FileMode.Open))
+                        using (var archive = new ZipArchive(fs, ZipArchiveMode.Read))
                         {
-                            LoadModInfo(file_path);
-                            File.Copy(file_path, path, true);
+                            if(archive.GetEntry("META-INF/") == null)
+                            {
+                                MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod");
+                                continue;
+                            }
+                        }
+                        
+                        string CopyTo = ModsDir + Path.GetFileNameWithoutExtension(path) + ".jar";
+
+                        if (!File.Exists(CopyTo))
+                        {
+                            LoadModInfo(path);
+                            File.Copy(path, CopyTo, true);
                         }
                     }
                 }
             });
         }
 
+        private void Add_New(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Multiselect = true,
+                Title = "请选择mod",
+                Filter = "MOD文件| *.jar; *.zip",
+            };
+
+            if (dialog.ShowDialog() ?? false)
+            {
+                Copy_New(dialog.FileNames);
+            }
+        }
     }
 }

@@ -10,7 +10,6 @@
 
         private static Config data;
 
-        [JsonPropertyName("GameRootPath")]          public string  _GameRootPath;
         [JsonPropertyName("JavaPath")]              public string  _JavaPath;
         [JsonPropertyName("VersionIndex")]          public int     _VersionIndex;
         [JsonPropertyName("MaxMemory")]             public uint    _MaxMemory;
@@ -29,11 +28,6 @@
         [JsonPropertyName("ImagePath")]             public string  _ImagePath;
 
         #region 属性访问器
-
-        public static string GameRootPath
-        {
-            get => data._GameRootPath; set => data._GameRootPath = value;
-        }
 
         public static string JavaPath
         {

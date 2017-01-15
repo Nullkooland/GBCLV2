@@ -32,7 +32,7 @@ namespace GBCLV2
 
         private void Initialize_LauncherCore()
         {
-            Core = LauncherCore.Create(Config.GameRootPath, Config.JavaPath);
+            Core = LauncherCore.Create(Config.JavaPath);
             Core.GameLaunch += OnGameLaunch;
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
@@ -111,7 +111,6 @@ namespace GBCLV2
                 Current.MainWindow.Close();
             }));
             Config.JavaPath = Core.JavaPath;
-            Config.GameRootPath = Core.GameRootPath;
         }
 
         private void OnGameLog(string line)
@@ -127,7 +126,7 @@ namespace GBCLV2
                 {
                     if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        System.Diagnostics.Process.Start(Config.GameRootPath + @"\mcrun.log");
+                        System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
                     }
                 }
                 Current.Shutdown();

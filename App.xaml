@@ -81,14 +81,11 @@
 
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Focusable" Value="False"/>
-            <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Opacity="0.75" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
+                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
@@ -99,7 +96,9 @@
                                 <Rectangle Name="bg" Width="17" Height="17" StrokeThickness="1" Stroke="#BDFFFFFF"/>
                                 <Path Name="hook" Visibility="Collapsed" Width="16" Height="16" Data="M43,5 L20,40 20,40 0,20 6,15 18,26 37,7 43,5 z" Fill="White" Stretch="Uniform"/>
                             </Grid>
-                            <ContentPresenter Canvas.Left="20" IsHitTestVisible="False"/>
+                            <TextBlock Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                                       FontSize="14" Foreground="White" TextOptions.TextFormattingMode="Display"
+                                       Canvas.Left="20" IsHitTestVisible="False"/>
                         </Canvas>
                         <ControlTemplate.Triggers>
                             
@@ -305,17 +304,17 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="White"/>
-                                <Setter TargetName="border" Property="Background" Value="#3DFFFFFF"/>
+                                <Setter TargetName="border" Property="Background" Value="#3BFFFFFF"/>
                                 <Setter Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="0" Opacity="0.75" Color="WhiteSmoke"/>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.8" Color="WhiteSmoke"/>
                                     </Setter.Value>
                                 </Setter>
 
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation From="0" To="12" Duration="0:0:0.2" Storyboard.TargetProperty="(Effect).(DropShadowEffect.BlurRadius)"/>
+                                            <DoubleAnimation From="0" To="15" Duration="0:0:0.2" Storyboard.TargetProperty="(Effect).(DropShadowEffect.BlurRadius)"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
@@ -335,7 +334,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Rectangle x:Name="rect" Width="12" Fill="#90BDBDBD" RadiusX="6" RadiusY="6"/>
+                        <Rectangle x:Name="rect" Width="10" Fill="#90BDBDBD" RadiusX="5" RadiusY="5"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="rect" Property="Fill" Value="White"/>
@@ -355,7 +354,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ScrollBar">
                         <Grid>
-                            <Border Width="12" HorizontalAlignment="Center" CornerRadius="6" Background="#55555555"/>
+                            <Border Width="10" HorizontalAlignment="Center" CornerRadius="5" Background="#55555555"/>
                             <Track HorizontalAlignment="Center" Name="PART_Track" Width="{TemplateBinding Width}" Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}"
                                     Value="{TemplateBinding Value}"  IsDirectionReversed="true">
                                 <Track.DecreaseRepeatButton>

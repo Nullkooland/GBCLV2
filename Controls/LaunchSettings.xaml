@@ -20,7 +20,7 @@
     <TextBlock Text="最大内存" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="10,0"/>
     <TextBlock Text="MB" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="293,0"/>
     <TextBlock Text="窗口大小" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="10,0"/>
-    <TextBlock Text="×" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="181,0"/>
+    <TextBlock Text="×" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="180,0"/>
     <TextBlock x:Name="UserName_TextBlcok" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="5" Margin="10,0"/>
     <TextBlock x:Name="PassWord_TextBlcok" Text="密码" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="10,0"/>
 
