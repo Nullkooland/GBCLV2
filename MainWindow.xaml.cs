@@ -26,7 +26,16 @@ namespace GBCLV2
             var mp = new MainPage();
             frame.Navigate(mp);
 
-            WindowBlurHelper.EnableBlur(this);
+            if(Environment.OSVersion.Version.Minor > 1)
+            {
+                Win10BlurHelper.EnableBlur(this);
+            }
+            else
+            {
+                this.BorderThickness = new Thickness(0.6);
+                this.BorderBrush = Brushes.DarkGray;
+                Win7BlurHelper.EnableAeroGlass(this);
+            }
         }
 
         private void ShutDown(object sender, RoutedEventArgs e)

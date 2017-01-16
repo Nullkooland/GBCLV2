@@ -5,7 +5,7 @@ using System.Windows.Interop;
 
 namespace GBCLV2
 {
-    class WindowBlurHelper
+    class Win10BlurHelper
     {
         [DllImport("user32.dll")]
         internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
@@ -45,7 +45,7 @@ namespace GBCLV2
 
         public static void EnableBlur(Window _window)
         {
-            var windowHelper = new WindowInteropHelper(_window);
+            var WindowPtr = new WindowInteropHelper(_window).Handle;
 
             var accent = new AccentPolicy()
             {
@@ -65,9 +65,36 @@ namespace GBCLV2
                 SizeOfData = accentStructSize,
                 Data = accentPtr
             };
-            SetWindowCompositionAttribute(windowHelper.Handle, ref data);
+            SetWindowCompositionAttribute(WindowPtr, ref data);
 
             Marshal.FreeHGlobal(accentPtr);
+        }
+    }
+
+    class Win7BlurHelper
+    {
+        [DllImport("dwmapi.dll")]
+        static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
+
+        struct DWM_BLURBEHIND
+        {
+            public uint dwFlags;
+            public bool fEnable;
+            public IntPtr hRgnBlur;
+            public bool fTransitionOnMaximized;
+        }
+
+        public static void EnableAeroGlass(Window _window)
+        {
+            var WindowPtr = new WindowInteropHelper(_window).Handle;
+
+            var Blur = new DWM_BLURBEHIND()
+            {
+                dwFlags = 0x00000001 | 0x00000002,
+                fEnable = true
+            };
+
+            DwmEnableBlurBehindWindow(WindowPtr, ref Blur);
         }
     }
 }
