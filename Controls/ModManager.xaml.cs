@@ -49,8 +49,11 @@ namespace GBCLV2.Controls
                 }
             };
 
-            NameBox.MouseLeftButtonDown += (s, e) => 
-            System.Diagnostics.Process.Start((ModList.SelectedItem as Mod).Url);
+            NameBox.MouseLeftButtonDown += (s, e) =>
+            {
+                System.Diagnostics.Process.Start((ModList.SelectedItem as Mod).Url);
+                e.Handled = true;
+            };   
         }
 
         private void GetModsFromDisk()

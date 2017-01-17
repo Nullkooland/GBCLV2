@@ -67,9 +67,12 @@ namespace GBCLV2.Controls
                 }
             }
 
-            for(int i = 0; i < EnabledPackNames.Length; i++)
+            if(EnabledPackNames!= null)
             {
-                EnabledPackNames[i] = EnabledPackNames[i].Substring(1, EnabledPackNames[i].Length - 2);
+                for(int i = 0; i < EnabledPackNames.Length; i++)
+                {
+                    EnabledPackNames[i] = EnabledPackNames[i].Substring(1, EnabledPackNames[i].Length - 2);
+                }
             }
         }
 
@@ -86,13 +89,17 @@ namespace GBCLV2.Controls
             {
                 for(int i = EnabledPackNames.Length - 1; i >=0; i--)
                 {
-                    var pack = GetResPackFromDisk(PacksDir + EnabledPackNames[i]);
-                    pack.IsEnabled = true;
-
-                    Dispatcher.BeginInvoke((Action)delegate()
+                    var path = PacksDir + EnabledPackNames[i];
+                    if(File.Exists(path) || Directory.Exists(path))
                     {
-                        Enabled_Pack.Add(pack);
-                    });
+                        var pack = GetResPackFromDisk(PacksDir + EnabledPackNames[i]);
+                        pack.IsEnabled = true;
+
+                        Dispatcher.BeginInvoke((Action)delegate ()
+                        {
+                            Enabled_Pack.Add(pack);
+                        });
+                    }
                 }
             }
 
@@ -101,7 +108,7 @@ namespace GBCLV2.Controls
             foreach (var path in Directory.EnumerateFiles(PacksDir,"*.zip").Union(Directory.EnumerateDirectories(PacksDir)))
             {
                 bool NotEnabled = true;
-                if(count < EnabledPackNames.Length)
+                if(EnabledPackNames != null && count < EnabledPackNames.Length)
                 {
                     foreach (var str in EnabledPackNames)
                     {
@@ -209,25 +216,6 @@ namespace GBCLV2.Controls
                 _pack.Description = MC_Version + PackInfo["description"].ToString();
             }
         }
-
-
-        bool IsEnabledInOptions(ResPack _pack)
-        {
-            if (EnabledPackNames == null)
-            {
-                return _pack.IsEnabled = false;
-            }
-
-            foreach (string str in EnabledPackNames)
-            {
-                if (_pack.Name == str.Substring(1, str.Length - 2))
-                {
-                    return _pack.IsEnabled = true;
-                }
-            }
-            return _pack.IsEnabled = false;
-        }
-
 
         private void EnablePack(object sender, RoutedEventArgs e)
         {
