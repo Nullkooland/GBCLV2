@@ -1,0 +1,145 @@
+﻿<Grid x:Class="GBCLV2.Controls.ResourcepacksManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="282" Width="634">
+
+    <Grid.Resources>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="ToolTip" Value="{Binding Description}"/>
+            <Setter Property="ToolTipService.Placement" Value="Bottom"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="border" Height="54" Background="Transparent" BorderThickness="1">
+                            <Grid >
+                                <Image x:Name="cover" Source="{Binding Cover}" Width="50" Height="50" HorizontalAlignment="Left" Margin="1">
+                                    <Image.Effect>
+                                        <DropShadowEffect ShadowDepth="0" BlurRadius="7"/>
+                                    </Image.Effect>
+                                </Image>
+                                <TextBlock Style="{StaticResource Info_TextBlock_Style}" TextOptions.TextFormattingMode="Display"
+                                           Text="{Binding Name}" FontSize="14" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                           MaxWidth="240" Height="54" Margin="56,0,0,0" VerticalAlignment="Top"/>
+
+                                <Button x:Name="btn_right" Style="{StaticResource Button_Style}" Visibility="Collapsed" Click="EnablePack"
+                                        Width="27" Height="27" HorizontalAlignment="Left" Margin="12,0">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
+                                    </Button.Background>
+                                </Button>
+
+                                <Button x:Name="btn_left" Style="{StaticResource Button_Style}" Visibility="Collapsed" Click="DisablePack"
+                                        Width="24" Height="24" HorizontalAlignment="Left" Margin="12,0" RenderTransformOrigin="0.5,0.5">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
+                                    </Button.Background>
+                                    <Button.RenderTransform>
+                                        <RotateTransform Angle="180"/>
+                                    </Button.RenderTransform>
+                                </Button>
+
+                                <Button x:Name="btn_up" Style="{StaticResource Button_Style}" Visibility="Collapsed" Click="MovePackUp"
+                                        Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,0" RenderTransformOrigin="0.5,0.5">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
+                                    </Button.Background>
+                                    <Button.RenderTransform>
+                                        <RotateTransform Angle="270"/>
+                                    </Button.RenderTransform>
+                                </Button>
+
+                                <Button x:Name="btn_down" Style="{StaticResource Button_Style}" Visibility="Collapsed" Click="MovePackDown"
+                                        Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0" RenderTransformOrigin="0.5,0.5">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
+                                    </Button.Background>
+                                    <Button.RenderTransform>
+                                        <RotateTransform Angle="90"/>
+                                    </Button.RenderTransform>
+                                </Button>
+
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#4AEFEFEF"/>
+                                <Setter TargetName="cover" Property="Opacity" Value="0.3"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="White"/>
+                            </Trigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver,ElementName=border}" Value="True"/>
+                                    <Condition Binding="{Binding IsEnabled}" Value="False"/>
+                                </MultiDataTrigger.Conditions>
+
+                                <MultiDataTrigger.Setters>
+                                    <Setter TargetName="btn_right" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger.Setters>
+
+                            </MultiDataTrigger>
+
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver,ElementName=border}" Value="True"/>
+                                    <Condition Binding="{Binding IsEnabled}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+
+                                <MultiDataTrigger.Setters>
+                                    <Setter TargetName="btn_left" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="btn_up" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="btn_down" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger.Setters>
+
+                            </MultiDataTrigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Grid.Resources>
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="290"/>
+        <ColumnDefinition Width="290"/>
+        <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+
+    <ListBox x:Name="DisabledPacksList" Height="276" Width="285" Grid.Column="0" Grid.RowSpan="5"/>
+    <ListBox x:Name="EnabledPacksList" Height="276" Width="285" Grid.Column="1" Grid.RowSpan="5"/>
+
+    <Button x:Name="refresh_button" Style="{StaticResource Button_Style}" ToolTip="重新加载资源包" Grid.Row="0" Grid.Column="2"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
+        </Button.Background>
+    </Button>
+
+    <Button Click="Add_New" Style="{StaticResource Button_Style}" ToolTip="添加资源包" Grid.Row="1" Grid.Column="2"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/add.png"/>
+        </Button.Background>
+    </Button>
+
+
+    <Button x:Name="openfolder_button" Style="{StaticResource Button_Style}" ToolTip="打开resourcepacks文件夹" Grid.Row="2" Grid.Column="2"
+                Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>
+        </Button.Background>
+    </Button>
+
+</Grid>

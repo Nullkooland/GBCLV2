@@ -56,7 +56,7 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
-                            <Border x:Name="border" CornerRadius="9" Background="#3FFFFFFF" BorderBrush="Transparent" BorderThickness="1"/>
+                            <Border x:Name="border" CornerRadius="9" Background="#3FFFFFFF" BorderBrush="Transparent" BorderThickness="0.5"/>
                             <Track Name="PART_Track">
                                 <Track.Thumb>
                                     <Thumb Template="{StaticResource MyThumb}" DragCompleted="Slider_Thumb_DragCompleted"/>

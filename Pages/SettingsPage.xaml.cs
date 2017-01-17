@@ -19,6 +19,8 @@ namespace GBCLV2.Pages
         private void Go_Back(object sender, RoutedEventArgs e)
         {
             launch_settings.Save_Settings();
+            resourcepack_manager.SavePackOptions();
+
             NavigationService.GoBack();
         }
 

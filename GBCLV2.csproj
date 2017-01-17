@@ -79,8 +79,11 @@
     <Compile Include="Controls\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ModManage.xaml.cs">
-      <DependentUpon>ModManage.xaml</DependentUpon>
+    <Compile Include="Controls\ModManager.xaml.cs">
+      <DependentUpon>ModManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ResourcepacksManager.xaml.cs">
+      <DependentUpon>ResourcepacksManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DownloadPage.xaml.cs">
       <DependentUpon>DownloadPage.xaml</DependentUpon>
@@ -102,7 +105,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ModManage.xaml">
+    <Page Include="Controls\ModManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ResourcepacksManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,7 +193,6 @@
   <ItemGroup>
     <Resource Include="images\enderman.ico" />
     <Resource Include="images\frog.png" />
-    <Resource Include="images\left.png" />
     <Resource Include="images\refresh.png" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +203,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\right.png" />
   </ItemGroup>
   <Import Project="..\KMCCC\KMCCC.Shared\KMCCC.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,7 +13,7 @@ using System.Windows.Threading;
 
 namespace GBCLV2.Controls
 {
-    public partial class ModManage : Grid
+    public partial class ModManager : Grid
     {
         private class Mod
         {
@@ -25,9 +25,9 @@ namespace GBCLV2.Controls
         }
 
         private ObservableCollection<Mod> CurrentMods = new ObservableCollection<Mod>();
-        private string ModsDir = App.Core.GameRootPath + @"\mods\";
+        private const string ModsDir = @".minecraft\mods\";
 
-        public ModManage()
+        public ModManager()
         {
             InitializeComponent();
 
@@ -174,9 +174,25 @@ namespace GBCLV2.Controls
                 FileSystem.RenameFile(ModsDir + _mod.FileName + ".jar", _mod.FileName + ".disabled");
                 _mod.IsEnabled = false;
             }
+            ModList.SelectedIndex = -1;
             ModList.Items.SortDescriptions.Clear();
             ModList.Items.SortDescriptions.Add(new SortDescription("IsEnabled", ListSortDirection.Descending));
 
+        }
+
+        private void Add_New(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Multiselect = true,
+                Title = "请选择mod",
+                Filter = "MOD文件| *.jar; *.zip",
+            };
+
+            if (dialog.ShowDialog() ?? false)
+            {
+                Copy_New(dialog.FileNames);
+            }
         }
 
         private void Copy_New(string[] filePaths)
@@ -195,6 +211,8 @@ namespace GBCLV2.Controls
                                 MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod");
                                 continue;
                             }
+                            archive.Dispose();
+                            fs.Dispose();
                         }
                         
                         string CopyTo = ModsDir + Path.GetFileNameWithoutExtension(path) + ".jar";
@@ -207,21 +225,6 @@ namespace GBCLV2.Controls
                     }
                 }
             });
-        }
-
-        private void Add_New(object sender, RoutedEventArgs e)
-        {
-            var dialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                Multiselect = true,
-                Title = "请选择mod",
-                Filter = "MOD文件| *.jar; *.zip",
-            };
-
-            if (dialog.ShowDialog() ?? false)
-            {
-                Copy_New(dialog.FileNames);
-            }
         }
     }
 }

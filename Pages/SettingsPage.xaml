@@ -12,11 +12,11 @@
             </TabItem>
 
             <TabItem Header="/images/mod.png" Tag="mod管理">
-                <Controls:ModManage/>
+                <Controls:ModManager/>
             </TabItem>
 
             <TabItem Header="/images/resourcepack.png" Tag="资源包">
-
+                <Controls:ResourcepacksManager x:Name="resourcepack_manager"/>
             </TabItem>
 
             <TabItem Header="/images/about.png" Tag="关于">

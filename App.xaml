@@ -282,6 +282,15 @@
             </Setter>
         </Style>
 
+        <Style TargetType="ListBox">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+        </Style>
+
         <Style TargetType="TabItem">
             <Setter Property="Width" Value="126"/>
             <Setter Property="Height" Value="40"/>

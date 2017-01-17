@@ -11,9 +11,10 @@ namespace GBCLV2
 	{
         public static LauncherCore Core;
         public static ObservableCollection<Version> Versions = new ObservableCollection<Version>();
+
         private static Mutex mutex;
-        private FileStream log_FileStream;
-        private StreamWriter Logger;
+        private static FileStream log_FileStream;
+        private static StreamWriter Logger;
 
         protected override void OnStartup(StartupEventArgs e)
         {
