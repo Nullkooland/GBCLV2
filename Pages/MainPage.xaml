@@ -25,7 +25,7 @@
 
         <Button x:Name="LaunchButton" Content="启动" Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" FontSize="16" BorderBrush="#80FFFFFF" Background="#54FFFFFF"/>
 
-        <Button x:Name="Download" Style="{StaticResource _ButtonStyle}" ToolTip="瓜批！" Margin="90,0">
+        <Button x:Name="Download" Style="{StaticResource _ButtonStyle}" ToolTip="under construction!" Margin="90,0">
             <Button.Background>
                 <ImageBrush ImageSource="/images/download.png" po:Freeze="True"/>
             </Button.Background>

@@ -30,6 +30,12 @@ namespace GBCLV2.Controls
             WinWidthBox.Text = Config.WinWidth.ToString();
             WinHeightBox.Text = Config.WinHeight.ToString();
             FullScreen_CheckBox.IsChecked = Config.FullScreen;
+            
+            if(!string.IsNullOrEmpty(Config.ServerAddress))
+            {
+                DirectLoginServer_CheckBox.IsChecked = true;
+                ServerAddressBox.Text = Config.ServerAddress;
+            }
         }
 
         private void OnlineMode()
@@ -37,7 +43,7 @@ namespace GBCLV2.Controls
             Config.Offline = false;
             PassWordBox.IsEnabled = true;
             RememberPassword_CheckBox.IsEnabled = true;
-            PassWord_TextBlcok.Opacity = 1.0;
+            PassWord_TextBlcok.IsEnabled = true;
             UserName_TextBlcok.Text = "邮箱";
             UserNameBox.Text = Config.Email;
             PassWordBox.Password = Config.PassWord;
@@ -49,7 +55,7 @@ namespace GBCLV2.Controls
             Config.Offline = true;
             PassWordBox.Password = null;
             PassWordBox.IsEnabled = false;
-            PassWord_TextBlcok.Opacity = 0.3;
+            PassWord_TextBlcok.IsEnabled = false;
             RememberPassword_CheckBox.IsChecked = false;
             RememberPassword_CheckBox.IsEnabled = false;
             UserName_TextBlcok.Text = "游戏名";
@@ -58,9 +64,14 @@ namespace GBCLV2.Controls
 
         public void Save_Settings()
         {
-            App.Core.JavaPath = JavaPathBox.Text;
             Config.VersionIndex = VersionComboBox.SelectedIndex;
             Config.FullScreen = FullScreen_CheckBox.IsChecked ?? false;
+
+            if (System.IO.File.Exists(JavaPathBox.Text))
+            {
+                App.Core.JavaPath = JavaPathBox.Text;
+            }
+
             if (Config.Offline)
             {
                 Config.UserName = UserNameBox.Text;
@@ -70,6 +81,15 @@ namespace GBCLV2.Controls
                 Config.Email = UserNameBox.Text;
                 Config.PassWord = PassWordBox.Password;
                 Config.RememberPassWord = RememberPassword_CheckBox.IsChecked ?? false;
+            }
+
+            if(DirectLoginServer_CheckBox.IsChecked ?? false)
+            {
+                Config.ServerAddress = ServerAddressBox.Text;
+            }
+            else
+            {
+                Config.ServerAddress = null;
             }
         }
 

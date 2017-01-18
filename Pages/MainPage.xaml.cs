@@ -16,8 +16,9 @@ namespace GBCLV2.Pages
     {
         private Random rand = new Random();
         private string[] Excited = new string[]{
-            "(⇀‸↼‶)","(๑˘•◡•˘๑)","( Ծ ‸ Ծ )","_( '-' _)⌒)_","(●—●)","~( ´•︵•` )~","( *・ω・)✄╰ひ╯","(╯>д<)╯┻━┻","_(｀•ω•´ 」∠)_",
-            "ᕦ(･ㅂ･)ᕤ","(◞‸◟ )","(ㅎ‸ㅎ)","(= ᵒᴥᵒ =)","(๑乛◡乛๑)","(｀・ω・´)","ε=ε=(ノ≧∇≦)ノ","(･∀･)","Σ( ￣□￣||)","(。-`ω´-)","ʕ•ﻌ•ʔ"
+            "(⇀‸↼‶)","(๑˘•◡•˘๑)","( Ծ ‸ Ծ )","_( '-' _)⌒)_","(●—●)","~( ´•︵•` )~","( *・ω・)✄╰ひ╯","(╯>д<)╯┻━┻","_(-ω-`_)⌒)_",
+            "ᕦ(･ㅂ･)ᕤ","(◞‸◟ )","(ㅎ‸ㅎ)","(= ᵒᴥᵒ =)","(๑乛◡乛๑)","( ,,ÒωÓ,, )","ε=ε=(ノ≧∇≦)ノ","(･∀･)","Σ( ￣□￣||)","(。-`ω´-)",
+            "(´• ᗜ •`)","(๑╹∀╹๑)","(´• ᵕ •`)*✲","┑(￣Д ￣)┍","(｡•ˇ‸ˇ•｡)","\\(•ㅂ•)/","(´･ᆺ･`)","ԅ(¯﹃¯ԅ)","୧(๑•∀•๑)૭","ʕ•ﻌ•ʔ"
         };
 
         public MainPage()
@@ -62,7 +63,16 @@ namespace GBCLV2.Pages
                 Authenticator = (Config.Offline) ?
                 (IAuthenticator)new OfflineAuthenticator(Config.UserName) : new YggdrasilLogin(Config.Email, Config.PassWord, false),
                 MaxMemory = Config.MaxMemory,
-                Size = new WindowSize { Width = Config.WinWidth, Height = Config.WinHeight,FullScreen = Config.FullScreen },
+
+                Size = new WindowSize
+                {
+                    Width = Config.WinWidth,
+                    Height = Config.WinHeight,
+                    FullScreen = Config.FullScreen
+                },
+
+                ServerAddress = Config.ServerAddress
+
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 
             if(Result.Success)

@@ -10,22 +10,23 @@
 
         private static Config data;
 
-        [JsonPropertyName("JavaPath")]              public string  _JavaPath;
-        [JsonPropertyName("VersionIndex")]          public int     _VersionIndex;
-        [JsonPropertyName("MaxMemory")]             public uint    _MaxMemory;
-        [JsonPropertyName("Offline")]               public bool    _Offline;
-        [JsonPropertyName("UserName")]              public string  _UserName;
-        [JsonPropertyName("Email")]                 public string  _Email;
-        [JsonPropertyName("PassWord")]              public string  _PassWord;
-        [JsonPropertyName("RememberPassWord")]      public bool    _RememberPassWord;
-        [JsonPropertyName("WinWidth")]              public ushort  _WinWidth;
-        [JsonPropertyName("WinHeight")]             public ushort  _WinHeight;
-        [JsonPropertyName("FullScreen")]            public bool    _FullScreen;
-        [JsonPropertyName("AdvancedArgs")]          public string  _AdvancedArgs;
-        [JsonPropertyName("ThemeColor")]            public string  _ThemeColor;
-        [JsonPropertyName("UseSystemThemeColor")]   public bool    _UseSystemThemeColor;
-        [JsonPropertyName("UseImageBackground")]    public bool    _UseImageBackground;
-        [JsonPropertyName("ImagePath")]             public string  _ImagePath;
+        [JsonPropertyName("JavaPath")]              public string   _JavaPath;
+        [JsonPropertyName("VersionIndex")]          public int      _VersionIndex;
+        [JsonPropertyName("MaxMemory")]             public uint     _MaxMemory;
+        [JsonPropertyName("Offline")]               public bool     _Offline;
+        [JsonPropertyName("UserName")]              public string   _UserName;
+        [JsonPropertyName("Email")]                 public string   _Email;
+        [JsonPropertyName("PassWord")]              public string   _PassWord;
+        [JsonPropertyName("RememberPassWord")]      public bool     _RememberPassWord;
+        [JsonPropertyName("WinWidth")]              public ushort   _WinWidth;
+        [JsonPropertyName("WinHeight")]             public ushort   _WinHeight;
+        [JsonPropertyName("FullScreen")]            public bool     _FullScreen;
+        [JsonPropertyName("ServerAddress")]         public string   _ServerAddress;
+        [JsonPropertyName("AdvancedArgs")]          public string   _AdvancedArgs;
+        [JsonPropertyName("ThemeColor")]            public string   _ThemeColor;
+        [JsonPropertyName("UseSystemThemeColor")]   public bool     _UseSystemThemeColor;
+        [JsonPropertyName("UseImageBackground")]    public bool     _UseImageBackground;
+        [JsonPropertyName("ImagePath")]             public string   _ImagePath;
 
         #region 属性访问器
 
@@ -87,6 +88,11 @@
         public static string AdvancedArgs
         {
             get => data._AdvancedArgs; set => data._AdvancedArgs = value;
+        }
+
+        public static string ServerAddress
+        {
+            get => data._ServerAddress; set => data._ServerAddress = value;
         }
 
         public static string ThemeColor

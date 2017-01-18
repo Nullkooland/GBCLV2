@@ -18,7 +18,7 @@
     </Grid.ColumnDefinitions>
 
     <ListBox x:Name="ModList" Grid.RowSpan="6" Grid.Column="0"
-             Height="276" Width="445" VerticalAlignment="Top" 
+             Height="275" Width="445" VerticalAlignment="Top" 
              AllowDrop="True" SelectionMode="Extended" 
              SelectionChanged="ModList_SelectionChanged">
 
@@ -32,9 +32,8 @@
                             <Border x:Name="border" Height="21" BorderThickness="1" Background="Transparent" HorizontalAlignment="Stretch">
                                 <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}" 
                                           Content="{Binding FileName}"
-                                          Height="17"
                                           HorizontalAlignment="Left"
-                                          Margin="2,0"
+                                          Margin="1"
                                           Click="RewriteExtension"
                                           />
                             </Border>

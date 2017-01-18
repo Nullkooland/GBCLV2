@@ -117,8 +117,8 @@
         <ColumnDefinition/>
     </Grid.ColumnDefinitions>
 
-    <ListBox x:Name="DisabledPacksList" Height="276" Width="285" Grid.Column="0" Grid.RowSpan="5"/>
-    <ListBox x:Name="EnabledPacksList" Height="276" Width="285" Grid.Column="1" Grid.RowSpan="5"/>
+    <ListBox x:Name="DisabledPacksList" Height="275" Width="285" Grid.Column="0" Grid.RowSpan="5"/>
+    <ListBox x:Name="EnabledPacksList" Height="275" Width="285" Grid.Column="1" Grid.RowSpan="5"/>
 
     <Button x:Name="refresh_button" Style="{StaticResource Button_Style}" ToolTip="重新加载资源包" Grid.Row="0" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">

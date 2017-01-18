@@ -238,7 +238,7 @@ namespace GBCLV2.Controls
         private void MovePackUp(object sender, RoutedEventArgs e)
         {
             int i = Enabled_Pack.IndexOf((sender as Button).DataContext as ResPack);
-            if(i != 0)
+            if(i > 0)
             {
                 Enabled_Pack.Move(i, i - 1);
             }
@@ -247,7 +247,7 @@ namespace GBCLV2.Controls
         private void MovePackDown(object sender, RoutedEventArgs e)
         {
             int i = Enabled_Pack.IndexOf((sender as Button).DataContext as ResPack);
-            if (i != Enabled_Pack.Count - 1)
+            if (i < Enabled_Pack.Count)
             {
                 Enabled_Pack.Move(i, i + 1);
             }

@@ -87,7 +87,7 @@ namespace GBCLV2.Controls
                 ZipArchiveEntry entry = archive.GetEntry("mcmod.info");
                 if (entry != null)
                 {
-                    string str = new StreamReader(entry.Open(), System.Text.Encoding.Default).ReadToEnd();
+                    string str = new StreamReader(entry.Open(), System.Text.Encoding.UTF8).ReadToEnd();
                     try
                     {
                         JsonData ModInfo = JsonMapper.ToObject(str.Substring(1, str.Length - 1));
@@ -159,7 +159,6 @@ namespace GBCLV2.Controls
                 NameBox.Foreground = System.Windows.Media.Brushes.DodgerBlue;
 
             }
-
         }
 
         private void RewriteExtension(object sender, RoutedEventArgs e)

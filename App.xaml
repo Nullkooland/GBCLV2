@@ -16,12 +16,17 @@
             <Setter Property="Padding" Value="3,0"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Height" Value="22"/>
+            <Setter Property="Height" Value="24"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.3"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="{x:Type Page}" x:Key="Page_Style">
@@ -82,6 +87,7 @@
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Height" Value="17"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Effect">
                 <Setter.Value>
@@ -225,6 +231,7 @@
         </ControlTemplate>
 
         <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="24"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Focusable" Value="False"/>

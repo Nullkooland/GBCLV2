@@ -16,10 +16,14 @@ namespace GBCLV2.Pages
         public SkinPage()
         {
             InitializeComponent();
+            PresetColorList.ItemsSource = PresetColors;
 
             SystemColor_CheckBox.IsChecked = Config.UseSystemThemeColor;
             Img_CheckBox.IsChecked = Config.UseImageBackground;
-            PresetColorList.ItemsSource = PresetColors;
+            if (Config.UseImageBackground)
+            {
+                Img_PathBox.Text = Config.ImagePath;
+            }
 
             Temp_Color = (Color)Application.Current.Resources["Theme_Color"];
 
@@ -27,16 +31,6 @@ namespace GBCLV2.Pages
             Slider_R.Value = Temp_Color.R;
             Slider_G.Value = Temp_Color.G;
             Slider_B.Value = Temp_Color.B;
-
-            if(Config.UseImageBackground)
-            {
-                Img_PathBox.Text = Config.ImagePath;
-            }
-            else
-            {
-                Img_PathBox.IsEnabled = false;
-                GetImage_Button.IsEnabled = false;
-            }
 
             Slider_A.ValueChanged += (s, e) =>
             {
@@ -47,18 +41,8 @@ namespace GBCLV2.Pages
             Slider_G.ValueChanged += (s, e) => { Temp_Color.G = (byte)Slider_G.Value; Update_ThemeColor(); };
             Slider_B.ValueChanged += (s, e) => { Temp_Color.B = (byte)Slider_B.Value; Update_ThemeColor(); };
 
-            Img_CheckBox.Checked += (s, e) =>
-            {
-                MainWindow.ChangeImageBackgroundAsync(Img_PathBox.Text);
-                Img_PathBox.IsEnabled = true;
-                GetImage_Button.IsEnabled = true;
-            };
-            Img_CheckBox.Unchecked += (s, e) =>
-            {
-                Application.Current.MainWindow.Background = null;
-                Img_PathBox.IsEnabled = false;
-                GetImage_Button.IsEnabled = false;
-            };
+            Img_CheckBox.Checked    += (s, e) => MainWindow.ChangeImageBackgroundAsync(Img_PathBox.Text);
+            Img_CheckBox.Unchecked  += (s, e) => Application.Current.MainWindow.Background = null;
 
             PresetColorList.SelectionChanged += (s, e) =>
              {
