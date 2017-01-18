@@ -91,23 +91,23 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <Canvas Background="Transparent">
-                            <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Background="Transparent">
                                 <Rectangle Name="bg" Width="17" Height="17" StrokeThickness="1" Stroke="#BDFFFFFF"/>
-                                <Path Name="hook" Visibility="Collapsed" Width="16" Height="16" Data="M43,5 L20,40 20,40 0,20 6,15 18,26 37,7 43,5 z" Fill="White" Stretch="Uniform"/>
+                                <Path Name="hook" Visibility="Collapsed" Data="M43,5 L20,40 20,40 0,20 6,15 18,26 37,7 43,5 z" Fill="White" Stretch="Uniform"/>
                             </Grid>
                             <TextBlock Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
                                        FontSize="14" Foreground="White" TextOptions.TextFormattingMode="Display"
-                                       Canvas.Left="20" IsHitTestVisible="False"/>
-                        </Canvas>
+                                       Margin="3,0" IsHitTestVisible="False" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <ControlTemplate.Triggers>
                             
-                            <Trigger Property="IsMouseOver" Value="true">
+                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bg" Property="Fill" Value="White"/>
                                 <Setter TargetName="hook" Property="Fill" Value="{DynamicResource Theme_Brush}"/>
                             </Trigger>
 
-                            <Trigger Property="IsChecked" Value="true">
+                            <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="hook" Property="Visibility" Value="Visible"/>
                                 <Trigger.EnterActions>
                                     <BeginStoryboard>
