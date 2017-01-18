@@ -4,10 +4,11 @@
     using LitJson;
     using System;
     using System.Text;
+    using System.Security.Cryptography;
 
     public class Config
     {
-
+        const string encryptKey = "无可奉告";
         private static Config data;
 
         [JsonPropertyName("JavaPath")]              public string   _JavaPath;
@@ -124,11 +125,15 @@
 
         public static void Save()
         {
-            if(!string.IsNullOrEmpty(data._PassWord) && data._RememberPassWord)
-                data._PassWord = Convert.ToBase64String(Encoding.Default.GetBytes(data._PassWord));
+            if(data._RememberPassWord)
+            {
+                data._PassWord = Encrypt(data._PassWord);
+            }
             else
+            {
                 data._PassWord = null;
-
+            }
+                
             File.WriteAllText("GBCL.json", JsonMapper.ToJson(data));
         }
 
@@ -137,8 +142,7 @@
             try
             {
                 data = JsonMapper.ToObject<Config>(File.ReadAllText("GBCL.json"));
-                if (data._RememberPassWord && !string.IsNullOrEmpty(data._PassWord))
-                    data._PassWord = Encoding.Default.GetString(Convert.FromBase64String(data._PassWord));
+                data._PassWord = Decrypt(data._PassWord);
             }
             catch
             {
@@ -148,6 +152,48 @@
                     _WinWidth = 854,
                     _WinHeight = 480,
                 };
+            }
+        }
+
+        private static string Encrypt(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+
+            DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();
+
+            byte[] key = Encoding.Unicode.GetBytes(encryptKey);
+            byte[] data = Encoding.Default.GetBytes(str);
+
+            using (var ms = new MemoryStream())
+            {
+                CryptoStream cs = new CryptoStream(ms, descsp.CreateEncryptor(key, key), CryptoStreamMode.Write);
+                cs.Write(data, 0, data.Length);
+                cs.FlushFinalBlock();
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        private static string Decrypt(string str)
+        {
+            if(string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+
+            DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();
+
+            byte[] key = Encoding.Unicode.GetBytes(encryptKey);
+            byte[] data = Convert.FromBase64String(str);
+
+            using (var ms = new MemoryStream())
+            {
+                CryptoStream cs = new CryptoStream(ms, descsp.CreateDecryptor(key, key), CryptoStreamMode.Write);
+                cs.Write(data, 0, data.Length);
+                cs.FlushFinalBlock();
+                return Encoding.Default.GetString(ms.ToArray());
             }
         }
     }
