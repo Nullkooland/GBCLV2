@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using KMCCC.Tools;
 
 namespace GBCLV2.Pages
 {
@@ -22,5 +21,13 @@ namespace GBCLV2.Pages
             NavigationService.GoBack();
         }
 
+        private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabcontrol.SelectedIndex == 1)
+            {
+                await game_download.GetVersionListFromNetAsync();
+            }
+            e.Handled = true;
+        }
     }
 }

@@ -8,7 +8,7 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    public enum AfterLaunchBehavior { 隐藏启动器, 退出启动器, 保持启动器可见 }
+    public enum AfterLaunchBehavior { 隐藏并后台运行, 直接退出, 保持可见 }
 
     public class ConfigModule : INotifyPropertyChanged
     {
@@ -58,47 +58,47 @@
 
         public uint MaxMemory
         {
-            get => _MaxMemory; set { _MaxMemory = value; NotifyPropertyChanged(); }
+            get => _MaxMemory; set => _MaxMemory = value;
         }
 
         public bool Offline
         {
-            get => _Offline;  set { _Offline = value; NotifyPropertyChanged(); }
+            get => _Offline; set => _Offline = value;
         }
 
         public string UserName
         {
-            get => _UserName; set { _UserName = value; NotifyPropertyChanged(); }
+            get => _UserName; set => _UserName = value;
         }
 
         public string Email
         {
-            get => _Email; set { _Email= value; NotifyPropertyChanged(); }
+            get => _Email; set => _Email= value;
         }
 
         public string PassWord
         {
-            get => _PassWord; set { _PassWord = value; NotifyPropertyChanged(); }
+            get => _PassWord; set => _PassWord = value;
         }
 
         public bool RememberPassWord
         {
-            get => _RememberPassWord; set { _RememberPassWord = value; NotifyPropertyChanged(); }
+            get => _RememberPassWord; set => _RememberPassWord = value;
         }
 
         public ushort WinWidth
         {
-            get => _WinWidth; set { _WinWidth = value; NotifyPropertyChanged(); }
+            get => _WinWidth; set => _WinWidth = value;
         }
 
         public ushort WinHeight
         {
-            get => _WinHeight; set { _WinHeight = value; NotifyPropertyChanged(); }
+            get => _WinHeight; set => _WinHeight = value;
         }
 
         public bool FullScreen
         {
-            get => _FullScreen; set { _FullScreen = value; NotifyPropertyChanged(); }
+            get => _FullScreen; set => _FullScreen = value;
         }
 
         public string AdvancedArgs
@@ -118,22 +118,22 @@
 
         public bool UseSystemThemeColor
         {
-            get => _UseSystemThemeColor; set { _UseSystemThemeColor = value; NotifyPropertyChanged(); }
+            get => _UseSystemThemeColor; set => _UseSystemThemeColor = value;
         }
 
         public bool UseImageBackground
         {
-            get => _UseImageBackground; set { _UseImageBackground = value; NotifyPropertyChanged(); }
+            get => _UseImageBackground; set => _UseImageBackground = value;
         }
 
         public string ImagePath
         {
-            get => _ImagePath; set { _ImagePath = value; NotifyPropertyChanged(); }
+            get => _ImagePath; set => _ImagePath = value;
         }
 
         public DownloadSource DownloadSource
         {
-            get => _DownloadSource; set { _DownloadSource = value; NotifyPropertyChanged(); }
+            get => _DownloadSource; set { _DownloadSource = value; DownloadHelper.SetDownloadSource(value); }
         }
 
         public AfterLaunchBehavior AfterLaunch

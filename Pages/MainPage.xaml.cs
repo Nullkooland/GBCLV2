@@ -106,31 +106,29 @@ namespace GBCLV2.Pages
             }
         }
 
-
         private void Goto_Page(object sender, RoutedEventArgs e)
         {
             var page = "Pages/" + (sender as Button).Name + ".xaml";
             NavigationService.Navigate(new Uri(page,UriKind.Relative));
         }
 
-
         private void OnGameLaunch()
         {
             switch (App.Config.AfterLaunch)
             {
-                case AfterLaunchBehavior.隐藏启动器:
+                case AfterLaunchBehavior.隐藏并后台运行:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.MainWindow.Hide();
                     });
                     break;
-                case AfterLaunchBehavior.退出启动器:
+                case AfterLaunchBehavior.直接退出:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.Shutdown();
                     });
                     break;
-                case AfterLaunchBehavior.保持启动器可见:
+                case AfterLaunchBehavior.保持可见:
                     Dispatcher.Invoke(() =>
                     {
                         if (string.IsNullOrWhiteSpace(App.Config.UserName))

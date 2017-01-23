@@ -13,8 +13,6 @@ namespace GBCLV2.Controls
 
             DownloadSourceComboBox.ItemsSource = Enum.GetValues(typeof(DownloadSource));
             AfterLaunchBehaviorComboBox.ItemsSource = Enum.GetValues(typeof(AfterLaunchBehavior));
-
-            DownloadSourceComboBox.SelectionChanged += (s, e) => DownloadHelper.SetDownloadSource();
         }
     }
 }

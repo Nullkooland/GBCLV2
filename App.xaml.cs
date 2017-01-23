@@ -28,8 +28,6 @@ namespace GBCLV2
             }
 
             Config = ConfigModule.LoadConfig();
-            DownloadHelper.SetDownloadSource();
-
             Initialize_LauncherCore();
             Initialize_ThemeColor();
 
@@ -49,7 +47,7 @@ namespace GBCLV2
 
             if (Core.JavaPath == null)
             {
-                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java", MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
                 }
@@ -120,7 +118,7 @@ namespace GBCLV2
         {
             if (ExitCode != 0)
             {
-                if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo,MessageBoxImage.Asterisk) == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
                 }
@@ -128,7 +126,7 @@ namespace GBCLV2
 
             Current.Dispatcher.Invoke(() =>
             {
-                if(Config.AfterLaunch == AfterLaunchBehavior.隐藏启动器)
+                if(Config.AfterLaunch == AfterLaunchBehavior.隐藏并后台运行)
                 {
                     Current.Shutdown();
                 }
@@ -144,7 +142,7 @@ namespace GBCLV2
 
         void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(string.Format("异常信息：{0}\n异常源：{1}",e.Exception.Message,e.Exception.StackTrace), "程序发生了无法处理的异常！");
+            MessageBox.Show(string.Format("异常信息：{0}\n异常源：{1}",e.Exception.Message,e.Exception.StackTrace), "程序发生了无法处理的异常！",MessageBoxButton.OK,MessageBoxImage.Error);
             //Shutdown(1);
             e.Handled = true;
         }

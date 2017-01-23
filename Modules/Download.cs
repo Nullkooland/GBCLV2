@@ -45,9 +45,9 @@ namespace GBCLV2.Modules
     {
         public static IDownloadBaseUrl BaseUrl;
 
-        public static void SetDownloadSource()
+        public static void SetDownloadSource(DownloadSource source)
         {
-            switch(App.Config.DownloadSource)
+            switch(source)
             {
                 case DownloadSource.官方:
                     BaseUrl = new OfficialBaseUrl();

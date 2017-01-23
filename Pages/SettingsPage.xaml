@@ -5,13 +5,16 @@
       Style="{StaticResource Page_Style}">
 
     <Grid>
-        <TabControl Height="325" VerticalAlignment="Bottom" Margin="3" BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
+        <TabControl x:Name="tabcontrol" SelectionChanged="TabControl_SelectionChanged"
+                    Height="325" VerticalAlignment="Bottom" Margin="3" 
+                    BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
+            
             <TabItem Header="/images/launch.png" Tag="启动设置">
                 <Controls:LaunchSettings x:Name="launch_settings"/>
             </TabItem>
 
             <TabItem Header="/images/download.png" Tag="游戏下载">
-                <Controls:GameDownload/>
+                <Controls:GameDownload x:Name="game_download"/>
             </TabItem>
 
             <TabItem Header="/images/bomb.png" Tag="Forge安装">
