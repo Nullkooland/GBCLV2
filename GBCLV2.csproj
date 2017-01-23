@@ -57,6 +57,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -75,16 +76,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Config.cs" />
     <Compile Include="Controls\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ModManager.xaml.cs">
-      <DependentUpon>ModManager.xaml</DependentUpon>
+    <Compile Include="Controls\GameDownload.xaml.cs">
+      <DependentUpon>GameDownload.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ResourcepacksManager.xaml.cs">
-      <DependentUpon>ResourcepacksManager.xaml</DependentUpon>
+    <Compile Include="Controls\OtherSettings.xaml.cs">
+      <DependentUpon>OtherSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\Config.cs" />
+    <Compile Include="Modules\Download.cs" />
+    <Compile Include="Modules\WindowBlurHelper.cs" />
     <Compile Include="Pages\DownloadPage.xaml.cs">
       <DependentUpon>DownloadPage.xaml</DependentUpon>
     </Compile>
@@ -94,22 +97,27 @@
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ModPage.xaml.cs">
+      <DependentUpon>ModPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ResourcepackPage.xaml.cs">
+      <DependentUpon>ResourcepackPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SkinPage.xaml.cs">
       <DependentUpon>SkinPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowBlurHelper.cs" />
     <Page Include="Controls\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ModManager.xaml">
+    <Page Include="Controls\GameDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ResourcepacksManager.xaml">
+    <Page Include="Controls\OtherSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,6 +142,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ModPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ResourcepackPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,7 +200,6 @@
     <Resource Include="images\minimize.png" />
     <Resource Include="images\open.png" />
     <Resource Include="images\openfolder.png" />
-    <Resource Include="images\pictures.png" />
     <Resource Include="images\resourcepack.png" />
     <Resource Include="images\settings.png" />
     <Resource Include="images\skin.png" />
@@ -192,7 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\enderman.ico" />
-    <Resource Include="images\frog.png" />
     <Resource Include="images\refresh.png" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +220,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\steven.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\cloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\other.png" />
   </ItemGroup>
   <Import Project="..\KMCCC\KMCCC.Shared\KMCCC.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -11,12 +11,9 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 
-namespace GBCLV2.Controls
+namespace GBCLV2.Pages
 {
-    /// <summary>
-    /// ResourcepacksManager.xaml 的交互逻辑
-    /// </summary>
-    public partial class ResourcepacksManager : Grid
+    public partial class ResourcepackPage : Page
     {
         private class ResPack
         {
@@ -35,7 +32,7 @@ namespace GBCLV2.Controls
         private static string LineToReplace;
         private static string[] EnabledPackNames;
 
-        public ResourcepacksManager()
+        public ResourcepackPage()
         {
             InitializeComponent();
             EnabledPacksList.ItemsSource = Enabled_Pack;
@@ -105,7 +102,7 @@ namespace GBCLV2.Controls
 
             uint count = 0;
 
-            foreach (var path in Directory.EnumerateFiles(PacksDir,"*.zip").Union(Directory.EnumerateDirectories(PacksDir)))
+            foreach (var path in Directory.EnumerateFiles(PacksDir,"*.zip").Concat(Directory.EnumerateDirectories(PacksDir)))
             {
                 bool NotEnabled = true;
                 if(EnabledPackNames != null && count < EnabledPackNames.Length)
@@ -143,12 +140,12 @@ namespace GBCLV2.Controls
 
             if(path.EndsWith(".zip"))
             {
-                using (var fs = new FileStream(path, FileMode.Open))
+                using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                 using (var archive = new ZipArchive(fs, ZipArchiveMode.Read))
                 {
                     using (var sr = new StreamReader(archive.GetEntry("pack.mcmeta").Open(), Encoding.UTF8))
                     {
-                        GetPackInfo(sr.ReadToEnd(), pack);
+                        GetPackInfo(sr.ReadToEnd(), ref pack);
                         sr.Dispose();
                     }
 
@@ -157,7 +154,7 @@ namespace GBCLV2.Controls
                         var ms = new MemoryStream();
                         stream.CopyTo(ms);
 
-                        GetPackCover(ms, pack);
+                        GetPackCover(ms, ref pack);
                         stream.Dispose();
                         ms.Dispose();
                     }
@@ -168,32 +165,32 @@ namespace GBCLV2.Controls
             {
                 if (File.Exists(path + @"/pack.mcmeta"))
                 {
-                    GetPackInfo(File.ReadAllText(path + @"/pack.mcmeta", Encoding.UTF8), pack);
+                    GetPackInfo(File.ReadAllText(path + @"/pack.mcmeta", Encoding.UTF8), ref pack);
                 }
 
                 if (File.Exists(path + @"/pack.png"))
                 {
                     var fs = File.Open(path + @"/pack.png", FileMode.Open);
-                    GetPackCover(fs, pack);
+                    GetPackCover(fs, ref pack);
                     fs.Dispose();
                 }
             }
 
             return pack;
 
-            void GetPackCover(Stream stream, ResPack _pack)
+            void GetPackCover(Stream stream, ref ResPack _pack)
             {
                 _pack.Cover = new BitmapImage();
                 _pack.Cover.BeginInit();
                 _pack.Cover.StreamSource = stream;
-                _pack.Cover.DecodePixelWidth = 54;
-                _pack.Cover.DecodePixelHeight = 54;
+                _pack.Cover.DecodePixelWidth = 64;
+                _pack.Cover.DecodePixelHeight = 64;
                 _pack.Cover.CacheOption = BitmapCacheOption.OnLoad;
                 _pack.Cover.EndInit();
                 _pack.Cover.Freeze();
             }
 
-            void GetPackInfo(string str, ResPack _pack)
+            void GetPackInfo(string str, ref ResPack _pack)
             {
                 var PackInfo = JsonMapper.ToObject(str)[0];
                 _pack.Format = (int)PackInfo["pack_format"];
@@ -247,38 +244,9 @@ namespace GBCLV2.Controls
         private void MovePackDown(object sender, RoutedEventArgs e)
         {
             int i = Enabled_Pack.IndexOf((sender as Button).DataContext as ResPack);
-            if (i < Enabled_Pack.Count)
+            if (i < Enabled_Pack.Count - 1)
             {
                 Enabled_Pack.Move(i, i + 1);
-            }
-        }
-
-        public void SavePackOptions()
-        {
-            string s = "resourcePacks:[";
-            string options_text;
-
-            for (int i = Enabled_Pack.Count - 1; i >= 0; --i)
-            {
-                s += "\"" + Enabled_Pack[i].Name + "\"" + ",";
-            }
-
-            s = s.Remove(s.Length - 1);
-            s += "]";
-
-            if (LineToReplace != null)
-            {
-                if(File.Exists(OptionsDir))
-                {
-                    options_text = File.ReadAllText(OptionsDir, Encoding.Default).Replace(LineToReplace, s);
-                }
-                else
-                {
-                    options_text = s;
-                }
-
-                File.WriteAllText(OptionsDir, options_text, Encoding.Default);
-                LineToReplace = null;
             }
         }
 
@@ -321,6 +289,37 @@ namespace GBCLV2.Controls
                     }
                 }
             }
+        }
+
+        private void Go_Back(object sender, RoutedEventArgs e)
+        {
+            string s = "resourcePacks:[";
+            string options_text;
+
+            for (int i = Enabled_Pack.Count - 1; i >= 0; --i)
+            {
+                s += "\"" + Enabled_Pack[i].Name + "\"" + ",";
+            }
+
+            s = s.Remove(s.Length - 1);
+            s += "]";
+
+            if (LineToReplace != null)
+            {
+                if(File.Exists(OptionsDir))
+                {
+                    options_text = File.ReadAllText(OptionsDir, Encoding.Default).Replace(LineToReplace, s);
+                }
+                else
+                {
+                    options_text = s;
+                }
+
+                File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                LineToReplace = null;
+            }
+
+            NavigationService.GoBack();
         }
     }
 }

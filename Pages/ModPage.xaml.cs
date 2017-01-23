@@ -11,9 +11,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace GBCLV2.Controls
+namespace GBCLV2.Pages
 {
-    public partial class ModManager : Grid
+    public partial class ModPage : Page
     {
         private class Mod
         {
@@ -27,7 +27,7 @@ namespace GBCLV2.Controls
         private ObservableCollection<Mod> CurrentMods = new ObservableCollection<Mod>();
         private const string ModsDir = @".minecraft\mods\";
 
-        public ModManager()
+        public ModPage()
         {
             InitializeComponent();
 
@@ -36,9 +36,10 @@ namespace GBCLV2.Controls
 
             Task.Run(() => GetModsFromDisk());
 
-            refresh_button.Click    += (s, e) => GetModsFromDisk();
-            delete_button.Click     += (s, e) => DeleteModsAsync();
-            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
+            refresh_btn.Click    += (s, e) => GetModsFromDisk();
+            delete_btn.Click     += (s, e) => DeleteModsAsync();
+            openfolder_btn.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
+            goback_btn.Click     += (s, e) => NavigationService.GoBack();
 
             ModList.Drop            += (s, e) => Copy_New(e.Data.GetData(DataFormats.FileDrop) as string[]);
             ModList.PreviewKeyDown  += (s, e) =>
@@ -81,7 +82,7 @@ namespace GBCLV2.Controls
                 IsEnabled = dir.EndsWith(".disabled") ? false : true
             };
 
-            using (FileStream ModToOpen = new FileStream(dir, FileMode.Open))
+            using (FileStream ModToOpen = new FileStream(dir, FileMode.Open, FileAccess.Read))
             using (ZipArchive archive = new ZipArchive(ModToOpen, ZipArchiveMode.Read))
             {
                 ZipArchiveEntry entry = archive.GetEntry("mcmod.info");

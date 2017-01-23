@@ -27,7 +27,7 @@
             <SolidColorBrush Color="{DynamicResource Theme_Color}"/>
         </Canvas.Background>
 
-        <Frame x:Name="frame" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="frame" NavigationUIVisibility="Hidden" Focusable="False"/>
         <Button Style="{StaticResource Button_Style}" Click="ShutDown" Width="22" Height="22" Canvas.Right="7" Canvas.Top="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/close.png" po:Freeze="True"/>

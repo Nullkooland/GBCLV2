@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Tools;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
@@ -15,81 +16,65 @@ namespace GBCLV2.Controls
         public LaunchSettings()
         {
             InitializeComponent();
+            this.DataContext = App.Config;
 
             VersionComboBox.ItemsSource = App.Versions;
-            VersionComboBox.SelectedIndex = Config.VersionIndex;
-            Offline_CheckBox.IsChecked = Config.Offline;
-            if (Config.Offline) OfflineMode();
+
+            if (App.Config.Offline) OfflineMode();
             else OnlineMode();
 
             Offline_CheckBox.Checked += (s, e) => OfflineMode();
             Offline_CheckBox.Unchecked += (s, e) => OnlineMode();
 
-            JavaPathBox.Text = App.Core.JavaPath;
-            MaxMemoryBox.Text = Config.MaxMemory.ToString();
-            WinWidthBox.Text = Config.WinWidth.ToString();
-            WinHeightBox.Text = Config.WinHeight.ToString();
-            FullScreen_CheckBox.IsChecked = Config.FullScreen;
-            
-            if(!string.IsNullOrEmpty(Config.ServerAddress))
+            if(!string.IsNullOrEmpty(App.Config.ServerAddress))
             {
                 DirectLoginServer_CheckBox.IsChecked = true;
-                ServerAddressBox.Text = Config.ServerAddress;
+                ServerAddressBox.Text = App.Config.ServerAddress;
             }
         }
 
         private void OnlineMode()
         {
-            Config.Offline = false;
+            App.Config.Offline = false;
             PassWordBox.IsEnabled = true;
             RememberPassword_CheckBox.IsEnabled = true;
             PassWord_TextBlcok.IsEnabled = true;
             UserName_TextBlcok.Text = "邮箱";
-            UserNameBox.Text = Config.Email;
-            PassWordBox.Password = Config.PassWord;
-            RememberPassword_CheckBox.IsChecked = Config.RememberPassWord;
+            UserNameBox.Text = App.Config.Email;
+            PassWordBox.Password = App.Config.PassWord;
+
         }
 
         private void OfflineMode()
         {
-            Config.Offline = true;
+            App.Config.Offline = true;
             PassWordBox.Password = null;
             PassWordBox.IsEnabled = false;
             PassWord_TextBlcok.IsEnabled = false;
-            RememberPassword_CheckBox.IsChecked = false;
             RememberPassword_CheckBox.IsEnabled = false;
             UserName_TextBlcok.Text = "游戏名";
-            UserNameBox.Text = Config.UserName;
+            UserNameBox.Text = App.Config.UserName;
         }
 
         public void Save_Settings()
         {
-            Config.VersionIndex = VersionComboBox.SelectedIndex;
-            Config.FullScreen = FullScreen_CheckBox.IsChecked ?? false;
-
-            if (System.IO.File.Exists(JavaPathBox.Text))
+            if (App.Config.Offline)
             {
-                App.Core.JavaPath = JavaPathBox.Text;
-            }
-
-            if (Config.Offline)
-            {
-                Config.UserName = UserNameBox.Text;
+                App.Config.UserName = UserNameBox.Text;
             }
             else
             {
-                Config.Email = UserNameBox.Text;
-                Config.PassWord = PassWordBox.Password;
-                Config.RememberPassWord = RememberPassword_CheckBox.IsChecked ?? false;
+                App.Config.Email = UserNameBox.Text;
+                App.Config.PassWord = PassWordBox.Password;
             }
 
             if(DirectLoginServer_CheckBox.IsChecked ?? false)
             {
-                Config.ServerAddress = ServerAddressBox.Text;
+                App.Config.ServerAddress = ServerAddressBox.Text;
             }
             else
             {
-                Config.ServerAddress = null;
+                App.Config.ServerAddress = null;
             }
         }
 
@@ -106,42 +91,6 @@ namespace GBCLV2.Controls
                 Menu_Delete.IsEnabled = false;
             }
             VersionOptions.IsOpen = true;
-        }
-
-        private void Update_MaxMemory(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Config.MaxMemory = uint.Parse(MaxMemoryBox.Text);
-                Config.MaxMemory = Config.MaxMemory > 1024 ? Config.MaxMemory : 1024;
-                Config.MaxMemory = Config.MaxMemory < AvailableMemory ? Config.MaxMemory : AvailableMemory;
-                MaxMemoryBox.Text = Config.MaxMemory.ToString();
-            }
-            catch
-            {
-                MaxMemoryBox.Text = Config.MaxMemory.ToString();
-            }
-        }
-
-        private void Update_WindowSize(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Config.WinWidth = ushort.Parse(WinWidthBox.Text);
-            }
-            catch
-            {
-                WinWidthBox.Text = Config.WinWidth.ToString();
-            }
-
-            try
-            {
-                Config.WinHeight = ushort.Parse(WinHeightBox.Text);
-            }
-            catch
-            {
-                WinHeightBox.Text = Config.WinHeight.ToString();
-            }
         }
 
         private void RefreshVersion(object sender, RoutedEventArgs e)
@@ -208,12 +157,12 @@ namespace GBCLV2.Controls
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
                 Title = "请选择Java路径",
-                Filter = "Java运行环境|javaw.exe",
+                Filter = "Java运行环境| javaw.exe; java.exe",
             };
 
             if (dialog.ShowDialog() ?? false)
             {
-                JavaPathBox.Text = dialog.FileName;
+                App.Config.JavaPath = dialog.FileName;
             }
         }
     }

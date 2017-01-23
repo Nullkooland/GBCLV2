@@ -4,11 +4,13 @@ using System.Threading;
 using KMCCC.Launcher;
 using System.Collections.ObjectModel;
 using System.IO;
+using GBCLV2.Modules;
 
 namespace GBCLV2
 {
     public partial class App : Application
 	{
+        public static ConfigModule Config;
         public static LauncherCore Core;
         public static ObservableCollection<Version> Versions = new ObservableCollection<Version>();
 
@@ -25,16 +27,20 @@ namespace GBCLV2
                 System.Environment.Exit(0);
             }
 
+            Config = ConfigModule.LoadConfig();
+            DownloadHelper.SetDownloadSource();
+
             Initialize_LauncherCore();
             Initialize_ThemeColor();
+
+            Dispatcher.UnhandledException += UnhandledExceptionHandler;
 
             base.OnStartup(e);
         }
 
         private void Initialize_LauncherCore()
         {
-            Core = LauncherCore.Create(Config.JavaPath);
-            Core.GameLaunch += OnGameLaunch;
+            Core = LauncherCore.Create();
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
 
@@ -48,7 +54,7 @@ namespace GBCLV2
                     System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
                 }
             }
-
+            
             uint count = 0;
 
             foreach(Version ver in Core.GetVersions())
@@ -105,15 +111,6 @@ namespace GBCLV2
             Current.Resources["Theme_Brush"] = new SolidColorBrush(_col);
         }
 
-        private void OnGameLaunch()
-        {
-            Current.Dispatcher.BeginInvoke((System.Action)(() =>
-            {
-                Current.MainWindow.Close();
-            }));
-            Config.JavaPath = Core.JavaPath;
-        }
-
         private void OnGameLog(string line)
         {
             Logger.WriteLine(line);
@@ -121,17 +118,21 @@ namespace GBCLV2
 
         private void OnGameExit(int ExitCode)
         {
-            Current.Dispatcher.BeginInvoke((System.Action)(() => 
+            if (ExitCode != 0)
             {
-                if (ExitCode != 0)
+                if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
-                    }
+                    System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
                 }
-                Current.Shutdown();
-            }));
+            }
+
+            Current.Dispatcher.Invoke(() =>
+            {
+                if(Config.AfterLaunch == AfterLaunchBehavior.隐藏启动器)
+                {
+                    Current.Shutdown();
+                }
+            });
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -139,6 +140,13 @@ namespace GBCLV2
             Config.ThemeColor = Resources["Theme_Color"].ToString();
             Config.Save();
             base.OnExit(e);
+        }
+
+        void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(string.Format("异常信息：{0}\n异常源：{1}",e.Exception.Message,e.Exception.StackTrace), "程序发生了无法处理的异常！");
+            //Shutdown(1);
+            e.Handled = true;
         }
     }
 }

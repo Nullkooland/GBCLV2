@@ -1,0 +1,42 @@
+﻿<Grid x:Class="GBCLV2.Controls.GameDownload"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="290" Width="630">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="7"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width="48"/>
+    </Grid.ColumnDefinitions>
+
+    <ListView x:Name="VersionList" Style="{StaticResource GridListView_Style}" 
+              Grid.RowSpan="4" Grid.Column="0" HorizontalAlignment="Left">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="版本" Width="150" DisplayMemberBinding="{Binding ID}"/>
+                <GridViewColumn Header="发布日期" Width="300" DisplayMemberBinding="{Binding ReleaseTime}"/>
+                <GridViewColumn Header="类型" Width="110" DisplayMemberBinding="{Binding Type}"/>
+            </GridView>
+        </ListView.View>
+    </ListView>
+
+    <Button x:Name="refresh_btn" Style="{StaticResource Button_Style}" ToolTip="刷新列表"
+            Width="32" Height="32" Grid.Row="1" Grid.Column="1">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
+        </Button.Background>
+    </Button>
+
+    <Button x:Name="download_btn" Style="{StaticResource Button_Style}" ToolTip="下载选中版本" 
+            Width="32" Height="32" Grid.Row="2" Grid.Column="1">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/cloud.png"/>
+        </Button.Background>
+    </Button>
+</Grid>

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GBCLV2.Pages;
+using GBCLV2.Modules;
 
 namespace GBCLV2
 {
@@ -19,9 +20,9 @@ namespace GBCLV2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Config.UseImageBackground)
+            if (App.Config.UseImageBackground)
             {
-                ChangeImageBackgroundAsync(Config.ImagePath);
+                ChangeImageBackgroundAsync(App.Config.ImagePath);
             }
             var mp = new MainPage();
             frame.Navigate(mp);
@@ -32,7 +33,7 @@ namespace GBCLV2
             }
             else
             {
-                this.BorderThickness = new Thickness(0.6);
+                this.BorderThickness = new Thickness(0.5);
                 this.BorderBrush = Brushes.DarkGray;
                 Win7BlurHelper.EnableAeroGlass(this);
             }

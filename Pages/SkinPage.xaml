@@ -110,7 +110,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Style="{StaticResource Button_Style}" Click="Go_Back" ToolTip="返回" 
+        <Button x:Name="goback_btn" Style="{StaticResource Button_Style}" ToolTip="返回" 
                 Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png" po:Freeze="True"/>
@@ -119,7 +119,7 @@
 
         <Button Style="{StaticResource Button_Style}" x:Name="GetImage_Button" Click="GetImageFromDisk" ToolTip="选取图片文件"
                 Grid.Row="8" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left" 
-                IsEnabled="{Binding IsChecked,ElementName=Img_CheckBox}">
+                IsEnabled="{Binding UseImageBackground}">
             <Button.Background>
                 <ImageBrush ImageSource="/images/open.png" po:Freeze="True"/>
             </Button.Background>
@@ -140,13 +140,13 @@
         <TextBlock Text="{Binding ElementName=Slider_G, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
         <TextBlock Text="{Binding ElementName=Slider_B, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
 
-        <CheckBox x:Name="SystemColor_CheckBox" Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Margin="9,0"/>
+        <CheckBox IsChecked="{Binding UseSystemThemeColor}" Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Margin="9,0"/>
         <TextBlock Text="预置颜色" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="75,0" Style="{StaticResource Info_TextBlock_Style}"/>
         <ComboBox x:Name="PresetColorList" Grid.Row="6" Grid.Column="1" Width="65" HorizontalAlignment="Right" Margin="7,0" DisplayMemberPath="Name"/>
 
-        <CheckBox x:Name="Img_CheckBox" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
-        <TextBox x:Name ="Img_PathBox" FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"
-                 IsEnabled="{Binding IsChecked,ElementName=Img_CheckBox}"/>
+        <CheckBox x:Name="Img_CheckBox" IsChecked="{Binding UseImageBackground}" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
+        <TextBox Text="{Binding ImagePath}"  FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"
+                 IsEnabled="{Binding UseImageBackground}"/>
 
     </Grid>
 </Page>

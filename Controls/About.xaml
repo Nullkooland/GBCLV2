@@ -1,11 +1,12 @@
 ﻿<Grid x:Class="GBCLV2.Controls.About"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Height="282" Width="634">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="290" Width="630">
+    
     <Grid.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="15,0"/>
+            <Setter Property="Margin" Value="18,0"/>
             <Setter Property="TextDecorations" Value="UnderLine"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontSize" Value="14"/>
@@ -13,7 +14,7 @@
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.6" Color="#FF3CB8E0"/>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="0" Opacity="0.75" Color="#FF06A4D4"/>
                 </Setter.Value>
             </Setter>
             <EventSetter Event="MouseLeftButtonDown" Handler="Open_Link"/>
@@ -22,7 +23,7 @@
 
     <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="60"/>
+        <RowDefinition Height="80"/>
         <RowDefinition Height="30"/>
         <RowDefinition Height="20"/>
         <RowDefinition Height="30"/>
@@ -32,16 +33,20 @@
         <RowDefinition Height="3*"/>
     </Grid.RowDefinitions>
 
-    <Image Source="/GBCLV2;component/images/frog.png" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Right" Margin="100,0"/>
+    <Image Source="/GBCLV2;component/images/steven.png" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Right" Margin="125,0">
+        <Image.Effect>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="9" />
+        </Image.Effect>
+    </Image>
 
-    <TextBlock Text="关于 GBCL V2.0.1" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="12,0"/>
+    <TextBlock Text="关于 GBCL V2.0.2" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="15,0"/>
     
-    <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="12,0"/>
+    <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="15,0"/>
     <TextBlock Text="https://github.com/Goose-Bomb/GBCLV2" Grid.Row="3"/>
 
-    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="12,0"/>
+    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="15,0"/>
     <TextBlock Text="https://github.com/MineStudio/KMCCC" Grid.Row="5"/>
 
-    <TextBlock Text="使用BMCLAPI下载源" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="12,0"/>
+    <TextBlock Text="使用BMCLAPI下载源" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="15,0"/>
     <TextBlock Text="http://bmclapi.bangbang93.com/" Grid.Row="7"/>
 </Grid>

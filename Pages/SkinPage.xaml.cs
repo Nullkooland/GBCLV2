@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Collections.Generic;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
@@ -16,14 +17,8 @@ namespace GBCLV2.Pages
         public SkinPage()
         {
             InitializeComponent();
+            this.DataContext = App.Config;
             PresetColorList.ItemsSource = PresetColors;
-
-            SystemColor_CheckBox.IsChecked = Config.UseSystemThemeColor;
-            Img_CheckBox.IsChecked = Config.UseImageBackground;
-            if (Config.UseImageBackground)
-            {
-                Img_PathBox.Text = Config.ImagePath;
-            }
 
             Temp_Color = (Color)Application.Current.Resources["Theme_Color"];
 
@@ -41,7 +36,7 @@ namespace GBCLV2.Pages
             Slider_G.ValueChanged += (s, e) => { Temp_Color.G = (byte)Slider_G.Value; Update_ThemeColor(); };
             Slider_B.ValueChanged += (s, e) => { Temp_Color.B = (byte)Slider_B.Value; Update_ThemeColor(); };
 
-            Img_CheckBox.Checked    += (s, e) => MainWindow.ChangeImageBackgroundAsync(Img_PathBox.Text);
+            Img_CheckBox.Checked    += (s, e) => MainWindow.ChangeImageBackgroundAsync(App.Config.ImagePath);
             Img_CheckBox.Unchecked  += (s, e) => Application.Current.MainWindow.Background = null;
 
             PresetColorList.SelectionChanged += (s, e) =>
@@ -54,11 +49,18 @@ namespace GBCLV2.Pages
                  Slider_B.Value = Temp_Color.B;
                  App.Update_ThemeColorBrush(Temp_Color);
              };
+
+            goback_btn.Click += (s, e) => NavigationService.GoBack();
         }
 
         private static void Update_ThemeColor()
         {
             Application.Current.Resources["Theme_Color"] = Temp_Color;
+        }
+
+        private void Slider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            App.Update_ThemeColorBrush(Temp_Color);
         }
 
         private void GetImageFromDisk(object sender, RoutedEventArgs e)
@@ -69,24 +71,11 @@ namespace GBCLV2.Pages
                 Filter = "图像文件| *.png; *.jpg; *.bmp; *.gif",
             };
 
-            if(dialog.ShowDialog() ?? false)
+            if (dialog.ShowDialog() ?? false)
             {
-                Img_PathBox.Text = dialog.FileName;
+                App.Config.ImagePath = dialog.FileName;
                 MainWindow.ChangeImageBackgroundAsync(dialog.FileName);
             }
-        }
-
-        private void Slider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            App.Update_ThemeColorBrush(Temp_Color);
-        }
-
-        private void Go_Back(object sender, RoutedEventArgs e)
-        {
-            Config.UseSystemThemeColor = SystemColor_CheckBox.IsChecked ?? false;
-            Config.UseImageBackground = Img_CheckBox.IsChecked ?? false;
-            Config.ImagePath = Img_PathBox.Text;
-            NavigationService.GoBack();
         }
 
         private class MyColor

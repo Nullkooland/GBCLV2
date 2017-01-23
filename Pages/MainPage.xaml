@@ -21,23 +21,29 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <ComboBox Name="VersionBox" DisplayMemberPath="ID" SelectionChanged="SelectVersionChanged" Grid.Row="2" Width="240" Height="26" HorizontalAlignment="Right" Margin="95,0"/>
+        <ComboBox Name="VersionBox" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}" Grid.Row="2" Width="240" Height="26" HorizontalAlignment="Right" Margin="95,0"/>
 
         <Button x:Name="LaunchButton" Content="启动" Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" FontSize="16" BorderBrush="#80FFFFFF" Background="#54FFFFFF"/>
 
-        <Button x:Name="Download" Style="{StaticResource _ButtonStyle}" ToolTip="under construction!" Margin="90,0">
+        <Button x:Name="ResourcepackPage" Style="{StaticResource _ButtonStyle}" ToolTip="资源包管理器" Margin="130,0" Click="Goto_Page">
             <Button.Background>
-                <ImageBrush ImageSource="/images/download.png" po:Freeze="True"/>
+                <ImageBrush ImageSource="/images/resourcepack.png" po:Freeze="True"/>
+            </Button.Background>
+        </Button>
+        
+        <Button x:Name="ModPage" Style="{StaticResource _ButtonStyle}" ToolTip="MOD管理器" Margin="90,0" Click="Goto_Page">
+            <Button.Background>
+                <ImageBrush ImageSource="/images/mod.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Click="Goto_SkinPage" x:Name="Skin" Style="{StaticResource _ButtonStyle}" ToolTip="外观选项" Margin="50,0">
+        <Button x:Name="SkinPage" Style="{StaticResource _ButtonStyle}" ToolTip="外观选项" Margin="50,0" Click="Goto_Page">
             <Button.Background>
                 <ImageBrush ImageSource="/images/skin.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Click="Goto_SettingsPage" Style="{StaticResource _ButtonStyle}" ToolTip="游戏选项" Margin="10,0">
+        <Button x:Name="SettingsPage" Style="{StaticResource _ButtonStyle}" ToolTip="游戏选项" Margin="10,0" Click="Goto_Page">
             <Button.Background>
                 <ImageBrush ImageSource="/images/settings.png" po:Freeze="True"/>
             </Button.Background>

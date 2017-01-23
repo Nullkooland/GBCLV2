@@ -6,6 +6,7 @@ using KMCCC.Authentication;
 using KMCCC.Launcher;
 using KMCCC.Tools;
 using System.Windows.Media;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
@@ -24,19 +25,20 @@ namespace GBCLV2.Pages
         public MainPage()
         {
             InitializeComponent();
+            this.DataContext = App.Config;
 
             Loaded += (s, e) =>
             {
-                if (string.IsNullOrWhiteSpace(Config.UserName))
+                if (string.IsNullOrWhiteSpace(App.Config.UserName))
                 {
                     tb.Text = Excited[rand.Next(Excited.Length)];
                 }
                 else
                 {
-                    tb.Text = "Hello " + Config.UserName;
+                    tb.Text = "Hello " + App.Config.UserName;
                 }
 
-                if(Config.VersionIndex == -1)
+                if(App.Config.VersionIndex == -1)
                 {
                     LaunchButton.IsEnabled = false;
                     LaunchButton.Content = "没有版本";
@@ -47,7 +49,6 @@ namespace GBCLV2.Pages
                     LaunchButton.Content = "启动";
 
                     VersionBox.ItemsSource = App.Versions;
-                    VersionBox.SelectedIndex = Config.VersionIndex;
                 }
             };
         }
@@ -55,11 +56,28 @@ namespace GBCLV2.Pages
         private void Launch(object sender, RoutedEventArgs e)
         {
             var Core = App.Core;
-            var Versions = App.Versions;
+            var Config = App.Config;
+
+            Core.JavaPath = System.IO.File.Exists(Config.JavaPath) ? Config.JavaPath : SystemTools.FindJava();
+            Core.GameLaunch += OnGameLaunch;
+
+            var LaunchVersion = App.Versions[VersionBox.SelectedIndex];
+
+            var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion).ToList();
+            if(lostEssentials.Any())
+            {
+                var downloadPage = new DownloadPage{ FilesToDownload = lostEssentials };
+                NavigationService.Navigate(downloadPage);
+                return;
+            }
+
+            var AvailableMemory = SystemTools.GetAvailableMemory();
+            Config.MaxMemory = Config.MaxMemory > 1024 ? Config.MaxMemory : 1024;
+            Config.MaxMemory = Config.MaxMemory < AvailableMemory ? Config.MaxMemory : AvailableMemory;
 
             var Result = Core.Launch(new LaunchOptions()
             {
-                Version = Versions[VersionBox.SelectedIndex],
+                Version = LaunchVersion,
                 Authenticator = (Config.Offline) ?
                 (IAuthenticator)new OfflineAuthenticator(Config.UserName) : new YggdrasilLogin(Config.Email, Config.PassWord, false),
                 MaxMemory = Config.MaxMemory,
@@ -88,25 +106,46 @@ namespace GBCLV2.Pages
             }
         }
 
-        private void Goto_SettingsPage(object sender, RoutedEventArgs e)
+
+        private void Goto_Page(object sender, RoutedEventArgs e)
         {
-            var settings_page = new SettingsPage();
-            if(Config.UseImageBackground)
+            var page = "Pages/" + (sender as Button).Name + ".xaml";
+            NavigationService.Navigate(new Uri(page,UriKind.Relative));
+        }
+
+
+        private void OnGameLaunch()
+        {
+            switch (App.Config.AfterLaunch)
             {
-                settings_page.Background = new SolidColorBrush(Color.FromArgb(100,150,150,150));
+                case AfterLaunchBehavior.隐藏启动器:
+                    Dispatcher.Invoke(() =>
+                    {
+                        Application.Current.MainWindow.Hide();
+                    });
+                    break;
+                case AfterLaunchBehavior.退出启动器:
+                    Dispatcher.Invoke(() =>
+                    {
+                        Application.Current.Shutdown();
+                    });
+                    break;
+                case AfterLaunchBehavior.保持启动器可见:
+                    Dispatcher.Invoke(() =>
+                    {
+                        if (string.IsNullOrWhiteSpace(App.Config.UserName))
+                        {
+                            tb.Text = Excited[rand.Next(Excited.Length)];
+                        }
+                        else
+                        {
+                            tb.Text = "Hello " + App.Config.UserName;
+                        }
+                        LaunchButton.IsEnabled = true;
+                        LaunchButton.Content = "启动";
+                    });
+                    break;
             }
-            NavigationService.Navigate(settings_page);
-        }
-
-        private void Goto_SkinPage(object sender, RoutedEventArgs e)
-        {
-            var skin_page = new SkinPage();
-            NavigationService.Navigate(skin_page);
-        }
-
-        private void SelectVersionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Config.VersionIndex = VersionBox.SelectedIndex;
         }
     }
 }

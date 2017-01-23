@@ -3,9 +3,9 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace GBCLV2
+namespace GBCLV2.Modules
 {
-    class Win10BlurHelper
+    static class Win10BlurHelper
     {
         [DllImport("user32.dll")]
         internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
@@ -71,7 +71,7 @@ namespace GBCLV2
         }
     }
 
-    class Win7BlurHelper
+    static class Win7BlurHelper
     {
         [DllImport("dwmapi.dll")]
         static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
