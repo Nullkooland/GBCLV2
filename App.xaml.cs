@@ -23,7 +23,7 @@ namespace GBCLV2
             mutex = new Mutex(true, "GBCLV2", out bool ret);
             if (!ret)
             {
-                MessageBox.Show("_(:3」∠)_\n已经有一个我在运行了", "不要老是想弄个大新闻");
+                MessageBox.Show("已经有一个我在运行了", "(>ㅂ< )", MessageBoxButton.OK, MessageBoxImage.Information);
                 System.Environment.Exit(0);
             }
 
@@ -47,7 +47,8 @@ namespace GBCLV2
 
             if (Core.JavaPath == null)
             {
-                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java", MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
+                    MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
                 }
@@ -118,7 +119,8 @@ namespace GBCLV2
         {
             if (ExitCode != 0)
             {
-                if (MessageBox.Show("Minecraft未正常退出\n是否查看log文件？", "~( ´•︵•` )~", MessageBoxButton.YesNo,MessageBoxImage.Asterisk) == MessageBoxResult.Yes)
+                if (MessageBox.Show(string.Format("Minecraft异常退出了,Exit Code: {0}\n是否查看log文件？", ExitCode), "（/TДT)/", 
+                    MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
                 }

@@ -23,7 +23,7 @@
 
         <ComboBox Name="VersionBox" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}" Grid.Row="2" Width="240" Height="26" HorizontalAlignment="Right" Margin="95,0"/>
 
-        <Button x:Name="LaunchButton" Content="启动" Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" FontSize="16" BorderBrush="#80FFFFFF" Background="#54FFFFFF"/>
+        <Button x:Name="LaunchButton" Content="启动" Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" FontSize="15" BorderBrush="#80FFFFFF" Background="#54FFFFFF"/>
 
         <Button x:Name="ResourcepackPage" Style="{StaticResource _ButtonStyle}" ToolTip="资源包管理器" Margin="130,0" Click="Goto_Page">
             <Button.Background>

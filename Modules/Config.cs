@@ -7,6 +7,7 @@
     using System.Security.Cryptography;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using KMCCC.Tools;
 
     public enum AfterLaunchBehavior { 隐藏并后台运行, 直接退出, 保持可见 }
 
@@ -48,7 +49,16 @@
 
         public string JavaPath
         {
-            get => _JavaPath; set => _JavaPath = value;
+            get => _JavaPath;
+            set
+            {
+                if(!File.Exists(value))
+                {
+                    value = SystemTools.FindJava();
+                }
+                _JavaPath = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public int VersionIndex
@@ -58,7 +68,14 @@
 
         public uint MaxMemory
         {
-            get => _MaxMemory; set => _MaxMemory = value;
+            get => _MaxMemory;
+            set
+            {
+                if (value < 1024) value = 1024;
+                if (value > SystemTools.GetAvailableMemory()) value = SystemTools.GetAvailableMemory();
+                _MaxMemory = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public bool Offline
@@ -123,12 +140,39 @@
 
         public bool UseImageBackground
         {
-            get => _UseImageBackground; set => _UseImageBackground = value;
+            get => _UseImageBackground;
+            set
+            {
+                if (App.Current.MainWindow != null)
+                {
+                    if (value)
+                    {
+                        MainWindow.ChangeImageBackgroundAsync(_ImagePath);
+                    }
+                    else
+                    {
+                        App.Current.MainWindow.Background = null;
+                    }
+                }
+
+                _UseImageBackground = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public string ImagePath
         {
-            get => _ImagePath; set => _ImagePath = value;
+            get => _ImagePath;
+            set
+            {
+                if(_UseImageBackground)
+                {
+                    MainWindow.ChangeImageBackgroundAsync(value);
+                }
+
+                _ImagePath = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public DownloadSource DownloadSource
@@ -174,10 +218,10 @@
                     _MaxMemory = 2048,
                     _WinWidth = 854,
                     _WinHeight = 480,
-                    _DownloadSource = DownloadSource.BMCLAPI
+                    _JavaPath = SystemTools.FindJava(),
+                    _DownloadSource = DownloadSource.BMCLAPI,
                 };
             }
-            config._JavaPath = File.Exists(config._JavaPath) ? config._JavaPath : KMCCC.Tools.SystemTools.FindJava();
             return config;
         }
 

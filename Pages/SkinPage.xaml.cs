@@ -36,9 +36,6 @@ namespace GBCLV2.Pages
             Slider_G.ValueChanged += (s, e) => { Temp_Color.G = (byte)Slider_G.Value; Update_ThemeColor(); };
             Slider_B.ValueChanged += (s, e) => { Temp_Color.B = (byte)Slider_B.Value; Update_ThemeColor(); };
 
-            Img_CheckBox.Checked    += (s, e) => MainWindow.ChangeImageBackgroundAsync(App.Config.ImagePath);
-            Img_CheckBox.Unchecked  += (s, e) => Application.Current.MainWindow.Background = null;
-
             PresetColorList.SelectionChanged += (s, e) =>
              {
                  var SelectedColor = PresetColorList.SelectedItem as MyColor;
@@ -74,7 +71,6 @@ namespace GBCLV2.Pages
             if (dialog.ShowDialog() ?? false)
             {
                 App.Config.ImagePath = dialog.FileName;
-                MainWindow.ChangeImageBackgroundAsync(dialog.FileName);
             }
         }
 

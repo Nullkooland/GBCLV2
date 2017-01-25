@@ -7,7 +7,10 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Button Style="{StaticResource Button_Style}" Click="Go_Back" ToolTip="返回" 
@@ -16,6 +19,26 @@
                 <ImageBrush ImageSource="/images/back.png"/>
             </Button.Background>
         </Button>
-       
+
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="statusBox" Text="正在下载" Grid.Row="1" Margin="15,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="failsBox" Grid.Row="1" HorizontalAlignment="Right" Margin="35,0"/>
+        
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" Text="下载进度" Grid.Row="2" Margin="15,0"/>
+        <ProgressBar x:Name="progressBar" Height="27" Width="500" Grid.Row="2" HorizontalAlignment="Right" Margin="40,0"/>
+
+        <Button Style="{StaticResource Button_Style}" Click="Cancle" ToolTip="取消下载" 
+                Width="22" Height="22" HorizontalAlignment="Right" Grid.Row="2" Margin="10,0">
+            <Button.Background>
+                <ImageBrush ImageSource="/images/close.png"/>
+            </Button.Background>
+        </Button>
+
+        <Button Style="{StaticResource Button_Style}" Click="Start" ToolTip="开始下载" 
+                Width="22" Height="22" HorizontalAlignment="Right" Grid.Row="1" Margin="10,0">
+            <Button.Background>
+                <ImageBrush ImageSource="/images/launch.png"/>
+            </Button.Background>
+        </Button>
+
     </Grid>
 </Page>

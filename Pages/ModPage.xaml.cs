@@ -211,7 +211,7 @@ namespace GBCLV2.Pages
                         {
                             if(archive.GetEntry("META-INF/") == null)
                             {
-                                MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod");
+                                MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod",MessageBoxButton.OK,MessageBoxImage.Information);
                                 continue;
                             }
                             archive.Dispose();

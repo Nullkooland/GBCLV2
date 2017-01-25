@@ -268,7 +268,7 @@ namespace GBCLV2.Pages
                     {
                         if (archive.GetEntry("pack.mcmeta") == null)
                         {
-                            MessageBox.Show(path + "\n不是有效的资源包文件", "你可能选了假资源包");
+                            MessageBox.Show(path + "\n不是有效的资源包文件", "你可能选了假资源包", MessageBoxButton.OK, MessageBoxImage.Information);
                             continue;
                         }
                         archive.Dispose();
@@ -315,7 +315,15 @@ namespace GBCLV2.Pages
                     options_text = s;
                 }
 
-                File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                try
+                {
+                    File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                }
+                catch
+                {
+                    MessageBox.Show("options.txt可能被占用", "写入失败", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                
                 LineToReplace = null;
             }
 

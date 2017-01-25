@@ -16,18 +16,16 @@ namespace GBCLV2
         {
             InitializeComponent();
             MouseLeftButtonDown += (s, e) => DragMove();
+            minimize_btn.Click  += (s, e) => this.WindowState = WindowState.Minimized;
+            shutdown_btn.Click  += (s, e) => Application.Current.Shutdown();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (App.Config.UseImageBackground)
-            {
-                ChangeImageBackgroundAsync(App.Config.ImagePath);
-            }
             var mp = new MainPage();
             frame.Navigate(mp);
 
-            if(Environment.OSVersion.Version.Minor > 1)
+            if(Environment.OSVersion.Version.Major == 10)
             {
                 Win10BlurHelper.EnableBlur(this);
             }
@@ -37,16 +35,6 @@ namespace GBCLV2
                 this.BorderBrush = Brushes.DarkGray;
                 Win7BlurHelper.EnableAeroGlass(this);
             }
-        }
-
-        private void ShutDown(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void Minimize(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
         }
 
         public static async void ChangeImageBackgroundAsync(string FilePath)

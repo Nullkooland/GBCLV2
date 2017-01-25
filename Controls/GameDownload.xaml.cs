@@ -44,9 +44,9 @@ namespace GBCLV2.Controls
             {
                 json = await client.GetStringAsync(DownloadHelper.BaseUrl.VersionListUrl);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                if(this.IsVisible) MessageBox.Show("加载版本列表失败");
+                if(this.IsVisible) MessageBox.Show("加载版本列表失败","",MessageBoxButton.OK,MessageBoxImage.Information);
                 refresh_btn.IsEnabled = true;
                 return;
             }

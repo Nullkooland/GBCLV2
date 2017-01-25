@@ -58,7 +58,6 @@ namespace GBCLV2.Pages
             var Core = App.Core;
             var Config = App.Config;
 
-            Core.JavaPath = System.IO.File.Exists(Config.JavaPath) ? Config.JavaPath : SystemTools.FindJava();
             Core.GameLaunch += OnGameLaunch;
 
             var LaunchVersion = App.Versions[VersionBox.SelectedIndex];
@@ -71,9 +70,13 @@ namespace GBCLV2.Pages
                 return;
             }
 
-            var AvailableMemory = SystemTools.GetAvailableMemory();
-            Config.MaxMemory = Config.MaxMemory > 1024 ? Config.MaxMemory : 1024;
-            Config.MaxMemory = Config.MaxMemory < AvailableMemory ? Config.MaxMemory : AvailableMemory;
+            var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion).ToList();
+            if(lostAssets.Any())
+            {
+                var downloadPage = new DownloadPage{ FilesToDownload = lostAssets };
+                NavigationService.Navigate(downloadPage);
+                return;
+            }
 
             var Result = Core.Launch(new LaunchOptions()
             {
@@ -101,7 +104,7 @@ namespace GBCLV2.Pages
             }
             else
             {
-                MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString());
+                MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString(),MessageBoxButton.OK,MessageBoxImage.Error);
                 return;
             }
         }
