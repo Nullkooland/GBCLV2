@@ -10,9 +10,6 @@ using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
-    /// <summary>
-    /// Page1.xaml 的交互逻辑
-    /// </summary>
     public partial class MainPage : Page
     {
         private Random rand = new Random();

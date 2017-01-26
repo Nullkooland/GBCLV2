@@ -42,7 +42,14 @@ namespace GBCLV2.Pages
             Task.Run(() => LoadResPacks());
 
             refresh_button.Click    += (s, e) => LoadResPacks();
-            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe", PacksDir);
+            openfolder_button.Click += (s, e) =>
+            {
+                if (!Directory.Exists(PacksDir))
+                {
+                    Directory.CreateDirectory(PacksDir);
+                }
+                System.Diagnostics.Process.Start("explorer.exe", PacksDir);
+            };
         }
 
         private void LoadOptions()

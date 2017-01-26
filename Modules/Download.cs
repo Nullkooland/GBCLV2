@@ -13,6 +13,7 @@ namespace GBCLV2.Modules
         string VersionListUrl       { get; }
         string VersionJarBaseUrl    { get; }
         string LibraryBaseUrl       { get; }
+        string MavenBaseUrl         { get; }
         string AssetsIndexBaseUrl   { get; }
         string AssetsBaseUrl        { get; }
     }
@@ -22,6 +23,7 @@ namespace GBCLV2.Modules
         public string VersionListUrl        { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
         public string VersionJarBaseUrl     { get; } = "http://bmclapi2.bangbang93.com/versions/";
         public string LibraryBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/libraries/";
+        public string MavenBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/";
         public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/indexes/";
         public string AssetsBaseUrl         { get; } = "http://bmclapi2.bangbang93.com/assets/";
     }
@@ -31,6 +33,7 @@ namespace GBCLV2.Modules
         public string VersionListUrl        { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
         public string VersionJarBaseUrl     { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
         public string LibraryBaseUrl        { get; } = "https://libraries.minecraft.net/";
+        public string MavenBaseUrl          { get; } = "http://ftb.cursecdn.com/FTB2/maven/";
         public string AssetsIndexBaseUrl    { get; } = "https://s3.amazonaws.com/Minecraft.Download/indexes/";
         public string AssetsBaseUrl         { get; } = "https://resources.download.minecraft.net/";
     }
@@ -63,17 +66,28 @@ namespace GBCLV2.Modules
         {
             var lostEssentials = new List<DownloadInfo>();
 
-            var libs = version.Libraries.Select(lib => core.GetLibPath(lib));
-            var natives = version.Natives.Select(native => core.GetNativePath(native));
-
-            foreach (var path in libs.Concat(natives))
+            foreach(var lib in version.Libraries)
             {
-                if (!File.Exists(path))
+                var absolutePath = string.Format(@"{0}\libraries\{1}", core.GameRootPath, lib.Path);
+                if(!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
                     {
-                        Path = path,
-                        Url = path.Replace(core.GameRootPath + @"\libraries\" ,BaseUrl.LibraryBaseUrl)
+                        Path = absolutePath,
+                        Url = (lib.IsForgeLib) ? BaseUrl.MavenBaseUrl + lib.Path : BaseUrl.LibraryBaseUrl + lib.Path
+                    });
+                }
+            }
+
+            foreach (var native in version.Natives)
+            {
+                var absolutePath = string.Format(@"{0}\libraries\{1}",core.GameRootPath,native.Path);
+                if (!File.Exists(absolutePath))
+                {
+                    lostEssentials.Add(new DownloadInfo
+                    {
+                        Path = absolutePath,
+                        Url = BaseUrl.LibraryBaseUrl + native.Path,
                     });
                 }
             }

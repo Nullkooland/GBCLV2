@@ -38,8 +38,15 @@ namespace GBCLV2.Pages
 
             refresh_btn.Click    += (s, e) => GetModsFromDisk();
             delete_btn.Click     += (s, e) => DeleteModsAsync();
-            openfolder_btn.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe",ModsDir);
             goback_btn.Click     += (s, e) => NavigationService.GoBack();
+            openfolder_btn.Click += (s, e) =>
+            {
+                if (!Directory.Exists(ModsDir))
+                {
+                    Directory.CreateDirectory(ModsDir);
+                }
+                System.Diagnostics.Process.Start("explorer.exe", ModsDir);
+            };
 
             ModList.Drop            += (s, e) => Copy_New(e.Data.GetData(DataFormats.FileDrop) as string[]);
             ModList.PreviewKeyDown  += (s, e) =>
