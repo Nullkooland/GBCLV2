@@ -4,9 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Authentication;
 using KMCCC.Launcher;
-using KMCCC.Tools;
-using System.Windows.Media;
 using GBCLV2.Modules;
+using System.Threading.Tasks;
 
 namespace GBCLV2.Pages
 {
@@ -50,8 +49,10 @@ namespace GBCLV2.Pages
             };
         }
 
-        private void Launch(object sender, RoutedEventArgs e)
+        private async void Launch(object sender, RoutedEventArgs e)
         {
+            LaunchButton.IsEnabled = false;
+
             var Core = App.Core;
             var Config = App.Config;
 
@@ -59,20 +60,22 @@ namespace GBCLV2.Pages
 
             var LaunchVersion = App.Versions[VersionBox.SelectedIndex];
 
-            var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion).ToList();
+            var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion);
             if(lostEssentials.Any())
             {
-                var downloadPage = new DownloadPage{ FilesToDownload = lostEssentials };
+                var downloadPage = new DownloadPage(lostEssentials , "下载依赖库");
                 NavigationService.Navigate(downloadPage);
-                return;
+                await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
             }
 
-            var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion).ToList();
-            if(lostAssets.Any())
+            var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion);
+
+            if(lostAssets.Any() && MessageBox.Show("资源文件缺失，是否补齐", "(σﾟ∀ﾟ)σ",
+                MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                var downloadPage = new DownloadPage{ FilesToDownload = lostAssets };
+                var downloadPage = new DownloadPage(lostAssets, "下载资源文件");
                 NavigationService.Navigate(downloadPage);
-                return;
+                await Task.Run(()=> downloadPage.DownloadComplete.WaitOne());
             }
 
             var Result = Core.Launch(new LaunchOptions()
@@ -96,13 +99,12 @@ namespace GBCLV2.Pages
             if(Result.Success)
             {
                 tb.Text = "(。-`ω´-) 启动中...";
-                LaunchButton.IsEnabled = false;
                 LaunchButton.Content = "启动中";
             }
             else
             {
                 MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString(),MessageBoxButton.OK,MessageBoxImage.Error);
-                return;
+                LaunchButton.IsEnabled = true;
             }
         }
 

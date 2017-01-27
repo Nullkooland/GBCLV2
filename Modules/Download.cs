@@ -2,7 +2,6 @@
 using LitJson;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace GBCLV2.Modules
 {
@@ -24,7 +23,7 @@ namespace GBCLV2.Modules
         public string VersionJarBaseUrl     { get; } = "http://bmclapi2.bangbang93.com/versions/";
         public string LibraryBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/libraries/";
         public string MavenBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/";
-        public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/indexes/";
+        public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
         public string AssetsBaseUrl         { get; } = "http://bmclapi2.bangbang93.com/assets/";
     }
 
@@ -34,7 +33,7 @@ namespace GBCLV2.Modules
         public string VersionJarBaseUrl     { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
         public string LibraryBaseUrl        { get; } = "https://libraries.minecraft.net/";
         public string MavenBaseUrl          { get; } = "http://ftb.cursecdn.com/FTB2/maven/";
-        public string AssetsIndexBaseUrl    { get; } = "https://s3.amazonaws.com/Minecraft.Download/indexes/";
+        public string AssetsIndexBaseUrl    { get; } = "https://launchermeta.mojang.com/";
         public string AssetsBaseUrl         { get; } = "https://resources.download.minecraft.net/";
     }
 
@@ -62,13 +61,13 @@ namespace GBCLV2.Modules
             }
         }
 
-        public static IEnumerable<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
+        public static List<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
         {
             var lostEssentials = new List<DownloadInfo>();
 
             foreach(var lib in version.Libraries)
             {
-                var absolutePath = string.Format(@"{0}\libraries\{1}", core.GameRootPath, lib.Path);
+                var absolutePath = $"{core.GameRootPath}\\libraries\\{lib.Path}";
                 if(!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
@@ -81,7 +80,7 @@ namespace GBCLV2.Modules
 
             foreach (var native in version.Natives)
             {
-                var absolutePath = string.Format(@"{0}\libraries\{1}",core.GameRootPath,native.Path);
+                var absolutePath = $"{core.GameRootPath}\\libraries\\{native.Path}";
                 if (!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
@@ -94,18 +93,60 @@ namespace GBCLV2.Modules
             return lostEssentials;
         }
 
-        public static IEnumerable<DownloadInfo> GetLostAssets(LauncherCore core, Version version)
+        public static List<DownloadInfo> GetLostAssets(LauncherCore core, Version version)
         {
             var lostAssets = new List<DownloadInfo>();
 
-            var index = File.ReadAllText(string.Format(@"{0}\assets\indexes\{1}.json", core.GameRootPath, version.Assets));
-            var assets = JsonMapper.ToObject(index)["objects"];
+            if(version.InheritsVersion != null)
+            {
+                version = core.GetVersion(version.InheritsVersion);
+            }
+
+            var indexPath = $"{core.GameRootPath}\\assets\\indexes\\{version.Assets}.json";
+            string indexJson;
+
+            if (!File.Exists(indexPath))
+            {
+                try
+                {
+                    string indexUrl;
+                    if (version.AssetsIndexUrl == null )
+                    {
+                        indexUrl = $"{BaseUrl.AssetsIndexBaseUrl}indexs/{version.Assets}.json";
+                    }
+                    else
+                    {
+                        indexUrl = BaseUrl.AssetsIndexBaseUrl + version.AssetsIndexUrl;
+                    }
+                    System.Diagnostics.Debug.WriteLine(indexUrl);
+                    var client = new System.Net.Http.HttpClient() { Timeout = new System.TimeSpan(0, 0, 2) };
+                    indexJson = client.GetStringAsync(indexUrl).Result;
+                    client.Dispose();
+                }
+                catch
+                {
+                    System.Windows.MessageBox.Show("获取资源列表失败!");
+                    return lostAssets;
+                }
+
+                if (!Directory.Exists(Path.GetDirectoryName(indexPath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(indexPath));
+                }
+                File.WriteAllText(indexPath, indexJson);
+            }
+            else
+            {
+                indexJson = File.ReadAllText(indexPath);
+            }
+
+            var assets = JsonMapper.ToObject(indexJson)["objects"];
 
             for (int i = 0; i < assets.Count; i++)
             {
                 var hash = assets[i][0].ToString();
-                var relativePath = string.Format(@"{0}\{1}", hash.Substring(0, 2), hash);
-                var absolutePath = string.Format(@"{0}\assets\objects\{1}", core.GameRootPath, relativePath);
+                var relativePath = $"{hash.Substring(0, 2)}\\{hash}";
+                var absolutePath = $"{core.GameRootPath}\\assets\\objects\\{relativePath}";
 
                 if (!File.Exists(absolutePath))
                 {

@@ -1,21 +1,26 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Navigation;
-using GBCLV2.Modules;
+﻿using GBCLV2.Modules;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 
 namespace GBCLV2.Pages
 {
     public partial class DownloadPage : Page
     {
-        public List<DownloadInfo> FilesToDownload;
+        public readonly AutoResetEvent DownloadComplete = new AutoResetEvent(false);
+        private readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private readonly DispatcherTimer timer = new DispatcherTimer() { Interval = new TimeSpan(2500000) };
+
+        private List<DownloadInfo> Downloads;
+        private string title;
 
         private int total;
         private int succeeded;
@@ -23,36 +28,52 @@ namespace GBCLV2.Pages
 
         private long Bytes;
 
-        private CancellationTokenSource cts = new CancellationTokenSource();
-        private static DispatcherTimer timer = new DispatcherTimer();
+        private bool IsDownloading;
 
-        public DownloadPage()
+        public DownloadPage(List<DownloadInfo> FilesToDownload, string Title)
         {
-            InitializeComponent();
             ServicePointManager.DefaultConnectionLimit = 256;
 
+            title = Title;
+            Downloads = FilesToDownload;
+            total = FilesToDownload.Count;
+
+            InitializeComponent();
             cancle_btn.Click += (s, e) => CancleDownload();
 
-            timer.Interval = new TimeSpan(2500000);
             timer.Tick += (s, e) =>
             {
                 if(succeeded == total)
                 {
                     timer.Stop();
+                    cts.Dispose();
                     NavigationService.GoBack();
+                    DownloadComplete.Set();
+                    return;
+                }
+
+                if(succeeded + failed == total)
+                {
+                    IsDownloading = false;
+                    cancle_btn.IsEnabled = false;
+                    timer.Stop();
+                    cts.Dispose();
+                    titleBox.Text = "下载结束，某些文件下载失败";
+                    speedBox.Text = null;
+                    return;
                 }
 
                 if(Bytes > 262144L)
                 {
-                    speedBox.Text = string.Format("{0:F1} MB/s",(double)Bytes / 262144.0);
+                    speedBox.Text = $"{Bytes / 262144.0:F1} MB/s";
                 }
                 else if(Bytes > 256L)
                 {
-                    speedBox.Text = string.Format("{0:F1} KB/s", (double)Bytes / 256.0);
+                    speedBox.Text = $"{Bytes / 256.0:F1} KB/s";
                 }
                 else
                 {
-                    speedBox.Text = string.Format("{0} B/s", Bytes * 4);
+                    speedBox.Text = $"{Bytes * 4} B/s";
                 }
                 Bytes = 0;
             };
@@ -60,15 +81,17 @@ namespace GBCLV2.Pages
 
         private async void StartDownload(object sender, RoutedEventArgs e)
         {
-            total = FilesToDownload.Count;
+            IsDownloading = true;
+            titleBox.Text = title;
             progressBar.Maximum = total;
-            cts = new CancellationTokenSource();
-            timer.Start();
-            statusBox.Text = string.Format("{0}/{1}个文件下载成功", succeeded, total);
 
-            for (int i = 0; i < total; i++)
+            timer.Start();
+            statusBox.Text = $"0/{total}个文件下载成功";
+
+            foreach (var download in Downloads)
             {
-                await DownloadFileAsync(FilesToDownload[i]).ConfigureAwait(false);
+                if(cts.IsCancellationRequested) break;
+                await DownloadFileAsync(download).ConfigureAwait(false);
             }
         }
 
@@ -76,8 +99,10 @@ namespace GBCLV2.Pages
         {
             cts.Cancel();
             timer.Stop();
-            statusBox.Text = "下载已取消";
+            titleBox.Text = "下载已取消";
             speedBox.Text = null;
+            IsDownloading = false;
+            cancle_btn.IsEnabled = false;
         }
 
         private async Task DownloadFileAsync(DownloadInfo download)
@@ -104,32 +129,41 @@ namespace GBCLV2.Pages
                     return;
                 }
 
-                var responseStream = response.GetResponseStream();
-                var fileStream = new FileStream(download.Path, FileMode.Create, FileAccess.Write);
-
-                byte[] buffer = new byte[1024];
-                int size = responseStream.Read(buffer, 0, 1024);
-
-                while (!cts.IsCancellationRequested && size > 0)
+                using (var fileStream = new FileStream(download.Path, FileMode.Create, FileAccess.Write))
                 {
-                    fileStream.Write(buffer, 0, size);
-                    size = responseStream.Read(buffer, 0, 1024);
-                    Bytes += size;
+                    var responseStream = response.GetResponseStream();
+                    byte[] buffer = new byte[1024];
+                    int size = responseStream.Read(buffer, 0, 1024);
+
+                    while (!cts.IsCancellationRequested && size > 0)
+                    {
+                        fileStream.Write(buffer, 0, size);
+                        size = responseStream.Read(buffer, 0, 1024);
+                        Bytes += size;
+                    }
+                    responseStream.Close();
+                    fileStream.Close();
+                    response.Dispose();
                 }
-                responseStream.Close();
-                fileStream.Close();
 
                 if (cts.IsCancellationRequested)
                 {
+                    File.Delete(download.Path);
                     return;
                 }
+            }
+            catch(WebException) when(cts.IsCancellationRequested)
+            {
+                File.Delete(download.Path);
+                //你自己要取消的~
             }
             catch(Exception e)
             {
                 Interlocked.Increment(ref failed);
                 Debug.WriteLine(download.Url);
                 Debug.WriteLine(e.Message);
-                Dispatcher.Invoke(() => failsBox.Text = string.Format("{0}个下载失败", failed));
+                Dispatcher.Invoke(() => failsBox.Text = $"{failed}个文件下载失败" );
+                File.Delete(download.Path);
                 return;
             }
 
@@ -137,18 +171,29 @@ namespace GBCLV2.Pages
             Dispatcher.Invoke(() =>
             {
                 progressBar.Value = succeeded;
-                statusBox.Text = string.Format("{0}/{1}个文件下载成功", succeeded, total);
+                statusBox.Text = $"{succeeded}/{total}个文件下载成功";
             });
         }
 
         private void Go_Back(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("正在下载中，你确定要中止吗", "(●—●)", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
+            if(IsDownloading)
             {
-                CancleDownload();
-                NavigationService.GoBack();
+                if (MessageBox.Show("正在下载中，你确定要中止吗", "(●—●)", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
+                {
+                    CancleDownload();
+                    cts.Dispose();
+                    NavigationService.GoBack();
+                    DownloadComplete.Set();
+                }
+                else return;
             }
-            else return;
+            else
+            {
+                cts.Dispose();
+                NavigationService.GoBack();
+                DownloadComplete.Set();
+            }
         }
     }
 }

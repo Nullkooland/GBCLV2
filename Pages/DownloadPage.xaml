@@ -8,9 +8,10 @@
 
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -21,14 +22,14 @@
             </Button.Background>
         </Button>
 
-        
-        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="statusBox" Text="正在下载" Grid.Row="1" Margin="10,0"/>
-        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="failsBox" Grid.Row="1" HorizontalAlignment="Right" Margin="35,0"/>
-        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="speedBox" Grid.Row="3" HorizontalAlignment="Right" Margin="40,0"/>
-        
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="titleBox" HorizontalAlignment="Right" Grid.Row="1" Margin="45,0"/>
         <TextBlock Style="{StaticResource Info_TextBlock_Style}" Text="总进度" Grid.Row="2" Margin="10,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="statusBox" FontSize="14" Height="18" Grid.Row="3" Margin="75,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="failsBox" FontSize="14" Height="18" Grid.Row="4" Margin="75,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="speedBox" FontSize="14" Height="18" Grid.Row="3" HorizontalAlignment="Right" Margin="45,0"/>
+
         <ProgressBar x:Name="progressBar" Foreground="{DynamicResource Theme_Brush}" Background="#60FFFFFF"
-                     Height="27" Width="520" Grid.Row="2" HorizontalAlignment="Right" Margin="40,0"/>
+                     Height="27" Width="520" Grid.Row="2" HorizontalAlignment="Left" Margin="75,0,0,0"/>
 
         <Button Style="{StaticResource Button_Style}" x:Name="cancle_btn" ToolTip="取消下载" 
                 Width="22" Height="22" HorizontalAlignment="Right" Grid.Row="2" Margin="10,0">
