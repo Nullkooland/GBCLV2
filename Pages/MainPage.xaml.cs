@@ -58,7 +58,7 @@ namespace GBCLV2.Pages
 
             Core.GameLaunch += OnGameLaunch;
 
-            var LaunchVersion = App.Versions[VersionBox.SelectedIndex];
+            var LaunchVersion = App.Versions[Config.VersionIndex];
 
             var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion);
             if(lostEssentials.Any())

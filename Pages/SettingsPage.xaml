@@ -18,6 +18,7 @@
             </TabItem>
 
             <TabItem Header="/images/bomb.png" Tag="Forge安装">
+                <Controls:ForgeInstall x:Name="forge_install"/>
             </TabItem>
 
             <TabItem Header="/images/other.png" Tag="其他设置">

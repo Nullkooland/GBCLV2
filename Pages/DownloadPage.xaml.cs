@@ -138,7 +138,7 @@ namespace GBCLV2.Pages
                     while (!cts.IsCancellationRequested && size > 0)
                     {
                         fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, 1024);
+                        size = await responseStream.ReadAsync(buffer, 0, 1024);
                         Bytes += size;
                     }
                     responseStream.Close();

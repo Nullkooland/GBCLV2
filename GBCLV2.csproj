@@ -83,6 +83,9 @@
     <Compile Include="Controls\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ForgeInstall.xaml.cs">
+      <DependentUpon>ForgeInstall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GameDownload.xaml.cs">
       <DependentUpon>GameDownload.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <DependentUpon>SkinPage.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ForgeInstall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

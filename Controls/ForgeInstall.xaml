@@ -1,0 +1,40 @@
+﻿<Grid x:Class="GBCLV2.Controls.ForgeInstall"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="290" Width="630">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition />
+        <RowDefinition Height="23"/>
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition Width="49"/>
+    </Grid.ColumnDefinitions>
+
+    <TextBlock Text="安装Forge到选择的版本" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="0" VerticalAlignment="Top"/>
+    <ComboBox x:Name="VersionBox" Width="375" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}" 
+              HorizontalAlignment="Right" VerticalAlignment="Top" Margin="1,0" SelectionChanged="GetVersionForgeListAsync"/>
+
+    <ListView x:Name="ForgeList" Style="{StaticResource GridListView_Style}"
+              Width="580" Height="237" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Forge版本" Width="300" DisplayMemberBinding="{Binding Version}"/>
+                <GridViewColumn Header="修改日期" Width="260" DisplayMemberBinding="{Binding ModifiedTime}"/>
+            </GridView>
+        </ListView.View>
+    </ListView>
+
+    <TextBlock x:Name="statusBox" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Height="20" FontSize="14"/>
+
+    <Button x:Name="download_btn" Style="{StaticResource Button_Style}" ToolTip="安装选中Forge版本" Click="InstallForgeAsync"
+            Width="32" Height="32" Grid.Row="1" Grid.Column="1">
+        <Button.Background>
+            <ImageBrush ImageSource="/GBCLV2;component/images/cloud.png"/>
+        </Button.Background>
+    </Button>
+</Grid>

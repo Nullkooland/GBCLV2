@@ -36,12 +36,12 @@
     <TextBox x:Name="ServerAddressBox" Grid.Row="6" Width="410" Margin="90,0,0,0"
              IsEnabled="{Binding IsChecked,ElementName=DirectLoginServer_CheckBox}"/>
 
-    <CheckBox x:Name="FullScreen_CheckBox" Content="全屏启动" Grid.Row="3" Margin="505,0,0,0" IsChecked="{Binding FullScreen}"/>
+    <CheckBox Content="全屏启动" Grid.Row="3" Margin="505,0,0,0" IsChecked="{Binding FullScreen}"/>
     <CheckBox x:Name="Offline_CheckBox" Content="离线模式" Grid.Row="4" Margin="505,0,0,0" IsChecked="{Binding Offline}"/>
     <CheckBox x:Name="RememberPassword_CheckBox" Content="记住密码" Grid.Row="5" Margin="505,0,0,0" IsChecked="{Binding RememberPassWord}"/>
     <CheckBox x:Name="DirectLoginServer_CheckBox" Content="直入服务器" Grid.Row="6" Margin="505,0,0,0"/>
 
-    <ComboBox x:Name="VersionComboBox" Grid.Row="1" Width="500" HorizontalAlignment="Left" Margin="90,0,0,0" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}"/>
+    <ComboBox Name="VersionBox" Grid.Row="1" Width="500" HorizontalAlignment="Left" Margin="90,0,0,0" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}"/>
 
     <Button Style="{StaticResource Button_Style}" ToolTip="版本选项" Click="ShowVersionOptions"
             Width="25" Height="25" HorizontalAlignment="Right" Grid.Row="1" Margin="10,0">

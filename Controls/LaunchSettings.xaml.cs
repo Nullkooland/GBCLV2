@@ -17,8 +17,7 @@ namespace GBCLV2.Controls
         {
             InitializeComponent();
             this.DataContext = App.Config;
-
-            VersionComboBox.ItemsSource = App.Versions;
+            VersionBox.ItemsSource = App.Versions;
 
             if (App.Config.Offline) OfflineMode();
             else OnlineMode();
@@ -80,9 +79,9 @@ namespace GBCLV2.Controls
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
         {
-            if (VersionComboBox.SelectedIndex != -1)
+            if (App.Config.VersionIndex != -1)
             {
-                versionID = App.Versions[VersionComboBox.SelectedIndex].ID;
+                versionID = App.Versions[App.Config.VersionIndex].ID;
             }
             else
             {
@@ -104,7 +103,7 @@ namespace GBCLV2.Controls
             }
             if (count != 0)
             {
-                VersionComboBox.SelectedIndex = count - 1;
+                App.Config.VersionIndex = count - 1;
                 Menu_OpenFolder.IsEnabled = true;
                 Menu_OpenJson.IsEnabled = true;
                 Menu_Delete.IsEnabled = true;
@@ -113,7 +112,7 @@ namespace GBCLV2.Controls
 
         private void OpenVersionFolder(object sender, RoutedEventArgs e)
         {
-            if (VersionComboBox.SelectedIndex != -1)
+            if (App.Config.VersionIndex != -1)
             {
                 string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
                 System.Diagnostics.Process.Start("explorer.exe", DirPath);
@@ -122,7 +121,7 @@ namespace GBCLV2.Controls
 
         private void OpenVersionJson(object sender, RoutedEventArgs e)
         {
-            if (VersionComboBox.SelectedIndex != -1)
+            if (App.Config.VersionIndex != -1)
             {
                 string JsonPath = string.Format(@"{0}\versions\{1}\{1}.json", App.Core.GameRootPath, versionID);
                 try
@@ -135,13 +134,13 @@ namespace GBCLV2.Controls
 
         private void DeleteVersion(object sender, RoutedEventArgs e)
         {
-            if (VersionComboBox.SelectedIndex != -1)
+            if (App.Config.VersionIndex != -1)
             {
                 string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
                 SystemTools.DeleteDirectoryAsync(DirPath);
 
-                App.Versions.RemoveAt(VersionComboBox.SelectedIndex);
-                VersionComboBox.SelectedIndex = 0;
+                App.Versions.RemoveAt(App.Config.VersionIndex);
+                App.Config.VersionIndex = 0;
             }
 
         }

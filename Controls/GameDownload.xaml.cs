@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using GBCLV2.Modules;
+using System.IO;
 
 namespace GBCLV2.Controls
 {
@@ -21,11 +22,17 @@ namespace GBCLV2.Controls
             public string Type { get; set; }
         }
 
-        private List<VersionInfo> AllVersions = new List<VersionInfo>();
+        private static List<VersionInfo> AllVersions = new List<VersionInfo>();
 
         public GameDownload()
         {
             InitializeComponent();
+
+            if(AllVersions.Count != 0)
+            {
+                statusBox.Text = "准备下载";
+            }
+
             VersionList.ItemsSource = AllVersions;
             VersionList.SelectionChanged += (s, e) => e.Handled = true;
             refresh_btn.Click += async (s, e) => await GetVersionListFromNetAsync();
@@ -33,7 +40,7 @@ namespace GBCLV2.Controls
 
         public async Task GetVersionListFromNetAsync()
         {
-            if (refresh_btn.IsEnabled)
+            if (refresh_btn.IsEnabled && AllVersions.Count == 0)
             {
                 refresh_btn.IsEnabled = false;
             }
@@ -42,20 +49,21 @@ namespace GBCLV2.Controls
             string json;
             try
             {
+                statusBox.Text = $"正在获取所有版本列表";
                 json = await client.GetStringAsync(DownloadHelper.BaseUrl.VersionListUrl);
             }
-            catch (Exception ex)
+            catch
             {
-                if(this.IsVisible) MessageBox.Show("加载版本列表失败","",MessageBoxButton.OK,MessageBoxImage.Information);
+                statusBox.Text = $"正在获取版本列表失败";
                 refresh_btn.IsEnabled = true;
                 return;
             }
 
             AllVersions.Clear();
 
-            foreach (var x in JsonMapper.ToObject(json)["versions"])
+            foreach (var ver in JsonMapper.ToObject(json)["versions"])
             {
-                var version = x as JsonData;
+                var version = ver as JsonData;
                 var info = new VersionInfo
                 {
                     ID = version["id"].ToString(),
@@ -66,7 +74,55 @@ namespace GBCLV2.Controls
             }
 
             refresh_btn.IsEnabled = true;
+            statusBox.Text = "准备下载";
             VersionList.Items.Refresh();
+        }
+
+        private async void DownloadVersionAsync(object sender, RoutedEventArgs e)
+        {
+            if(VersionList.SelectedIndex == -1)
+            {
+                MessageBox.Show("未选取任何版本!", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK,MessageBoxImage.Information);
+                return;
+            }
+
+            download_btn.IsEnabled = false;
+
+            var core = App.Core;
+            var versionID = AllVersions[VersionList.SelectedIndex].ID;
+            var versionDir = $"{core.GameRootPath}\\versions\\{versionID}";
+            if(!Directory.Exists(versionDir))
+            {
+                Directory.CreateDirectory(versionDir);
+            }
+
+            var jsonPath = $"{versionDir}\\{versionID}.json";
+            var jsonUrl = $"{DownloadHelper.BaseUrl.VersionBaseUrl}{versionID}/{versionID}.json";
+
+            if(File.Exists(jsonPath))
+            {
+                MessageBox.Show("所选版本已经躺在你的硬盘里了", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
+                download_btn.IsEnabled = true;
+                return;
+            }
+
+            statusBox.Text = $"正在请求{versionID}版本json文件";
+            File.WriteAllText(jsonPath, await client.GetStringAsync(jsonUrl));
+
+            var version =  core.GetVersion(versionID);
+            App.Versions.Add(version);
+
+            var FilesToDownload = DownloadHelper.GetLostEssentials(core, version);
+            FilesToDownload.Add(new DownloadInfo
+            {
+                Path = $"{versionDir}\\{versionID}.jar",
+                Url = $"{DownloadHelper.BaseUrl.VersionBaseUrl}{versionID}/{versionID}.jar"
+            });
+
+            var downloadPage = new Pages.DownloadPage(FilesToDownload, "下载新Minecraft版本");
+            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
+
+            download_btn.IsEnabled = true;
         }
     }
 }

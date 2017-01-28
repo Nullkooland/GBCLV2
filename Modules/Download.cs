@@ -10,31 +10,34 @@ namespace GBCLV2.Modules
     interface IDownloadBaseUrl
     {
         string VersionListUrl       { get; }
-        string VersionJarBaseUrl    { get; }
+        string VersionBaseUrl       { get; }
         string LibraryBaseUrl       { get; }
         string MavenBaseUrl         { get; }
         string AssetsIndexBaseUrl   { get; }
         string AssetsBaseUrl        { get; }
+        string ForgeBaseUrl         { get; }
     }
 
     class BMCLAPIBaseUrl : IDownloadBaseUrl
     {
         public string VersionListUrl        { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
-        public string VersionJarBaseUrl     { get; } = "http://bmclapi2.bangbang93.com/versions/";
+        public string VersionBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/version/";
         public string LibraryBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/libraries/";
         public string MavenBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/";
         public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
         public string AssetsBaseUrl         { get; } = "http://bmclapi2.bangbang93.com/assets/";
+        public string ForgeBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/forge/download/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
     {
         public string VersionListUrl        { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
-        public string VersionJarBaseUrl     { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
+        public string VersionBaseUrl        { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
         public string LibraryBaseUrl        { get; } = "https://libraries.minecraft.net/";
         public string MavenBaseUrl          { get; } = "http://ftb.cursecdn.com/FTB2/maven/";
         public string AssetsIndexBaseUrl    { get; } = "https://launchermeta.mojang.com/";
         public string AssetsBaseUrl         { get; } = "https://resources.download.minecraft.net/";
+        public string ForgeBaseUrl          { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     }
 
     public class DownloadInfo
