@@ -135,11 +135,11 @@ namespace GBCLV2.Controls
 
             if(downloadPage.Succeeded)
             {
-                statusBox.Text = $"{versionID}版本下载成功";
+                MessageBox.Show($"{versionID}版本下载成功");
             }
             else
             {
-                statusBox.Text = $"{versionID}版本下载失败";
+                MessageBox.Show($"{versionID}版本下载失败");
                 Directory.Delete(versionDir, true);
                 App.Versions.Remove(version);
             }

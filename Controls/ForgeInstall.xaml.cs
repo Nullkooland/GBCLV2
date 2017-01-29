@@ -112,7 +112,7 @@ namespace GBCLV2.Controls
 
             if(!downloadPage.Succeeded)
             {
-                statusBox.Text = $"下载{mcVersion}版本Forge失败";
+                MessageBox.Show($"下载{mcVersion}版本Forge失败");
                 download_btn.IsEnabled = true;
                 return;
             }
@@ -121,7 +121,7 @@ namespace GBCLV2.Controls
             var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             try
             {
-                if(Directory.Exists(newVersionPath))
+                if(!Directory.Exists(newVersionPath))
                 {
                     Directory.CreateDirectory(newVersionPath);
                 }
@@ -133,7 +133,7 @@ namespace GBCLV2.Controls
             }
             catch
             {
-                statusBox.Text = $"安装{mcVersion}版本Forge失败";
+                MessageBox.Show($"安装{mcVersion}版本Forge失败");
                 download_btn.IsEnabled = true;
                 return;
             }
@@ -141,11 +141,7 @@ namespace GBCLV2.Controls
             var newVersion = core.GetVersion(newVersionID);
             App.Versions.Add(newVersion);
 
-            var FilesToDownload = DownloadHelper.GetLostEssentials(core, newVersion);
-
-            downloadPage = new Pages.DownloadPage(forgeDownload, "下载Forge版本依赖库");
-            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
-
+            MessageBox.Show($"安装{mcVersion}版本Forge成功");
             download_btn.IsEnabled = true;
         }
     }
