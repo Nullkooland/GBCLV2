@@ -79,7 +79,7 @@ namespace GBCLV2.Controls
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
         {
-            if (App.Config.VersionIndex != -1)
+            if (VersionBox.SelectedIndex != -1)
             {
                 versionID = App.Versions[App.Config.VersionIndex].ID;
             }

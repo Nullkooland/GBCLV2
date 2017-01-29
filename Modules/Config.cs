@@ -21,7 +21,7 @@
 
         #region 私有字段
 
-        const string encryptKey = "无可奉告";
+        const string encryptKey = "突然开车";
 
         private string   _JavaPath;
         private int      _VersionIndex;

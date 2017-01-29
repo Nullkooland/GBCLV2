@@ -14,6 +14,7 @@ namespace GBCLV2.Pages
 {
     public partial class DownloadPage : Page
     {
+        public bool Succeeded { get; internal set; }
         public readonly AutoResetEvent DownloadComplete = new AutoResetEvent(false);
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
         private readonly DispatcherTimer timer = new DispatcherTimer() { Interval = new TimeSpan(2500000) };
@@ -22,7 +23,7 @@ namespace GBCLV2.Pages
         private string title;
 
         private int total;
-        private int succeeded;
+        private int complete;
         private int failed;
 
         private long Bytes;
@@ -42,8 +43,9 @@ namespace GBCLV2.Pages
 
             timer.Tick += (s, e) =>
             {
-                if(succeeded == total)
+                if(complete == total)
                 {
+                    Succeeded = true;
                     timer.Stop();
                     cts.Dispose();
                     NavigationService.GoBack();
@@ -51,7 +53,7 @@ namespace GBCLV2.Pages
                     return;
                 }
 
-                if(succeeded + failed == total)
+                if(complete + failed == total)
                 {
                     IsDownloading = false;
                     cancle_btn.IsEnabled = false;
@@ -81,6 +83,7 @@ namespace GBCLV2.Pages
         private async void StartDownload(object sender, RoutedEventArgs e)
         {
             IsDownloading = true;
+            Succeeded = false;
             titleBox.Text = title;
             progressBar.Maximum = total;
 
@@ -166,11 +169,11 @@ namespace GBCLV2.Pages
                 return;
             }
 
-            Interlocked.Increment(ref succeeded);
+            Interlocked.Increment(ref complete);
             Dispatcher.Invoke(() =>
             {
-                progressBar.Value = succeeded;
-                statusBox.Text = $"{succeeded}/{total}个文件下载成功";
+                progressBar.Value = complete;
+                statusBox.Text = $"{complete}/{total}个文件下载成功";
             });
         }
 

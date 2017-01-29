@@ -110,11 +110,18 @@ namespace GBCLV2.Controls
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
             await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
 
+            if(!downloadPage.Succeeded)
+            {
+                statusBox.Text = $"下载{mcVersion}版本Forge失败";
+                download_btn.IsEnabled = true;
+                return;
+            }
+
             var newVersionID = $"{mcVersion}-forge{forgeName}";
             var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             try
             {
-                if(File.Exists(forgeJarPath) && !Directory.Exists(newVersionPath))
+                if(Directory.Exists(newVersionPath))
                 {
                     Directory.CreateDirectory(newVersionPath);
                 }

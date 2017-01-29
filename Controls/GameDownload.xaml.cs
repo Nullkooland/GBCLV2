@@ -99,7 +99,7 @@ namespace GBCLV2.Controls
             var jsonPath = $"{versionDir}\\{versionID}.json";
             var jsonUrl = $"{DownloadHelper.BaseUrl.VersionBaseUrl}{versionID}/{versionID}.json";
 
-            if(File.Exists(jsonPath))
+            if(File.Exists(jsonPath) && File.Exists(jsonPath.Replace("json","jar")))
             {
                 MessageBox.Show("所选版本已经躺在你的硬盘里了", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
                 download_btn.IsEnabled = true;
@@ -107,7 +107,17 @@ namespace GBCLV2.Controls
             }
 
             statusBox.Text = $"正在请求{versionID}版本json文件";
-            File.WriteAllText(jsonPath, await client.GetStringAsync(jsonUrl));
+            try
+            {
+                File.WriteAllText(jsonPath, await client.GetStringAsync(jsonUrl));
+            }
+            catch
+            {
+                statusBox.Text = $"获取{versionID}版本json文件失败";
+                Directory.Delete(versionDir, true);
+                download_btn.IsEnabled = true;
+                return;
+            }
 
             var version =  core.GetVersion(versionID);
             App.Versions.Add(version);
@@ -121,6 +131,18 @@ namespace GBCLV2.Controls
 
             var downloadPage = new Pages.DownloadPage(FilesToDownload, "下载新Minecraft版本");
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
+            await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+
+            if(downloadPage.Succeeded)
+            {
+                statusBox.Text = $"{versionID}版本下载成功";
+            }
+            else
+            {
+                statusBox.Text = $"{versionID}版本下载失败";
+                Directory.Delete(versionDir, true);
+                App.Versions.Remove(version);
+            }
 
             download_btn.IsEnabled = true;
         }

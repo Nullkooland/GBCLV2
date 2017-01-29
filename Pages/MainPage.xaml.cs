@@ -34,17 +34,17 @@ namespace GBCLV2.Pages
                     tb.Text = "Hello " + App.Config.UserName;
                 }
 
-                if(App.Config.VersionIndex == -1)
-                {
-                    LaunchButton.IsEnabled = false;
-                    LaunchButton.Content = "没有版本";
-                }
-                else
+                if(App.Versions.Any())
                 {
                     LaunchButton.IsEnabled = true;
                     LaunchButton.Content = "启动";
 
                     VersionBox.ItemsSource = App.Versions;
+                }
+                else
+                {
+                    LaunchButton.IsEnabled = false;
+                    LaunchButton.Content = "没有版本";
                 }
             };
         }
