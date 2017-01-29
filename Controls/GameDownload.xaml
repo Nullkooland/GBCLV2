@@ -4,10 +4,9 @@
         Height="290" Width="630">
 
     <Grid.RowDefinitions>
-        <RowDefinition Height="7"/>
+        <RowDefinition/>
         <RowDefinition Height="40"/>
         <RowDefinition Height="40"/>
-        <RowDefinition />
         <RowDefinition Height="23"/>
     </Grid.RowDefinitions>
 
@@ -17,7 +16,7 @@
     </Grid.ColumnDefinitions>
 
     <ListView x:Name="VersionList" Style="{StaticResource GridListView_Style}"
-              Width="580" Height="266" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0">
+              Width="580" Height="266" Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" VerticalAlignment="Top">
         <ListView.View>
             <GridView>
                 <GridViewColumn Header="版本" Width="150" DisplayMemberBinding="{Binding ID}"/>
@@ -27,7 +26,7 @@
         </ListView.View>
     </ListView>
 
-    <TextBlock x:Name="statusBox" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Height="20" FontSize="14"/>
+    <TextBlock x:Name="statusBox" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Height="20" FontSize="14"/>
 
     <Button x:Name="refresh_btn" Style="{StaticResource Button_Style}" ToolTip="刷新列表"
             Width="32" Height="32" Grid.Row="1" Grid.Column="1">
@@ -39,7 +38,7 @@
     <Button x:Name="download_btn" Style="{StaticResource Button_Style}" ToolTip="下载选中版本" Click="DownloadVersionAsync"
             Width="32" Height="32" Grid.Row="2" Grid.Column="1">
         <Button.Background>
-            <ImageBrush ImageSource="/GBCLV2;component/images/cloud.png"/>
+            <ImageBrush ImageSource="/GBCLV2;component/images/download.png"/>
         </Button.Background>
     </Button>
 </Grid>

@@ -49,12 +49,12 @@ namespace GBCLV2.Controls
             string json;
             try
             {
-                statusBox.Text = $"正在获取所有版本列表";
+                statusBox.Text = "正在获取所有版本列表";
                 json = await client.GetStringAsync(DownloadHelper.BaseUrl.VersionListUrl);
             }
             catch
             {
-                statusBox.Text = $"正在获取版本列表失败";
+                statusBox.Text = "获取版本列表失败";
                 refresh_btn.IsEnabled = true;
                 return;
             }

@@ -6,13 +6,13 @@
 
     <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
         <RowDefinition Height="1.5*"/>
     </Grid.RowDefinitions>
 

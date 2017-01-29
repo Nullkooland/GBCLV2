@@ -81,16 +81,15 @@ namespace GBCLV2.Pages
             }
         }
 
-        private void LoadModInfo(string dir)
+        private void LoadModInfo(string path)
         {
             Mod _mod = new Mod()
             {
-                FileName = Path.GetFileNameWithoutExtension(dir),
-                IsEnabled = dir.EndsWith(".disabled") ? false : true
+                FileName = Path.GetFileNameWithoutExtension(path),
+                IsEnabled = path.EndsWith(".disabled") ? false : true
             };
 
-            using (FileStream ModToOpen = new FileStream(dir, FileMode.Open, FileAccess.Read))
-            using (ZipArchive archive = new ZipArchive(ModToOpen, ZipArchiveMode.Read))
+            using (var archive = ZipFile.OpenRead(path))
             {
                 ZipArchiveEntry entry = archive.GetEntry("mcmod.info");
                 if (entry != null)
@@ -113,7 +112,7 @@ namespace GBCLV2.Pages
                 }
             }
 
-            if (dir.EndsWith(".zip")) FileSystem.RenameFile(dir, _mod.Name + ".jar");
+            if (path.EndsWith(".zip")) FileSystem.RenameFile(path, _mod.Name + ".jar");
             if (_mod.Name == null) _mod.Name = _mod.FileName;
 
             Dispatcher.BeginInvoke((Action)delegate ()

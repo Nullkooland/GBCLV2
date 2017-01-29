@@ -147,8 +147,7 @@ namespace GBCLV2.Pages
 
             if(path.EndsWith(".zip"))
             {
-                using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-                using (var archive = new ZipArchive(fs, ZipArchiveMode.Read))
+                using (var archive = ZipFile.OpenRead(path))
                 {
                     using (var sr = new StreamReader(archive.GetEntry("pack.mcmeta").Open(), Encoding.UTF8))
                     {

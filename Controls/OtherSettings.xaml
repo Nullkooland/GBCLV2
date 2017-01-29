@@ -4,21 +4,24 @@
         Height="290" Width="630">
 
     <Grid.RowDefinitions>
-        <RowDefinition/>
-        <RowDefinition Height="36"/>
-        <RowDefinition Height="36"/>
-        <RowDefinition/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="32"/>
+        <RowDefinition Height="1.5*"/>
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="110"/>
+        <ColumnDefinition Width="120"/>
         <ColumnDefinition/>
     </Grid.ColumnDefinitions>
 
-    <TextBlock Text="下载源选择" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="1" Margin="7,0"/>
-    <TextBlock Text="启动后行为" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="7,0"/>
+    <TextBlock Text="下载源选择" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="1" Margin="15,0,0,0"/>
+    <TextBlock Text="启动后行为" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="15,0,0,0"/>
+    <TextBlock Text="附加参数" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="15,0,0,0"/>
 
     <ComboBox x:Name="DownloadSourceComboBox" Grid.Row="1" Grid.Column="1" Width="480" HorizontalAlignment="Left" SelectedItem="{Binding DownloadSource}"/>
     <ComboBox x:Name="AfterLaunchBehaviorComboBox" Grid.Row="2" Grid.Column="1" Width="480" HorizontalAlignment="Left" SelectedItem="{Binding AfterLaunch}"/>
-    
+    <TextBox Text="{Binding AdvancedArgs}" Grid.Row="3" Grid.Column="1" Width="480" Height="24"/>
+
 </Grid>

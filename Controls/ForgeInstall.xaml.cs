@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.IO.Compression;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using LitJson;
 using System.Windows.Controls;
-using System.ComponentModel;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
@@ -13,10 +15,11 @@ namespace GBCLV2.Controls
     {
         private const string ForgeListUrl = "http://bmclapi2.bangbang93.com/forge/minecraft/";
         private static readonly HttpClient client = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
-        private KMCCC.Launcher.Version version;
+        private string mcVersion;
 
         class ForgeInfo
         {
+            public string Branch { get; set; }
             public string Version { get; set; }
             public string ModifiedTime { get; set; }
         }
@@ -33,52 +36,110 @@ namespace GBCLV2.Controls
 
         private async void GetVersionForgeListAsync(object sender, SelectionChangedEventArgs e)
         {
-            version = App.Versions[App.Config.VersionIndex];
+            if (App.Config.VersionIndex == -1) return;
+
+            var version = App.Versions[App.Config.VersionIndex];
             if(version.InheritsVersion != null)
             {
                 version = App.Core.GetVersion(version.InheritsVersion);
             }
+            mcVersion = version.ID;
 
             string json;
             try
             {
-                statusBox.Text = $"正在获取{version.ID}版本Forge列表";
-                json = await client.GetStringAsync(ForgeListUrl + version.ID);
+                statusBox.Text = $"正在获取{mcVersion}版本Forge列表";
+                json = await client.GetStringAsync(ForgeListUrl + mcVersion);
             }
             catch
             {
-                statusBox.Text = $"获取{version.ID}版本Forge列表失败";
+                statusBox.Text = $"获取{mcVersion}版本Forge列表失败";
                 return;
             }
 
             VersionForges.Clear();
 
-            foreach(var _forge in JsonMapper.ToObject(json))
+            var allForge = JsonMapper.ToObject(json);
+            for(int i = allForge.Count - 1; i >=0; i--)
             {
-                var forge = _forge as JsonData;
                 VersionForges.Add(new ForgeInfo
                 {
-                    Version = forge["version"].ToString(),
-                    ModifiedTime = forge["modified"].ToString()
+                    Branch = allForge[i]["branch"]?.ToString(),
+                    Version = allForge[i]["version"].ToString(),
+                    ModifiedTime = allForge[i]["modified"].ToString()
                 });
             }
 
             if(VersionForges.Count != 0)
             {
-                statusBox.Text = $"获取{version.ID}版本Forge列表成功";
+                statusBox.Text = $"获取{mcVersion}版本Forge列表成功";
             }
             else
             {
-                statusBox.Text = $"{version.ID}版本并没有可用的Forge";
+                statusBox.Text = $"{mcVersion}版本并没有可用的Forge";
             }
-            
-            ForgeList.Items.SortDescriptions.Add(new SortDescription("ModifiedTime", ListSortDirection.Descending));
+
             ForgeList.Items.Refresh();
         }
 
         private async void InstallForgeAsync(object sender, RoutedEventArgs e)
         {
+            if(ForgeList.SelectedIndex == -1)
+            {
+                MessageBox.Show("请选择要安装的Forge版本!", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            download_btn.IsEnabled = false;
+            var core = App.Core;
 
+            var forge = VersionForges[ForgeList.SelectedIndex];
+            var forgeName = $"{mcVersion}-{forge.Version}" + (forge.Branch == null ? null : $"-{forge.Branch}");
+
+            var forgeJarPath = $"{core.GameRootPath}\\libraries\\net\\minecraftforge\\forge\\{forgeName}\\forge-{forgeName}.jar";
+
+            var forgeDownload = new List<DownloadInfo>()
+            {
+                new DownloadInfo
+                {
+                    Path = forgeJarPath,
+                    Url = $"{DownloadHelper.BaseUrl.ForgeBaseUrl}{forgeName}/forge-{forgeName}-universal.jar"
+                }
+            };
+
+            var downloadPage = new Pages.DownloadPage(forgeDownload, "下载Forge");
+            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
+            await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+
+            var newVersionID = $"{mcVersion}-forge{forgeName}";
+            var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
+            try
+            {
+                if(File.Exists(forgeJarPath) && !Directory.Exists(newVersionPath))
+                {
+                    Directory.CreateDirectory(newVersionPath);
+                }
+
+                using (var archive = ZipFile.OpenRead(forgeJarPath))
+                {
+                    archive.GetEntry("version.json").ExtractToFile($"{newVersionPath}\\{newVersionID}.json");
+                }
+            }
+            catch
+            {
+                statusBox.Text = $"安装{mcVersion}版本Forge失败";
+                download_btn.IsEnabled = true;
+                return;
+            }
+
+            var newVersion = core.GetVersion(newVersionID);
+            App.Versions.Add(newVersion);
+
+            var FilesToDownload = DownloadHelper.GetLostEssentials(core, newVersion);
+
+            downloadPage = new Pages.DownloadPage(forgeDownload, "下载Forge版本依赖库");
+            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
+
+            download_btn.IsEnabled = true;
         }
     }
 }

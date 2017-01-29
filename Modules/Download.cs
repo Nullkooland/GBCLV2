@@ -26,7 +26,7 @@ namespace GBCLV2.Modules
         public string MavenBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/";
         public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
         public string AssetsBaseUrl         { get; } = "http://bmclapi2.bangbang93.com/assets/";
-        public string ForgeBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/forge/download/maven/net/minecraftforge/forge/";
+        public string ForgeBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
@@ -34,7 +34,7 @@ namespace GBCLV2.Modules
         public string VersionListUrl        { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
         public string VersionBaseUrl        { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
         public string LibraryBaseUrl        { get; } = "https://libraries.minecraft.net/";
-        public string MavenBaseUrl          { get; } = "http://ftb.cursecdn.com/FTB2/maven/";
+        public string MavenBaseUrl          { get; } = "http://files.minecraftforge.net/maven/";
         public string AssetsIndexBaseUrl    { get; } = "https://launchermeta.mojang.com/";
         public string AssetsBaseUrl         { get; } = "https://resources.download.minecraft.net/";
         public string ForgeBaseUrl          { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
@@ -121,7 +121,7 @@ namespace GBCLV2.Modules
                     {
                         indexUrl = BaseUrl.AssetsIndexBaseUrl + version.AssetsIndexUrl;
                     }
-                    System.Diagnostics.Debug.WriteLine(indexUrl);
+
                     var client = new System.Net.Http.HttpClient() { Timeout = new System.TimeSpan(0, 0, 2) };
                     indexJson = client.GetStringAsync(indexUrl).Result;
                     client.Dispose();

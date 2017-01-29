@@ -6,7 +6,7 @@
     <Grid.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="18,0"/>
+            <Setter Property="Margin" Value="27,0"/>
             <Setter Property="TextDecorations" Value="UnderLine"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontSize" Value="14"/>
@@ -39,14 +39,14 @@
         </Image.Effect>
     </Image>
 
-    <TextBlock Text="关于 GBCL V2.0.2" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="15,0"/>
+    <TextBlock Text="关于 GBCL V2.0.2" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
     
-    <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="15,0"/>
+    <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="25,0"/>
     <TextBlock Text="https://github.com/Goose-Bomb/GBCLV2" Grid.Row="3"/>
 
-    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="15,0"/>
+    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="25,0"/>
     <TextBlock Text="https://github.com/MineStudio/KMCCC" Grid.Row="5"/>
 
-    <TextBlock Text="使用BMCLAPI下载源" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="15,0"/>
+    <TextBlock Text="使用BMCLAPI加速下载" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="25,0"/>
     <TextBlock Text="http://bmclapi.bangbang93.com/" Grid.Row="7"/>
 </Grid>

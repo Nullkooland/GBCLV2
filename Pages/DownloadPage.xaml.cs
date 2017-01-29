@@ -1,7 +1,6 @@
 ﻿using GBCLV2.Modules;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -160,8 +159,8 @@ namespace GBCLV2.Pages
             catch(Exception e)
             {
                 Interlocked.Increment(ref failed);
-                Debug.WriteLine(download.Url);
-                Debug.WriteLine(e.Message);
+                //Debug.WriteLine(download.Url);
+                //Debug.WriteLine(e.Message);
                 Dispatcher.Invoke(() => failsBox.Text = $"{failed}个文件下载失败" );
                 File.Delete(download.Path);
                 return;
