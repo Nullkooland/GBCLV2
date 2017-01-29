@@ -116,21 +116,21 @@ namespace GBCLV2.Pages
 
         private void OnGameLaunch()
         {
-            switch (App.Config.AfterLaunch)
+            switch (App.Config.AfterLaunchBehavior)
             {
-                case AfterLaunchBehavior.隐藏并后台运行:
+                case 0:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.MainWindow.Hide();
                     });
                     break;
-                case AfterLaunchBehavior.直接退出:
+                case 1:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.Shutdown();
                     });
                     break;
-                case AfterLaunchBehavior.保持可见:
+                case 2:
                     Dispatcher.Invoke(() =>
                     {
                         if (string.IsNullOrWhiteSpace(App.Config.UserName))

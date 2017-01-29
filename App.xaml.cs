@@ -128,7 +128,7 @@ namespace GBCLV2
 
             Current.Dispatcher.Invoke(() =>
             {
-                if(Config.AfterLaunch == AfterLaunchBehavior.隐藏并后台运行)
+                if(Config.AfterLaunchBehavior == 0)
                 {
                     Current.Shutdown();
                 }

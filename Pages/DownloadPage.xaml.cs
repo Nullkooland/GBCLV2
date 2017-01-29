@@ -159,7 +159,7 @@ namespace GBCLV2.Pages
                 File.Delete(download.Path);
                 //你自己要取消的~
             }
-            catch(Exception e)
+            catch
             {
                 Interlocked.Increment(ref failed);
                 //Debug.WriteLine(download.Url);

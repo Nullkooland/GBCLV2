@@ -9,8 +9,6 @@
     using System.Runtime.CompilerServices;
     using KMCCC.Tools;
 
-    public enum AfterLaunchBehavior { 隐藏并后台运行, 直接退出, 保持可见 }
-
     public class ConfigModule : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,8 +38,8 @@
         private bool     _UseSystemThemeColor;
         private bool     _UseImageBackground;
         private string   _ImagePath;
-        private DownloadSource _DownloadSource;
-        private AfterLaunchBehavior _AfterLaunch;
+        private int     _DownloadSource;
+        private int     _AfterLaunchBehavior;
 
         #endregion
 
@@ -175,14 +173,14 @@
             }
         }
 
-        public DownloadSource DownloadSource
+        public int DownloadSource
         {
             get => _DownloadSource; set { _DownloadSource = value; DownloadHelper.SetDownloadSource(value); }
         }
 
-        public AfterLaunchBehavior AfterLaunch
+        public int AfterLaunchBehavior
         {
-            get => _AfterLaunch; set => _AfterLaunch = value;
+            get => _AfterLaunchBehavior; set => _AfterLaunchBehavior = value;
         }
 
         #endregion
@@ -219,7 +217,7 @@
                     _WinWidth = 854,
                     _WinHeight = 480,
                     _JavaPath = SystemTools.FindJava(),
-                    _DownloadSource = DownloadSource.BMCLAPI,
+                    _DownloadSource = 1,
                 };
             }
             return config;

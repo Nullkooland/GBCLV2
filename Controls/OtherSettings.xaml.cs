@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
-using GBCLV2.Modules;
+﻿using System.Windows.Controls;
 
 namespace GBCLV2.Controls
 {
@@ -11,8 +9,8 @@ namespace GBCLV2.Controls
             InitializeComponent();
             this.DataContext = App.Config;
 
-            DownloadSourceComboBox.ItemsSource = Enum.GetValues(typeof(DownloadSource));
-            AfterLaunchBehaviorComboBox.ItemsSource = Enum.GetValues(typeof(AfterLaunchBehavior));
+            DownloadSourceBox.ItemsSource = new string[2] { "官方","BMCLAPI" };
+            AfterLaunchBehaviorBox.ItemsSource = new string[3] { "隐藏并后台运行", "直接退出", "保持窗体可见" };
         }
     }
 }
