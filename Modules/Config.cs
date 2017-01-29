@@ -262,7 +262,14 @@
             {
                 CryptoStream cs = new CryptoStream(ms, descsp.CreateDecryptor(key, key), CryptoStreamMode.Write);
                 cs.Write(data, 0, data.Length);
-                cs.FlushFinalBlock();
+                try
+                {
+                    cs.FlushFinalBlock();
+                }
+                catch
+                {
+                    return null;
+                }
                 return Encoding.Default.GetString(ms.ToArray());
             }
         }
