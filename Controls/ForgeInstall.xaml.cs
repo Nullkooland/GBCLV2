@@ -140,6 +140,7 @@ namespace GBCLV2.Controls
 
             var newVersion = core.GetVersion(newVersionID);
             App.Versions.Add(newVersion);
+            App.Config.VersionIndex = App.Versions.IndexOf(newVersion);
 
             MessageBox.Show($"安装{mcVersion}版本Forge成功");
             download_btn.IsEnabled = true;

@@ -22,21 +22,14 @@
             </Button.Background>
         </Button>
 
-        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="titleBox" HorizontalAlignment="Right" Grid.Row="1" Margin="45,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="titleBox" HorizontalAlignment="Right" Grid.Row="1" Margin="25,0"/>
         <TextBlock Style="{StaticResource Info_TextBlock_Style}" Text="总进度" Grid.Row="2" Margin="10,0"/>
         <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="statusBox" FontSize="14" Height="18" Grid.Row="3" Margin="75,0"/>
         <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="failsBox" FontSize="14" Height="18" Grid.Row="4" Margin="75,0"/>
-        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="speedBox" FontSize="14" Height="18" Grid.Row="3" HorizontalAlignment="Right" Margin="45,0"/>
+        <TextBlock Style="{StaticResource Info_TextBlock_Style}" x:Name="speedBox" FontSize="14" Height="18" Grid.Row="3" HorizontalAlignment="Right" Margin="25,0"/>
 
         <ProgressBar x:Name="progressBar" Foreground="{DynamicResource Theme_Brush}" Background="#60FFFFFF"
-                     Height="27" Width="520" Grid.Row="2" HorizontalAlignment="Left" Margin="75,0,0,0"/>
-
-        <Button Style="{StaticResource Button_Style}" x:Name="cancle_btn" ToolTip="取消下载" 
-                Width="22" Height="22" HorizontalAlignment="Right" Grid.Row="2" Margin="10,0">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/close.png"/>
-            </Button.Background>
-        </Button>
+                     Height="27" Width="540" Grid.Row="2" HorizontalAlignment="Left" Margin="75,0,0,0"/>
 
     </Grid>
 </Page>

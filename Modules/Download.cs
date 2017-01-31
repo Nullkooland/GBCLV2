@@ -124,7 +124,7 @@ namespace GBCLV2.Modules
                     indexJson = client.GetStringAsync(indexUrl).Result;
                     client.Dispose();
                 }
-                catch
+                catch(System.Exception e)
                 {
                     System.Windows.MessageBox.Show("获取资源列表失败!");
                     return lostAssets;

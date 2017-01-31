@@ -66,6 +66,15 @@ namespace GBCLV2.Pages
                 var downloadPage = new DownloadPage(lostEssentials , "下载依赖库");
                 NavigationService.Navigate(downloadPage);
                 await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+                if(!downloadPage.Succeeded)
+                {
+                    if(MessageBox.Show("依赖库未全部下载成功，可能无法正常启动\n是否继续启动", "Σ( ￣□￣||)",
+                        MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                    
+                }
             }
 
             var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion);

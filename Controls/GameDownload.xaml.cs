@@ -121,6 +121,7 @@ namespace GBCLV2.Controls
 
             var version =  core.GetVersion(versionID);
             App.Versions.Add(version);
+            App.Config.VersionIndex = App.Versions.IndexOf(version);
 
             var FilesToDownload = DownloadHelper.GetLostEssentials(core, version);
             FilesToDownload.Add(new DownloadInfo
