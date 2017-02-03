@@ -121,13 +121,13 @@ namespace GBCLV2.Pages
                 using (var fileStream = new FileStream(download.Path, FileMode.Create, FileAccess.Write))
                 {
                     var responseStream = response.GetResponseStream();
-                    byte[] buffer = new byte[1024];
-                    int size = responseStream.Read(buffer, 0, 1024);
+                    byte[] buffer = new byte[2048];
+                    int size = responseStream.Read(buffer, 0, 2048);
 
                     while (!cts.IsCancellationRequested && size > 0)
                     {
                         fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, 1024);
+                        size = responseStream.Read(buffer, 0, 2048);
                         Bytes += size;
                     }
                     responseStream.Close();

@@ -391,6 +391,7 @@
         </Style>
 
         <Style TargetType="ListView" x:Key="GridListView_Style">
+            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
             <Setter Property="SelectionMode" Value="Single"/>
             <Setter Property="ItemContainerStyle" Value="{DynamicResource GridListViewItem_Style}"/>
             <Setter Property="Template">
@@ -434,7 +435,7 @@
             </Setter>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
+                    <ControlTemplate TargetType="ListViewItem">
                         <Border x:Name="border" Height="21" Width="560" BorderThickness="1" Background="Transparent">
                             <GridViewRowPresenter/>
                         </Border>

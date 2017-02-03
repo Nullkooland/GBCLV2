@@ -34,12 +34,13 @@
         private bool     _FullScreen;
         private string   _ServerAddress;
         private string   _AdvancedArgs;
+        private string   _WindowTitle;
         private string   _ThemeColor;
         private bool     _UseSystemThemeColor;
         private bool     _UseImageBackground;
         private string   _ImagePath;
-        private int     _DownloadSource;
-        private int     _AfterLaunchBehavior;
+        private int      _DownloadSource;
+        private int      _AfterLaunchBehavior;
 
         #endregion
 
@@ -116,14 +117,19 @@
             get => _FullScreen; set => _FullScreen = value;
         }
 
+        public string ServerAddress
+        {
+            get => _ServerAddress; set => _ServerAddress = value;
+        }
+
         public string AdvancedArgs
         {
             get => _AdvancedArgs; set => _AdvancedArgs = value;
         }
 
-        public string ServerAddress
+        public string WindowTitle
         {
-            get => _ServerAddress; set => _ServerAddress = value;
+            get => _WindowTitle; set => _WindowTitle = value;
         }
 
         public string ThemeColor

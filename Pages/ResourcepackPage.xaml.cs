@@ -269,16 +269,13 @@ namespace GBCLV2.Pages
             {
                 foreach (var path in dialog.FileNames)
                 {
-                    using (var fs = new FileStream(path, FileMode.Open))
-                    using (var archive = new ZipArchive(fs, ZipArchiveMode.Read))
+                    using (var archive = ZipFile.OpenRead(path))
                     {
                         if (archive.GetEntry("pack.mcmeta") == null)
                         {
                             MessageBox.Show(path + "\n不是有效的资源包文件", "你可能选了假资源包", MessageBoxButton.OK, MessageBoxImage.Information);
                             continue;
                         }
-                        archive.Dispose();
-                        fs.Dispose();
                     }
 
                     var CopyTo = PacksDir + Path.GetFileName(path);

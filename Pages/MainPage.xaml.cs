@@ -101,7 +101,8 @@ namespace GBCLV2.Pages
                     FullScreen = Config.FullScreen
                 },
 
-                ServerAddress = Config.ServerAddress
+                ServerAddress = Config.ServerAddress,
+                VersionType = "GBCL-v2.0.3"
 
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 
@@ -123,8 +124,13 @@ namespace GBCLV2.Pages
             NavigationService.Navigate(new Uri(page,UriKind.Relative));
         }
 
-        private void OnGameLaunch()
+        private void OnGameLaunch(LaunchHandle handle)
         {
+            if(!string.IsNullOrWhiteSpace(App.Config.WindowTitle))
+            {
+                handle.SetTitle(App.Config.WindowTitle);
+            }
+            
             switch (App.Config.AfterLaunchBehavior)
             {
                 case 0:
