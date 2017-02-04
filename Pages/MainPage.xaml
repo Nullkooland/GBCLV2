@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
         <ComboBox Name="VersionBox" DisplayMemberPath="ID" SelectedIndex="{Binding VersionIndex}" Grid.Row="2" Width="280" Height="26" HorizontalAlignment="Right" Margin="95,0"/>
