@@ -34,17 +34,17 @@ namespace GBCLV2.Pages
                     tb.Text = "Hello " + App.Config.UserName;
                 }
 
-                if(App.Config.VersionIndex == -1)
-                {
-                    LaunchButton.IsEnabled = false;
-                    LaunchButton.Content = "没有版本";
-                }
-                else
+                if(App.Versions.Any())
                 {
                     LaunchButton.IsEnabled = true;
                     LaunchButton.Content = "启动";
 
                     VersionBox.ItemsSource = App.Versions;
+                }
+                else
+                {
+                    LaunchButton.IsEnabled = false;
+                    LaunchButton.Content = "没有版本";
                 }
             };
         }
@@ -66,6 +66,15 @@ namespace GBCLV2.Pages
                 var downloadPage = new DownloadPage(lostEssentials , "下载依赖库");
                 NavigationService.Navigate(downloadPage);
                 await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+                if(!downloadPage.Succeeded)
+                {
+                    if(MessageBox.Show("依赖库未全部下载成功，可能无法正常启动\n是否继续启动", "Σ( ￣□￣||)",
+                        MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                    
+                }
             }
 
             var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion);
@@ -92,7 +101,8 @@ namespace GBCLV2.Pages
                     FullScreen = Config.FullScreen
                 },
 
-                ServerAddress = Config.ServerAddress
+                ServerAddress = Config.ServerAddress,
+                VersionType = "GBCL-v2.0.3"
 
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 
@@ -114,23 +124,28 @@ namespace GBCLV2.Pages
             NavigationService.Navigate(new Uri(page,UriKind.Relative));
         }
 
-        private void OnGameLaunch()
+        private void OnGameLaunch(LaunchHandle handle)
         {
-            switch (App.Config.AfterLaunch)
+            if(!string.IsNullOrWhiteSpace(App.Config.WindowTitle))
             {
-                case AfterLaunchBehavior.隐藏并后台运行:
+                handle.SetTitle(App.Config.WindowTitle);
+            }
+            
+            switch (App.Config.AfterLaunchBehavior)
+            {
+                case 0:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.MainWindow.Hide();
                     });
                     break;
-                case AfterLaunchBehavior.直接退出:
+                case 1:
                     Dispatcher.Invoke(() =>
                     {
                         Application.Current.Shutdown();
                     });
                     break;
-                case AfterLaunchBehavior.保持可见:
+                case 2:
                     Dispatcher.Invoke(() =>
                     {
                         if (string.IsNullOrWhiteSpace(App.Config.UserName))

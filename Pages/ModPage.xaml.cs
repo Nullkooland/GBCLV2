@@ -212,16 +212,13 @@ namespace GBCLV2.Pages
                 {
                     if (path.EndsWith(".jar") || path.EndsWith(".zip"))
                     {
-                        using (var fs = new FileStream(path, FileMode.Open))
-                        using (var archive = new ZipArchive(fs, ZipArchiveMode.Read))
+                        using (var archive = ZipFile.OpenRead(path))
                         {
                             if(archive.GetEntry("META-INF/") == null)
                             {
                                 MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod",MessageBoxButton.OK,MessageBoxImage.Information);
                                 continue;
                             }
-                            archive.Dispose();
-                            fs.Dispose();
                         }
                         
                         string CopyTo = ModsDir + Path.GetFileNameWithoutExtension(path) + ".jar";

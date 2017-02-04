@@ -9,8 +9,6 @@
     using System.Runtime.CompilerServices;
     using KMCCC.Tools;
 
-    public enum AfterLaunchBehavior { 隐藏并后台运行, 直接退出, 保持可见 }
-
     public class ConfigModule : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,12 +34,13 @@
         private bool     _FullScreen;
         private string   _ServerAddress;
         private string   _AdvancedArgs;
+        private string   _WindowTitle;
         private string   _ThemeColor;
         private bool     _UseSystemThemeColor;
         private bool     _UseImageBackground;
         private string   _ImagePath;
-        private DownloadSource _DownloadSource;
-        private AfterLaunchBehavior _AfterLaunch;
+        private int      _DownloadSource;
+        private int      _AfterLaunchBehavior;
 
         #endregion
 
@@ -118,14 +117,19 @@
             get => _FullScreen; set => _FullScreen = value;
         }
 
+        public string ServerAddress
+        {
+            get => _ServerAddress; set => _ServerAddress = value;
+        }
+
         public string AdvancedArgs
         {
             get => _AdvancedArgs; set => _AdvancedArgs = value;
         }
 
-        public string ServerAddress
+        public string WindowTitle
         {
-            get => _ServerAddress; set => _ServerAddress = value;
+            get => _WindowTitle; set => _WindowTitle = value;
         }
 
         public string ThemeColor
@@ -175,14 +179,14 @@
             }
         }
 
-        public DownloadSource DownloadSource
+        public int DownloadSource
         {
             get => _DownloadSource; set { _DownloadSource = value; DownloadHelper.SetDownloadSource(value); }
         }
 
-        public AfterLaunchBehavior AfterLaunch
+        public int AfterLaunchBehavior
         {
-            get => _AfterLaunch; set => _AfterLaunch = value;
+            get => _AfterLaunchBehavior; set => _AfterLaunchBehavior = value;
         }
 
         #endregion
@@ -219,7 +223,7 @@
                     _WinWidth = 854,
                     _WinHeight = 480,
                     _JavaPath = SystemTools.FindJava(),
-                    _DownloadSource = DownloadSource.BMCLAPI,
+                    _DownloadSource = 1,
                 };
             }
             return config;
@@ -262,7 +266,14 @@
             {
                 CryptoStream cs = new CryptoStream(ms, descsp.CreateDecryptor(key, key), CryptoStreamMode.Write);
                 cs.Write(data, 0, data.Length);
-                cs.FlushFinalBlock();
+                try
+                {
+                    cs.FlushFinalBlock();
+                }
+                catch
+                {
+                    return null;
+                }
                 return Encoding.Default.GetString(ms.ToArray());
             }
         }

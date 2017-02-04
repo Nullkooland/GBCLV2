@@ -3,13 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Collections.Generic;
-using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
-    /// <summary>
-    /// SkinPage.xaml 的交互逻辑
-    /// </summary>
     public partial class SkinPage : Page
     {
         private static Color Temp_Color;
@@ -80,7 +76,7 @@ namespace GBCLV2.Pages
             public string Color { get; set; }
         }
 
-        private static List<MyColor> PresetColors = new List<MyColor>
+        private static MyColor[] PresetColors = new MyColor[]
         {
             new MyColor{Name = "土豪金", Color = "#7DEBAF5A"},
             new MyColor{Name = "滑稽黄", Color = "#96F1C40F"},

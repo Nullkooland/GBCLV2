@@ -5,8 +5,6 @@ using System.IO;
 
 namespace GBCLV2.Modules
 {
-    public enum DownloadSource { 官方, BMCLAPI, }
-
     interface IDownloadBaseUrl
     {
         string VersionListUrl       { get; }
@@ -50,15 +48,15 @@ namespace GBCLV2.Modules
     {
         public static IDownloadBaseUrl BaseUrl;
 
-        public static void SetDownloadSource(DownloadSource source)
+        public static void SetDownloadSource(int DownloadSource)
         {
-            switch(source)
+            switch(DownloadSource)
             {
-                case DownloadSource.官方:
+                case 0:
                     BaseUrl = new OfficialBaseUrl();
                     break;
 
-                case DownloadSource.BMCLAPI:
+                case 1:
                     BaseUrl = new BMCLAPIBaseUrl();
                     break;
             }

@@ -1,13 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Tools;
-using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
-    /// <summary>
-    /// LaunchSettings.xaml 的交互逻辑
-    /// </summary>
     public partial class LaunchSettings : Grid
     {
         private string versionID;
@@ -79,7 +75,7 @@ namespace GBCLV2.Controls
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
         {
-            if (App.Config.VersionIndex != -1)
+            if (VersionBox.SelectedIndex != -1)
             {
                 versionID = App.Versions[App.Config.VersionIndex].ID;
             }
@@ -114,7 +110,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
+                string DirPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\";
                 System.Diagnostics.Process.Start("explorer.exe", DirPath);
             }
         }
@@ -123,7 +119,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string JsonPath = string.Format(@"{0}\versions\{1}\{1}.json", App.Core.GameRootPath, versionID);
+                string JsonPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\{versionID}.json";
                 try
                 {
                     System.Diagnostics.Process.Start(JsonPath);
@@ -136,7 +132,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string DirPath = string.Format(@"{0}\versions\{1}\", App.Core.GameRootPath, versionID);
+                string DirPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\";
                 SystemTools.DeleteDirectoryAsync(DirPath);
 
                 App.Versions.RemoveAt(App.Config.VersionIndex);

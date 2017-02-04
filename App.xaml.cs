@@ -42,7 +42,7 @@ namespace GBCLV2
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
 
-            log_FileStream = new FileStream(Core.GameRootPath + @"\mcrun.log", FileMode.Create);
+            log_FileStream = new FileStream(Core.GameRootPath + @"\logs\mcrun.log", FileMode.Create);
             Logger = new StreamWriter(log_FileStream);
 
             if (Core.JavaPath == null)
@@ -119,16 +119,16 @@ namespace GBCLV2
         {
             if (ExitCode != 0)
             {
-                if (MessageBox.Show(string.Format("Minecraft异常退出了,Exit Code: {0}\n是否查看log文件？", ExitCode), "（/TДT)/", 
+                if (MessageBox.Show($"Minecraft异常退出了,Exit Code: {ExitCode}\n是否查看log文件？", "（/TДT)/", 
                     MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
-                    System.Diagnostics.Process.Start(Core.GameRootPath + @"\mcrun.log");
+                    System.Diagnostics.Process.Start(Core.GameRootPath + @"\logs\mcrun.log");
                 }
             }
 
             Current.Dispatcher.Invoke(() =>
             {
-                if(Config.AfterLaunch == AfterLaunchBehavior.隐藏并后台运行)
+                if(Config.AfterLaunchBehavior == 0)
                 {
                     Current.Shutdown();
                 }
@@ -144,7 +144,7 @@ namespace GBCLV2
 
         void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(string.Format("异常信息：{0}\n异常源：{1}",e.Exception.Message,e.Exception.StackTrace), "程序发生了无法处理的异常！",MessageBoxButton.OK,MessageBoxImage.Error);
+            MessageBox.Show($"异常信息：{e.Exception.Message}\n异常源：{e.Exception.StackTrace}", "程序发生了无法处理的异常！",MessageBoxButton.OK,MessageBoxImage.Error);
             //Shutdown(1);
             e.Handled = true;
         }
