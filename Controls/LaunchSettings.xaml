@@ -12,7 +12,6 @@
         <RowDefinition Height="32"/>
         <RowDefinition Height="32"/>
         <RowDefinition Height="32"/>
-        <RowDefinition Height="32"/>
         <RowDefinition Height="1.5*"/>
     </Grid.RowDefinitions>
 
@@ -27,7 +26,7 @@
     <TextBlock Text="服务器IP" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="7,0"
                IsEnabled="{Binding IsChecked,ElementName=DirectLoginServer_CheckBox}"/>
 
-    <TextBox Text="{Binding JavaPath}" Grid.Row="2" Width="500" Margin="90,0,0,0"/>
+    <TextBox Text="{Binding JavaPath}" IsReadOnly="True" Grid.Row="2" Width="500" Margin="90,0,0,0"/>
     <TextBox Text="{Binding MaxMemory}" x:Name="MaxMemoryBox" Grid.Row="3" Width="130" Margin="90,0" MaxLength="10" ToolTip="" ToolTipOpening="Update_CurrentAvailableMemory"/>
     <TextBox Text="{Binding WinWidth}" Grid.Row="3" Width="60" Margin="360,0,0,0" MaxLength="4"/>
     <TextBox Text="{Binding WinHeight}" Grid.Row="3" Width="60" Margin="440,0,0,0" MaxLength="4"/>

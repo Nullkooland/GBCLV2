@@ -25,11 +25,20 @@ namespace GBCLV2.Pages
         }
 
         private ObservableCollection<Mod> CurrentMods = new ObservableCollection<Mod>();
-        private const string ModsDir = @".minecraft\mods\";
+        private string ModsDir;
 
         public ModPage()
         {
             InitializeComponent();
+
+            if(App.Versions.Any() && App.Config.VersionSplit)
+            {
+                ModsDir = $"{App.Core.GameRootPath}\\versions\\{App.Versions[App.Config.VersionIndex].ID}\\mods\\";
+            }
+            else
+            {
+                ModsDir = $"{App.Core.GameRootPath}\\mods\\";
+            }
 
             ModList.ItemsSource = CurrentMods;
             ModList.Items.SortDescriptions.Add(new SortDescription("IsEnabled",ListSortDirection.Descending));

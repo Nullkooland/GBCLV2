@@ -142,6 +142,7 @@ namespace GBCLV2.Pages
             }
             catch
             {
+                System.Diagnostics.Debug.WriteLine(download.Url);
                 Interlocked.Increment(ref failed);
                 Dispatcher.Invoke(() => failsBox.Text = $"{failed}个文件下载失败" );
                 File.Delete(download.Path);

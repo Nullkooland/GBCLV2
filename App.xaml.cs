@@ -42,9 +42,6 @@ namespace GBCLV2
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
 
-            log_FileStream = new FileStream(Core.GameRootPath + @"\logs\mcrun.log", FileMode.Create);
-            Logger = new StreamWriter(log_FileStream);
-
             if (Core.JavaPath == null)
             {
                 if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
@@ -66,9 +63,21 @@ namespace GBCLV2
             {
                 Config.VersionIndex = -1;
             }
-            else if (Config.VersionIndex == -1 || Config.VersionIndex >= count)
+            else
             {
-                Config.VersionIndex = 0;
+                if (Config.VersionIndex == -1 || Config.VersionIndex >= count)
+                {
+                    Config.VersionIndex = 0;
+                }
+
+                var logPath = Core.GameRootPath + @"\logs\";
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
+                log_FileStream = new FileStream(logPath + "mcrun.log", FileMode.Create);
+                Logger = new StreamWriter(log_FileStream);
             }
         }
 

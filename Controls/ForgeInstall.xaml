@@ -20,7 +20,7 @@
               HorizontalAlignment="Right" VerticalAlignment="Top" Margin="1,0" SelectionChanged="GetVersionForgeListAsync"/>
 
     <ListView x:Name="ForgeList" Style="{StaticResource GridListView_Style}"
-              Width="580" Height="236" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
+              Width="580" Height="235" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
         <ListView.View>
             <GridView>
                 <GridViewColumn Header="Forge版本" Width="260" DisplayMemberBinding="{Binding Version}"/>

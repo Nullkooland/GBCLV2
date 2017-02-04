@@ -51,8 +51,6 @@ namespace GBCLV2.Pages
 
         private async void Launch(object sender, RoutedEventArgs e)
         {
-            LaunchButton.IsEnabled = false;
-
             var Core = App.Core;
             var Config = App.Config;
 
@@ -90,6 +88,8 @@ namespace GBCLV2.Pages
             var Result = Core.Launch(new LaunchOptions()
             {
                 Version = LaunchVersion,
+                VersionSplit = Config.VersionSplit,
+
                 Authenticator = (Config.Offline) ?
                 (IAuthenticator)new OfflineAuthenticator(Config.UserName) : new YggdrasilLogin(Config.Email, Config.PassWord, false),
                 MaxMemory = Config.MaxMemory,
@@ -102,12 +102,13 @@ namespace GBCLV2.Pages
                 },
 
                 ServerAddress = Config.ServerAddress,
-                VersionType = "GBCL-v2.0.3"
+                VersionType = "GBCL-v2.0.4",
 
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 
             if(Result.Success)
             {
+                LaunchButton.IsEnabled = false;
                 tb.Text = "(。-`ω´-) 启动中...";
                 LaunchButton.Content = "启动中";
             }

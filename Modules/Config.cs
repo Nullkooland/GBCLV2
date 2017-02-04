@@ -21,26 +21,27 @@
 
         const string encryptKey = "无可奉告";
 
-        private string   _JavaPath;
-        private int      _VersionIndex;
-        private uint     _MaxMemory;
-        private bool     _Offline;
-        private string   _UserName;
-        private string   _Email;
-        private string   _PassWord;
-        private bool     _RememberPassWord;
-        private ushort   _WinWidth;
-        private ushort   _WinHeight;
-        private bool     _FullScreen;
-        private string   _ServerAddress;
-        private string   _AdvancedArgs;
-        private string   _WindowTitle;
-        private string   _ThemeColor;
-        private bool     _UseSystemThemeColor;
-        private bool     _UseImageBackground;
-        private string   _ImagePath;
-        private int      _DownloadSource;
-        private int      _AfterLaunchBehavior;
+        private string  _JavaPath;
+        private int     _VersionIndex;
+        private bool    _VersionSplit;
+        private uint    _MaxMemory;
+        private bool    _Offline;
+        private string  _UserName;
+        private string  _Email;
+        private string  _PassWord;
+        private bool    _RememberPassWord;
+        private ushort  _WinWidth;
+        private ushort  _WinHeight;
+        private bool    _FullScreen;
+        private string  _ServerAddress;
+        private string  _AdvancedArgs;
+        private string  _WindowTitle;
+        private string  _ThemeColor;
+        private bool    _UseSystemThemeColor;
+        private bool    _UseImageBackground;
+        private string  _ImagePath;
+        private int     _DownloadSource;
+        private int     _AfterLaunchBehavior;
 
         #endregion
 
@@ -48,21 +49,17 @@
 
         public string JavaPath
         {
-            get => _JavaPath;
-            set
-            {
-                if(!File.Exists(value))
-                {
-                    value = SystemTools.FindJava();
-                }
-                _JavaPath = value;
-                NotifyPropertyChanged();
-            }
+            get => _JavaPath; set { _JavaPath = value; NotifyPropertyChanged(); }
         }
 
         public int VersionIndex
         {
             get => _VersionIndex; set { _VersionIndex = value; NotifyPropertyChanged(); }
+        }
+
+        public bool VersionSplit
+        {
+            get => _VersionSplit; set => _VersionSplit = value;
         }
 
         public uint MaxMemory

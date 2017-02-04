@@ -39,7 +39,7 @@
         </Image.Effect>
     </Image>
 
-    <TextBlock Text="关于 GBCL V2.0.3" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
+    <TextBlock Text="关于 GBCL V2.0.4" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
     
     <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="25,0"/>
     <TextBlock Text="https://github.com/Goose-Bomb/GBCLV2" Grid.Row="3"/>

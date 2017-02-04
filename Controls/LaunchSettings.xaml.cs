@@ -7,7 +7,6 @@ namespace GBCLV2.Controls
     public partial class LaunchSettings : Grid
     {
         private string versionID;
-        private uint AvailableMemory = SystemTools.GetAvailableMemory();
 
         public LaunchSettings()
         {
@@ -143,8 +142,7 @@ namespace GBCLV2.Controls
 
         private void Update_CurrentAvailableMemory(object sender, ToolTipEventArgs e)
         {
-            AvailableMemory = SystemTools.GetAvailableMemory();
-            MaxMemoryBox.ToolTip = string.Format("当前可用物理内存：{0} MB", AvailableMemory);
+            MaxMemoryBox.ToolTip = $"当前可用物理内存：{SystemTools.GetAvailableMemory()} MB";
         }
 
         private void GetJavaPathFromDisk(object sender, RoutedEventArgs e)

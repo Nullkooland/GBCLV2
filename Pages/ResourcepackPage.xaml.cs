@@ -27,14 +27,32 @@ namespace GBCLV2.Pages
         private ObservableCollection<ResPack> Enabled_Pack = new ObservableCollection<ResPack>();
         private ObservableCollection<ResPack> Disabled_Pack = new ObservableCollection<ResPack>();
 
-        private const string PacksDir = @".minecraft\resourcepacks\";
-        private const string OptionsDir = @".minecraft\options.txt";
+        private string PacksDir;
+        private string OptionsDir;
         private static string LineToReplace;
         private static string[] EnabledPackNames;
 
         public ResourcepackPage()
         {
             InitializeComponent();
+
+            string rootPath;
+            if (App.Versions.Any() && App.Config.VersionSplit)
+            {
+                rootPath = $"{App.Core.GameRootPath}\\versions\\{App.Versions[App.Config.VersionIndex].ID}\\";
+            }
+            else
+            {
+                rootPath = App.Core.GameRootPath + "\\";
+            }
+            PacksDir = rootPath + "resourcepacks\\";
+            OptionsDir = rootPath + "options.txt";
+
+            if (!Directory.Exists(PacksDir))
+            {
+                Directory.CreateDirectory(PacksDir);
+            }
+
             EnabledPacksList.ItemsSource = Enabled_Pack;
             DisabledPacksList.ItemsSource = Disabled_Pack;
 
@@ -42,21 +60,13 @@ namespace GBCLV2.Pages
             Task.Run(() => LoadResPacks());
 
             refresh_button.Click    += (s, e) => LoadResPacks();
-            openfolder_button.Click += (s, e) =>
-            {
-                if (!Directory.Exists(PacksDir))
-                {
-                    Directory.CreateDirectory(PacksDir);
-                }
-                System.Diagnostics.Process.Start("explorer.exe", PacksDir);
-            };
+            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe", PacksDir);
         }
 
         private void LoadOptions()
         {
             if (!File.Exists(OptionsDir)) return;
-
-            StreamReader sr = new StreamReader(".minecraft//options.txt", Encoding.Default);
+            StreamReader sr = new StreamReader(OptionsDir, Encoding.Default);
             while (!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
@@ -296,38 +306,41 @@ namespace GBCLV2.Pages
 
         private void Go_Back(object sender, RoutedEventArgs e)
         {
-            string s = "resourcePacks:[";
-            string options_text;
-
-            for (int i = Enabled_Pack.Count - 1; i >= 0; --i)
+            if(Enabled_Pack.Any())
             {
-                s += "\"" + Enabled_Pack[i].Name + "\"" + ",";
-            }
+                string s = "resourcePacks:[";
+                string options_text;
 
-            s = s.Remove(s.Length - 1);
-            s += "]";
-
-            if (LineToReplace != null)
-            {
-                if(File.Exists(OptionsDir))
+                for (int i = Enabled_Pack.Count - 1; i >= 0; --i)
                 {
-                    options_text = File.ReadAllText(OptionsDir, Encoding.Default).Replace(LineToReplace, s);
-                }
-                else
-                {
-                    options_text = s;
+                    s += "\"" + Enabled_Pack[i].Name + "\"" + ",";
                 }
 
-                try
+                s = s.Remove(s.Length - 1);
+                s += "]";
+
+                if (LineToReplace != null)
                 {
-                    File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                    if (File.Exists(OptionsDir))
+                    {
+                        options_text = File.ReadAllText(OptionsDir, Encoding.Default).Replace(LineToReplace, s);
+                    }
+                    else
+                    {
+                        options_text = s;
+                    }
+
+                    try
+                    {
+                        File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("options.txt可能被占用", "写入失败", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
+                    LineToReplace = null;
                 }
-                catch
-                {
-                    MessageBox.Show("options.txt可能被占用", "写入失败", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                
-                LineToReplace = null;
             }
 
             NavigationService.GoBack();

@@ -34,7 +34,7 @@
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <BlurEffect Radius="0"/>
+                    <BlurEffect/>
                 </Setter.Value>
             </Setter>
 
@@ -43,9 +43,9 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetProperty="Opacity" po:Freeze="True"
-                            Duration="0:0:0.3" From="0.0" To="1.0" AccelerationRatio="0.3" DecelerationRatio="0.25"/>
+                            Duration="0:0:0.32" From="0.0" To="1.0" AccelerationRatio="0.3" DecelerationRatio="0.25"/>
                             <DoubleAnimation Storyboard.TargetProperty="(Effect).(BlurEffect.Radius)"
-                            Duration="0:0:0.3" From="18" To="0" AccelerationRatio="0.1" DecelerationRatio="0.5"/>
+                            Duration="0:0:0.36" From="20" To="0" AccelerationRatio="0.1" DecelerationRatio="0.6"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
