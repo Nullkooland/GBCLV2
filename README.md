@@ -1,7 +1,7 @@
 # GBCLV2
 * A Simple Win10-Style Minecraft Launcher<br>   
-* Based on WPF and .NET V4.5.2<br>  
-* Using [KMCCC](https://github.com/MineStudio/KMCCC) as launcher core<br>  
+* Based on WPF and .NET V4.6.1<br>  
+* Using [Modified KMCCC](https://github.com/Goose-Bomb/KMCCC) as launcher core<br>  
 
 ![](http://imgsrc.baidu.com/forum/pic/item/8e3b8e18972bd4076b3a294b72899e510eb309a2.jpg)<br>
 ![](http://imgsrc.baidu.com/forum/pic/item/fc96bb510fb30f2423100bb5c195d143ac4b0399.jpg)<br>
