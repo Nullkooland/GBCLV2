@@ -20,6 +20,7 @@ namespace GBCLV2.Controls
             public string ID { get; set; }
             public string ReleaseTime { get; set; }
             public string Type { get; set; }
+            public string JsonUrl { get; set; }
         }
 
         private static List<VersionInfo> AllVersions = new List<VersionInfo>();
@@ -68,7 +69,8 @@ namespace GBCLV2.Controls
                 {
                     ID = version["id"].ToString(),
                     Type = version["type"].ToString(),
-                    ReleaseTime = version["releaseTime"].ToString()
+                    ReleaseTime = version["releaseTime"].ToString(),
+                    JsonUrl = DownloadHelper.BaseUrl.JsonBaseUrl + version["url"].ToString().Substring(32)
                 };
                 AllVersions.Add(info);
             }
@@ -90,6 +92,7 @@ namespace GBCLV2.Controls
 
             var core = App.Core;
             var versionID = AllVersions[VersionList.SelectedIndex].ID;
+            var jsonUrl = AllVersions[VersionList.SelectedIndex].JsonUrl;
             var versionDir = $"{core.GameRootPath}\\versions\\{versionID}";
             if(!Directory.Exists(versionDir))
             {
@@ -97,7 +100,6 @@ namespace GBCLV2.Controls
             }
 
             var jsonPath = $"{versionDir}\\{versionID}.json";
-            var jsonUrl = $"{DownloadHelper.BaseUrl.VersionBaseUrl}{versionID}/{versionID}.json";
 
             if(File.Exists(jsonPath) && File.Exists(jsonPath.Replace("json","jar")))
             {
@@ -124,11 +126,6 @@ namespace GBCLV2.Controls
             App.Config.VersionIndex = App.Versions.IndexOf(version);
 
             var FilesToDownload = DownloadHelper.GetLostEssentials(core, version);
-            FilesToDownload.Add(new DownloadInfo
-            {
-                Path = $"{versionDir}\\{versionID}.jar",
-                Url = $"{DownloadHelper.BaseUrl.VersionBaseUrl}{versionID}/{versionID}.jar"
-            });
 
             var downloadPage = new Pages.DownloadPage(FilesToDownload, "下载新Minecraft版本");
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);

@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Tools;
+using KMCCC.Launcher;
 
 namespace GBCLV2.Controls
 {
     public partial class LaunchSettings : Grid
     {
-        private string versionID;
+        private Version version;
 
         public LaunchSettings()
         {
@@ -76,7 +77,7 @@ namespace GBCLV2.Controls
         {
             if (VersionBox.SelectedIndex != -1)
             {
-                versionID = App.Versions[App.Config.VersionIndex].ID;
+                version = App.Versions[App.Config.VersionIndex];
             }
             else
             {
@@ -109,7 +110,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string DirPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\";
+                string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
                 System.Diagnostics.Process.Start("explorer.exe", DirPath);
             }
         }
@@ -118,7 +119,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string JsonPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\{versionID}.json";
+                string JsonPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\{version.ID}.json";
                 try
                 {
                     System.Diagnostics.Process.Start(JsonPath);
@@ -131,8 +132,14 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex != -1)
             {
-                string DirPath = $"{App.Core.GameRootPath}\\versions\\{versionID}\\";
-                SystemTools.DeleteDirectoryAsync(DirPath);
+                string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
+                UsefulTools.DeleteDirectoryAsync(DirPath);
+
+                if(version.ID.Contains("forge"))
+                {
+                    var forgeDir = $"{App.Core.GameRootPath}\\libraries\\{System.IO.Path.GetDirectoryName(version.Libraries[0].Path)}";
+                    UsefulTools.DeleteDirectoryAsync(forgeDir);
+                }
 
                 App.Versions.RemoveAt(App.Config.VersionIndex);
                 App.Config.VersionIndex = 0;

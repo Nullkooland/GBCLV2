@@ -42,15 +42,6 @@ namespace GBCLV2
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
 
-            if (Core.JavaPath == null)
-            {
-                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
-                    MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
-                {
-                    System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
-                }
-            }
-            
             uint count = 0;
 
             foreach(Version ver in Core.GetVersions())

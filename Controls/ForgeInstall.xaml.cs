@@ -38,12 +38,7 @@ namespace GBCLV2.Controls
         {
             if (App.Config.VersionIndex == -1) return;
 
-            var version = App.Versions[App.Config.VersionIndex];
-            if(version.InheritsVersion != null)
-            {
-                version = App.Core.GetVersion(version.InheritsVersion);
-            }
-            mcVersion = version.ID;
+            mcVersion = App.Versions[App.Config.VersionIndex].JarID;
 
             string json;
             try

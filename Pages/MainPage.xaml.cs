@@ -54,6 +54,20 @@ namespace GBCLV2.Pages
             var Core = App.Core;
             var Config = App.Config;
 
+            if (Config.JavaPath == null)
+            {
+                if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
+                }
+                return;
+            }
+            else
+            {
+                Core.JavaPath = Config.JavaPath;
+            }
+
             Core.GameLaunch += OnGameLaunch;
 
             var LaunchVersion = App.Versions[Config.VersionIndex];
@@ -102,7 +116,7 @@ namespace GBCLV2.Pages
                 },
 
                 ServerAddress = Config.ServerAddress,
-                VersionType = "GBCL-v2.0.4",
+                VersionType = "GBCL-v2.0.5",
 
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 

@@ -2,9 +2,6 @@
 {
     using System.IO;
     using LitJson;
-    using System;
-    using System.Text;
-    using System.Security.Cryptography;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
     using KMCCC.Tools;
@@ -18,8 +15,6 @@
         }
 
         #region 私有字段
-
-        const string encryptKey = "无可奉告";
 
         private string  _JavaPath;
         private int     _VersionIndex;
@@ -193,7 +188,7 @@
         {
             if(_RememberPassWord)
             {
-                _PassWord = Encrypt(_PassWord);
+                _PassWord = UsefulTools.EncryptString(_PassWord);
             }
             else
             {
@@ -210,7 +205,11 @@
             if (File.Exists("GBCL.json"))
             {
                 config = JsonMapper.ToObject<ConfigModule>(File.ReadAllText("GBCL.json"));
-                config.PassWord = Decrypt(config.PassWord);
+                config.PassWord = UsefulTools.DecryptString(config.PassWord);
+                if(!File.Exists(config.JavaPath))
+                {
+                    config.JavaPath = SystemTools.FindJava();
+                }
             }
             else
             {
@@ -224,55 +223,6 @@
                 };
             }
             return config;
-        }
-
-        private static string Encrypt(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                return null;
-            }
-
-            DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();
-
-            byte[] key = Encoding.Unicode.GetBytes(encryptKey);
-            byte[] data = Encoding.Default.GetBytes(str);
-
-            using (var ms = new MemoryStream())
-            {
-                CryptoStream cs = new CryptoStream(ms, descsp.CreateEncryptor(key, key), CryptoStreamMode.Write);
-                cs.Write(data, 0, data.Length);
-                cs.FlushFinalBlock();
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
-
-        private static string Decrypt(string str)
-        {
-            if(string.IsNullOrEmpty(str))
-            {
-                return null;
-            }
-
-            DESCryptoServiceProvider descsp = new DESCryptoServiceProvider();
-
-            byte[] key = Encoding.Unicode.GetBytes(encryptKey);
-            byte[] data = Convert.FromBase64String(str);
-
-            using (var ms = new MemoryStream())
-            {
-                CryptoStream cs = new CryptoStream(ms, descsp.CreateDecryptor(key, key), CryptoStreamMode.Write);
-                cs.Write(data, 0, data.Length);
-                try
-                {
-                    cs.FlushFinalBlock();
-                }
-                catch
-                {
-                    return null;
-                }
-                return Encoding.Default.GetString(ms.ToArray());
-            }
         }
     }
 }

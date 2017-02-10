@@ -7,35 +7,35 @@ namespace GBCLV2.Modules
 {
     interface IDownloadBaseUrl
     {
-        string VersionListUrl       { get; }
-        string VersionBaseUrl       { get; }
-        string LibraryBaseUrl       { get; }
-        string MavenBaseUrl         { get; }
-        string AssetsIndexBaseUrl   { get; }
-        string AssetsBaseUrl        { get; }
-        string ForgeBaseUrl         { get; }
+        string VersionListUrl   { get; }
+        string VersionBaseUrl   { get; }
+        string LibraryBaseUrl   { get; }
+        string MavenBaseUrl     { get; }
+        string JsonBaseUrl      { get; }
+        string AssetsBaseUrl    { get; }
+        string ForgeBaseUrl     { get; }
     }
 
     class BMCLAPIBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl        { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/version/";
-        public string LibraryBaseUrl        { get; } = "http://bmclapi2.bangbang93.com/libraries/";
-        public string MavenBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/";
-        public string AssetsIndexBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
-        public string AssetsBaseUrl         { get; } = "http://bmclapi2.bangbang93.com/assets/";
-        public string ForgeBaseUrl          { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
+        public string VersionListUrl    { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
+        public string LibraryBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/libraries/";
+        public string MavenBaseUrl      { get; } = "http://bmclapi2.bangbang93.com/maven/";
+        public string JsonBaseUrl       { get; } = "http://bmclapi2.bangbang93.com/";
+        public string AssetsBaseUrl     { get; } = "http://bmclapi2.bangbang93.com/assets/";
+        public string ForgeBaseUrl      { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl        { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl        { get; } = "https://s3.amazonaws.com/Minecraft.Download/versions/";
-        public string LibraryBaseUrl        { get; } = "https://libraries.minecraft.net/";
-        public string MavenBaseUrl          { get; } = "http://files.minecraftforge.net/maven/";
-        public string AssetsIndexBaseUrl    { get; } = "https://launchermeta.mojang.com/";
-        public string AssetsBaseUrl         { get; } = "https://resources.download.minecraft.net/";
-        public string ForgeBaseUrl          { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+        public string VersionListUrl    { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl    { get; } = "https://launcher.mojang.com/";
+        public string LibraryBaseUrl    { get; } = "https://libraries.minecraft.net/";
+        public string MavenBaseUrl      { get; } = "http://files.minecraftforge.net/maven/";
+        public string JsonBaseUrl       { get; } = "https://launchermeta.mojang.com/";
+        public string AssetsBaseUrl     { get; } = "https://resources.download.minecraft.net/";
+        public string ForgeBaseUrl      { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     }
 
     public class DownloadInfo
@@ -65,6 +65,16 @@ namespace GBCLV2.Modules
         public static List<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
         {
             var lostEssentials = new List<DownloadInfo>();
+
+            var JarPath = $"{core.GameRootPath}\\versions\\{version.JarID}\\{version.JarID}.jar";
+            if (!File.Exists(JarPath))
+            {
+                lostEssentials.Add(new DownloadInfo
+                {
+                    Path = JarPath,
+                    Url = BaseUrl.VersionBaseUrl + version.JarUrl
+                });
+            }
 
             foreach(var lib in version.Libraries)
             {
@@ -98,11 +108,6 @@ namespace GBCLV2.Modules
         {
             var lostAssets = new List<DownloadInfo>();
 
-            if(version.InheritsVersion != null)
-            {
-                version = core.GetVersion(version.InheritsVersion);
-            }
-
             var indexPath = $"{core.GameRootPath}\\assets\\indexes\\{version.Assets}.json";
             string indexJson;
 
@@ -111,16 +116,16 @@ namespace GBCLV2.Modules
                 try
                 {
                     string indexUrl;
-                    if (version.AssetsIndexUrl == null )
+                    if (version.AssetsIndexUrl != null )
                     {
-                        indexUrl = $"{BaseUrl.AssetsIndexBaseUrl}indexs/{version.Assets}.json";
+                        indexUrl = BaseUrl.JsonBaseUrl + version.AssetsIndexUrl;
                     }
                     else
                     {
-                        indexUrl = BaseUrl.AssetsIndexBaseUrl + version.AssetsIndexUrl;
+                        indexUrl = $"{BaseUrl.JsonBaseUrl}indexs/{version.Assets}.json";
                     }
 
-                    var client = new System.Net.Http.HttpClient() { Timeout = new System.TimeSpan(0, 0, 2) };
+                    var client = new System.Net.Http.HttpClient() { Timeout = new System.TimeSpan(0, 0, 5) };
                     indexJson = client.GetStringAsync(indexUrl).Result;
                     client.Dispose();
                 }
