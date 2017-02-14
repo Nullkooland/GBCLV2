@@ -60,16 +60,16 @@ namespace GBCLV2
                 {
                     Config.VersionIndex = 0;
                 }
-
-                var logPath = Core.GameRootPath + @"\logs\";
-                if (!Directory.Exists(logPath))
-                {
-                    Directory.CreateDirectory(logPath);
-                }
-
-                log_FileStream = new FileStream(logPath + "mcrun.log", FileMode.Create);
-                Logger = new StreamWriter(log_FileStream);
             }
+
+            var logPath = Core.GameRootPath + @"\logs\";
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
+
+            log_FileStream = new FileStream(logPath + "mcrun.log", FileMode.Create);
+            Logger = new StreamWriter(log_FileStream);
         }
 
         private void Initialize_ThemeColor()
