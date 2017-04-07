@@ -15,7 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button Style="{StaticResource Button_Style}" Click="Go_Back" ToolTip="返回" 
+        <Button x:Name="back_btn"  Style="{StaticResource Button_Style}" ToolTip="取消下载并返回" 
                 Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="0" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png"/>

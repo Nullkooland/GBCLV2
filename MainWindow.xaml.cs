@@ -11,13 +11,13 @@ using GBCLV2.Modules;
 namespace GBCLV2
 {
     public partial class MainWindow : Window
-    { 
+    {
         public MainWindow()
         {
             InitializeComponent();
             MouseLeftButtonDown += (s, e) => DragMove();
-            minimize_btn.Click  += (s, e) => this.WindowState = WindowState.Minimized;
-            shutdown_btn.Click  += (s, e) => Application.Current.Shutdown();
+            minimize_btn.Click += (s, e) => this.WindowState = WindowState.Minimized;
+            shutdown_btn.Click += (s, e) => Application.Current.Shutdown();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -25,7 +25,7 @@ namespace GBCLV2
             var mp = new MainPage();
             frame.Navigate(mp);
 
-            if(Environment.OSVersion.Version.Major == 10)
+            if (Environment.OSVersion.Version.Major == 10)
             {
                 Win10BlurHelper.EnableBlur(this);
             }

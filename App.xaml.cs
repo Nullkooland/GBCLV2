@@ -9,7 +9,7 @@ using GBCLV2.Modules;
 namespace GBCLV2
 {
     public partial class App : Application
-	{
+    {
         public static ConfigModule Config;
         public static LauncherCore Core;
         public static ObservableCollection<Version> Versions = new ObservableCollection<Version>();
@@ -44,13 +44,13 @@ namespace GBCLV2
 
             uint count = 0;
 
-            foreach(Version ver in Core.GetVersions())
+            foreach (Version ver in Core.GetVersions())
             {
                 Versions.Add(ver);
                 count++;
             }
 
-            if(count == 0)
+            if (count == 0)
             {
                 Config.VersionIndex = -1;
             }
@@ -119,8 +119,8 @@ namespace GBCLV2
         {
             if (ExitCode != 0)
             {
-                if (MessageBox.Show($"Minecraft异常退出了,Exit Code: {ExitCode}\n是否查看log文件？", "（/TДT)/", 
-                    MessageBoxButton.YesNo,MessageBoxImage.Information) == MessageBoxResult.Yes)
+                if (MessageBox.Show($"Minecraft异常退出了,Exit Code: {ExitCode}\n是否查看log文件？", "（/TДT)/",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
                     System.Diagnostics.Process.Start(Core.GameRootPath + @"\logs\mcrun.log");
                 }
@@ -128,7 +128,7 @@ namespace GBCLV2
 
             Current.Dispatcher.Invoke(() =>
             {
-                if(Config.AfterLaunchBehavior == 0)
+                if (Config.AfterLaunchBehavior == 0)
                 {
                     Current.Shutdown();
                 }
@@ -144,7 +144,7 @@ namespace GBCLV2
 
         void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            MessageBox.Show($"异常信息：{e.Exception.Message}\n异常源：{e.Exception.StackTrace}", "程序发生了无法处理的异常！",MessageBoxButton.OK,MessageBoxImage.Error);
+            MessageBox.Show($"异常信息：{e.Exception.Message}\n异常源：{e.Exception.StackTrace}", "程序发生了无法处理的异常！", MessageBoxButton.OK, MessageBoxImage.Error);
             //Shutdown(1);
             e.Handled = true;
         }

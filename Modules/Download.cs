@@ -7,35 +7,35 @@ namespace GBCLV2.Modules
 {
     interface IDownloadBaseUrl
     {
-        string VersionListUrl   { get; }
-        string VersionBaseUrl   { get; }
-        string LibraryBaseUrl   { get; }
-        string MavenBaseUrl     { get; }
-        string JsonBaseUrl      { get; }
-        string AssetsBaseUrl    { get; }
-        string ForgeBaseUrl     { get; }
+        string VersionListUrl { get; }
+        string VersionBaseUrl { get; }
+        string LibraryBaseUrl { get; }
+        string MavenBaseUrl { get; }
+        string JsonBaseUrl { get; }
+        string AssetsBaseUrl { get; }
+        string ForgeBaseUrl { get; }
     }
 
     class BMCLAPIBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl    { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/";
-        public string LibraryBaseUrl    { get; } = "http://bmclapi2.bangbang93.com/libraries/";
-        public string MavenBaseUrl      { get; } = "http://bmclapi2.bangbang93.com/maven/";
-        public string JsonBaseUrl       { get; } = "http://bmclapi2.bangbang93.com/";
-        public string AssetsBaseUrl     { get; } = "http://bmclapi2.bangbang93.com/assets/";
-        public string ForgeBaseUrl      { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
+        public string VersionListUrl { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl { get; } = "http://bmclapi2.bangbang93.com/";
+        public string LibraryBaseUrl { get; } = "http://bmclapi2.bangbang93.com/libraries/";
+        public string MavenBaseUrl { get; } = "http://bmclapi2.bangbang93.com/maven/";
+        public string JsonBaseUrl { get; } = "http://bmclapi2.bangbang93.com/";
+        public string AssetsBaseUrl { get; } = "http://bmclapi2.bangbang93.com/assets/";
+        public string ForgeBaseUrl { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl    { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl    { get; } = "https://launcher.mojang.com/";
-        public string LibraryBaseUrl    { get; } = "https://libraries.minecraft.net/";
-        public string MavenBaseUrl      { get; } = "http://files.minecraftforge.net/maven/";
-        public string JsonBaseUrl       { get; } = "https://launchermeta.mojang.com/";
-        public string AssetsBaseUrl     { get; } = "https://resources.download.minecraft.net/";
-        public string ForgeBaseUrl      { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+        public string VersionListUrl { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl { get; } = "https://launcher.mojang.com/";
+        public string LibraryBaseUrl { get; } = "https://libraries.minecraft.net/";
+        public string MavenBaseUrl { get; } = "http://files.minecraftforge.net/maven/";
+        public string JsonBaseUrl { get; } = "https://launchermeta.mojang.com/";
+        public string AssetsBaseUrl { get; } = "https://resources.download.minecraft.net/";
+        public string ForgeBaseUrl { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     }
 
     public class DownloadInfo
@@ -50,7 +50,7 @@ namespace GBCLV2.Modules
 
         public static void SetDownloadSource(int DownloadSource)
         {
-            switch(DownloadSource)
+            switch (DownloadSource)
             {
                 case 0:
                     BaseUrl = new OfficialBaseUrl();
@@ -76,10 +76,10 @@ namespace GBCLV2.Modules
                 });
             }
 
-            foreach(var lib in version.Libraries)
+            foreach (var lib in version.Libraries)
             {
                 var absolutePath = $"{core.GameRootPath}\\libraries\\{lib.Path}";
-                if(!File.Exists(absolutePath))
+                if (!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
                     {
@@ -116,7 +116,7 @@ namespace GBCLV2.Modules
                 try
                 {
                     string indexUrl;
-                    if (version.AssetsIndexUrl != null )
+                    if (version.AssetsIndexUrl != null)
                     {
                         indexUrl = BaseUrl.JsonBaseUrl + version.AssetsIndexUrl;
                     }

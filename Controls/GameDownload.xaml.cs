@@ -13,7 +13,7 @@ namespace GBCLV2.Controls
 
     public partial class GameDownload : Grid
     {
-        private static readonly HttpClient client = new HttpClient { Timeout=new TimeSpan(0,0,5) };
+        private static readonly HttpClient client = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
 
         class VersionInfo
         {
@@ -29,7 +29,7 @@ namespace GBCLV2.Controls
         {
             InitializeComponent();
 
-            if(AllVersions.Count != 0)
+            if (AllVersions.Count != 0)
             {
                 statusBox.Text = "准备下载";
             }
@@ -82,9 +82,9 @@ namespace GBCLV2.Controls
 
         private async void DownloadVersionAsync(object sender, RoutedEventArgs e)
         {
-            if(VersionList.SelectedIndex == -1)
+            if (VersionList.SelectedIndex == -1)
             {
-                MessageBox.Show("未选取任何版本!", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("未选取任何版本!", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -94,14 +94,14 @@ namespace GBCLV2.Controls
             var versionID = AllVersions[VersionList.SelectedIndex].ID;
             var jsonUrl = AllVersions[VersionList.SelectedIndex].JsonUrl;
             var versionDir = $"{core.GameRootPath}\\versions\\{versionID}";
-            if(!Directory.Exists(versionDir))
+            if (!Directory.Exists(versionDir))
             {
                 Directory.CreateDirectory(versionDir);
             }
 
             var jsonPath = $"{versionDir}\\{versionID}.json";
 
-            if(File.Exists(jsonPath) && File.Exists(jsonPath.Replace("json","jar")))
+            if (File.Exists(jsonPath) && File.Exists(jsonPath.Replace("json", "jar")))
             {
                 MessageBox.Show("所选版本已经躺在你的硬盘里了", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
                 download_btn.IsEnabled = true;
@@ -121,7 +121,7 @@ namespace GBCLV2.Controls
                 return;
             }
 
-            var version =  core.GetVersion(versionID);
+            var version = core.GetVersion(versionID);
             App.Versions.Add(version);
             App.Config.VersionIndex = App.Versions.IndexOf(version);
 
@@ -131,7 +131,7 @@ namespace GBCLV2.Controls
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
             await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
 
-            if(downloadPage.Succeeded)
+            if (downloadPage.Succeeded)
             {
                 MessageBox.Show($"{versionID}版本下载成功");
             }
@@ -140,6 +140,7 @@ namespace GBCLV2.Controls
                 MessageBox.Show($"{versionID}版本下载失败");
                 Directory.Delete(versionDir, true);
                 App.Versions.Remove(version);
+                App.Config.VersionIndex = 0;
             }
 
             download_btn.IsEnabled = true;

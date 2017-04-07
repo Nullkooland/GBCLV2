@@ -17,11 +17,11 @@ namespace GBCLV2.Pages
     {
         private class ResPack
         {
-            public bool         IsEnabled       { get; set; }
-            public int          Format          { get; set; }
-            public string       Name            { get; set; }
-            public string       Description     { get; set; }
-            public BitmapImage  Cover           { get; set; }
+            public bool IsEnabled { get; set; }
+            public int Format { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public BitmapImage Cover { get; set; }
         }
 
         private ObservableCollection<ResPack> Enabled_Pack = new ObservableCollection<ResPack>();
@@ -59,7 +59,7 @@ namespace GBCLV2.Pages
             LoadOptions();
             Task.Run(() => LoadResPacks());
 
-            refresh_button.Click    += (s, e) => LoadResPacks();
+            refresh_button.Click += (s, e) => LoadResPacks();
             openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe", PacksDir);
         }
 
@@ -81,9 +81,9 @@ namespace GBCLV2.Pages
                 }
             }
 
-            if(EnabledPackNames!= null)
+            if (EnabledPackNames != null)
             {
-                for(int i = 0; i < EnabledPackNames.Length; i++)
+                for (int i = 0; i < EnabledPackNames.Length; i++)
                 {
                     EnabledPackNames[i] = EnabledPackNames[i].Substring(1, EnabledPackNames[i].Length - 2);
                 }
@@ -101,10 +101,10 @@ namespace GBCLV2.Pages
 
             if (EnabledPackNames != null)
             {
-                for(int i = EnabledPackNames.Length - 1; i >=0; i--)
+                for (int i = EnabledPackNames.Length - 1; i >= 0; i--)
                 {
                     var path = PacksDir + EnabledPackNames[i];
-                    if(File.Exists(path) || Directory.Exists(path))
+                    if (File.Exists(path) || Directory.Exists(path))
                     {
                         var pack = GetResPackFromDisk(PacksDir + EnabledPackNames[i]);
                         pack.IsEnabled = true;
@@ -119,10 +119,10 @@ namespace GBCLV2.Pages
 
             uint count = 0;
 
-            foreach (var path in Directory.EnumerateFiles(PacksDir,"*.zip").Concat(Directory.EnumerateDirectories(PacksDir)))
+            foreach (var path in Directory.EnumerateFiles(PacksDir, "*.zip").Concat(Directory.EnumerateDirectories(PacksDir)))
             {
                 bool NotEnabled = true;
-                if(EnabledPackNames != null && count < EnabledPackNames.Length)
+                if (EnabledPackNames != null && count < EnabledPackNames.Length)
                 {
                     foreach (var str in EnabledPackNames)
                     {
@@ -135,7 +135,7 @@ namespace GBCLV2.Pages
                     }
                 }
 
-                if(NotEnabled)
+                if (NotEnabled)
                 {
                     var pack = GetResPackFromDisk(path);
                     pack.IsEnabled = false;
@@ -155,14 +155,13 @@ namespace GBCLV2.Pages
                 Name = Path.GetFileName(path),
             };
 
-            if(path.EndsWith(".zip"))
+            if (path.EndsWith(".zip"))
             {
                 using (var archive = ZipFile.OpenRead(path))
                 {
                     using (var sr = new StreamReader(archive.GetEntry("pack.mcmeta").Open(), Encoding.UTF8))
                     {
                         GetPackInfo(sr.ReadToEnd(), ref pack);
-                        sr.Dispose();
                     }
 
                     using (var stream = archive.GetEntry("pack.png").Open())
@@ -171,7 +170,6 @@ namespace GBCLV2.Pages
                         stream.CopyTo(ms);
 
                         GetPackCover(ms, ref pack);
-                        stream.Dispose();
                         ms.Dispose();
                     }
                     archive.Dispose();
@@ -251,7 +249,7 @@ namespace GBCLV2.Pages
         private void MovePackUp(object sender, RoutedEventArgs e)
         {
             int i = Enabled_Pack.IndexOf((sender as Button).DataContext as ResPack);
-            if(i > 0)
+            if (i > 0)
             {
                 Enabled_Pack.Move(i, i - 1);
             }
@@ -290,7 +288,7 @@ namespace GBCLV2.Pages
 
                     var CopyTo = PacksDir + Path.GetFileName(path);
 
-                    if(!File.Exists(CopyTo))
+                    if (!File.Exists(CopyTo))
                     {
                         var pack = GetResPackFromDisk(path);
                         pack.IsEnabled = false;
@@ -306,7 +304,7 @@ namespace GBCLV2.Pages
 
         private void Go_Back(object sender, RoutedEventArgs e)
         {
-            if(Enabled_Pack.Any())
+            if (Enabled_Pack.Any())
             {
                 string s = "resourcePacks:[";
                 string options_text;

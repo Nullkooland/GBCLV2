@@ -16,27 +16,27 @@
 
         #region 私有字段
 
-        private string  _JavaPath;
-        private int     _VersionIndex;
-        private bool    _VersionSplit;
-        private uint    _MaxMemory;
-        private bool    _Offline;
-        private string  _UserName;
-        private string  _Email;
-        private string  _PassWord;
-        private bool    _RememberPassWord;
-        private ushort  _WinWidth;
-        private ushort  _WinHeight;
-        private bool    _FullScreen;
-        private string  _ServerAddress;
-        private string  _AdvancedArgs;
-        private string  _WindowTitle;
-        private string  _ThemeColor;
-        private bool    _UseSystemThemeColor;
-        private bool    _UseImageBackground;
-        private string  _ImagePath;
-        private int     _DownloadSource;
-        private int     _AfterLaunchBehavior;
+        private string _JavaPath;
+        private int _VersionIndex;
+        private bool _VersionSplit;
+        private uint _MaxMemory;
+        private bool _Offline;
+        private string _UserName;
+        private string _Email;
+        private string _PassWord;
+        private bool _RememberPassWord;
+        private ushort _WinWidth;
+        private ushort _WinHeight;
+        private bool _FullScreen;
+        private string _ServerAddress;
+        private string _AdvancedArgs;
+        private string _WindowTitle;
+        private string _ThemeColor;
+        private bool _UseSystemThemeColor;
+        private bool _UseImageBackground;
+        private string _ImagePath;
+        private int _DownloadSource;
+        private int _AfterLaunchBehavior;
 
         #endregion
 
@@ -81,7 +81,7 @@
 
         public string Email
         {
-            get => _Email; set => _Email= value;
+            get => _Email; set => _Email = value;
         }
 
         public string PassWord
@@ -161,7 +161,7 @@
             get => _ImagePath;
             set
             {
-                if(_UseImageBackground)
+                if (_UseImageBackground)
                 {
                     MainWindow.ChangeImageBackgroundAsync(value);
                 }
@@ -186,7 +186,7 @@
 
         public void Save()
         {
-            if(_RememberPassWord)
+            if (_RememberPassWord)
             {
                 _PassWord = UsefulTools.EncryptString(_PassWord);
             }
@@ -194,7 +194,7 @@
             {
                 _PassWord = null;
             }
-                
+
             File.WriteAllText("GBCL.json", JsonMapper.ToJson(this));
         }
 
@@ -206,7 +206,7 @@
             {
                 config = JsonMapper.ToObject<ConfigModule>(File.ReadAllText("GBCL.json"));
                 config.PassWord = UsefulTools.DecryptString(config.PassWord);
-                if(!File.Exists(config.JavaPath))
+                if (!File.Exists(config.JavaPath))
                 {
                     config.JavaPath = SystemTools.FindJava();
                 }

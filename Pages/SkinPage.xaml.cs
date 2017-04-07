@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using System.Collections.Generic;
 
 namespace GBCLV2.Pages
 {
@@ -94,7 +93,7 @@ namespace GBCLV2.Pages
             new MyColor{Name = "闪电蓝", Color = "#284BC8EB"},
             new MyColor{Name = "茄子紫", Color = "#B06E1E8C"},
             new MyColor{Name = "雾霾灰", Color = "#4D7F8C8D"},
-            new MyColor{Name = "高冷黑", Color = "#B41E2321"},     
+            new MyColor{Name = "高冷黑", Color = "#B41E2321"},
         };
 
     }

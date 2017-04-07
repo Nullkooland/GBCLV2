@@ -11,6 +11,7 @@ namespace GBCLV2.Pages
 {
     public partial class MainPage : Page
     {
+        private static bool Launching;
         private Random rand = new Random();
         private string[] Excited = new string[]{
             "(⇀‸↼‶)","(๑˘•◡•˘๑)","( Ծ ‸ Ծ )","_( '-' _)⌒)_","(●—●)","~( ´•︵•` )~","( *・ω・)✄╰ひ╯","(╯>д<)╯┻━┻","_(-ω-`_)⌒)_",
@@ -25,7 +26,7 @@ namespace GBCLV2.Pages
 
             Loaded += (s, e) =>
             {
-                if (string.IsNullOrWhiteSpace(App.Config.UserName))
+                if (!Launching && string.IsNullOrWhiteSpace(App.Config.UserName))
                 {
                     tb.Text = Excited[rand.Next(Excited.Length)];
                 }
@@ -34,12 +35,14 @@ namespace GBCLV2.Pages
                     tb.Text = "Hello " + App.Config.UserName;
                 }
 
-                if(App.Versions.Any())
+                if (App.Versions.Any())
                 {
-                    LaunchButton.IsEnabled = true;
-                    LaunchButton.Content = "启动";
-
-                    VersionBox.ItemsSource = App.Versions;
+                    if(!Launching)
+                    {
+                        LaunchButton.IsEnabled = true;
+                        LaunchButton.Content = "启动";
+                        VersionBox.ItemsSource = App.Versions;
+                    }
                 }
                 else
                 {
@@ -73,30 +76,30 @@ namespace GBCLV2.Pages
             var LaunchVersion = App.Versions[Config.VersionIndex];
 
             var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion);
-            if(lostEssentials.Any())
+            if (lostEssentials.Any())
             {
-                var downloadPage = new DownloadPage(lostEssentials , "下载依赖库");
+                var downloadPage = new DownloadPage(lostEssentials, "下载依赖库");
                 NavigationService.Navigate(downloadPage);
                 await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
-                if(!downloadPage.Succeeded)
+                if (!downloadPage.Succeeded)
                 {
-                    if(MessageBox.Show("依赖库未全部下载成功，可能无法正常启动\n是否继续启动", "Σ( ￣□￣||)",
+                    if (MessageBox.Show("依赖库未全部下载成功，可能无法正常启动\n是否继续启动", "Σ( ￣□￣||)",
                         MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
                     {
                         return;
                     }
-                    
+
                 }
             }
 
             var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion);
 
-            if(lostAssets.Any() && MessageBox.Show("资源文件缺失，是否补齐", "(σﾟ∀ﾟ)σ",
-                MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (lostAssets.Any() && MessageBox.Show("资源文件缺失，是否补齐", "(σﾟ∀ﾟ)σ",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 var downloadPage = new DownloadPage(lostAssets, "下载资源文件");
                 NavigationService.Navigate(downloadPage);
-                await Task.Run(()=> downloadPage.DownloadComplete.WaitOne());
+                await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
             }
 
             var Result = Core.Launch(new LaunchOptions()
@@ -116,19 +119,20 @@ namespace GBCLV2.Pages
                 },
 
                 ServerAddress = Config.ServerAddress,
-                VersionType = "GBCL-v2.0.5",
+                VersionType = "GBCL-v2.0.6",
 
             }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
 
-            if(Result.Success)
+            if (Result.Success)
             {
+                Launching = true;
                 LaunchButton.IsEnabled = false;
                 tb.Text = "(。-`ω´-) 启动中...";
                 LaunchButton.Content = "启动中";
             }
             else
             {
-                MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString(),MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
                 LaunchButton.IsEnabled = true;
             }
         }
@@ -136,16 +140,16 @@ namespace GBCLV2.Pages
         private void Goto_Page(object sender, RoutedEventArgs e)
         {
             var page = "Pages/" + (sender as Button).Name + ".xaml";
-            NavigationService.Navigate(new Uri(page,UriKind.Relative));
+            NavigationService.Navigate(new Uri(page, UriKind.Relative));
         }
 
         private void OnGameLaunch(LaunchHandle handle)
         {
-            if(!string.IsNullOrWhiteSpace(App.Config.WindowTitle))
+            if (!string.IsNullOrWhiteSpace(App.Config.WindowTitle))
             {
                 handle.SetTitle(App.Config.WindowTitle);
             }
-            
+
             switch (App.Config.AfterLaunchBehavior)
             {
                 case 0:
@@ -171,8 +175,10 @@ namespace GBCLV2.Pages
                         {
                             tb.Text = "Hello " + App.Config.UserName;
                         }
+
                         LaunchButton.IsEnabled = true;
                         LaunchButton.Content = "启动";
+                        Launching = false;
                     });
                     break;
             }

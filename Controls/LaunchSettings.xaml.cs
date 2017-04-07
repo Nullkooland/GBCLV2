@@ -21,7 +21,7 @@ namespace GBCLV2.Controls
             Offline_CheckBox.Checked += (s, e) => OfflineMode();
             Offline_CheckBox.Unchecked += (s, e) => OnlineMode();
 
-            if(!string.IsNullOrEmpty(App.Config.ServerAddress))
+            if (!string.IsNullOrEmpty(App.Config.ServerAddress))
             {
                 DirectLoginServer_CheckBox.IsChecked = true;
                 ServerAddressBox.Text = App.Config.ServerAddress;
@@ -63,7 +63,7 @@ namespace GBCLV2.Controls
                 App.Config.PassWord = PassWordBox.Password;
             }
 
-            if(DirectLoginServer_CheckBox.IsChecked ?? false)
+            if (DirectLoginServer_CheckBox.IsChecked ?? false)
             {
                 App.Config.ServerAddress = ServerAddressBox.Text;
             }
@@ -135,7 +135,7 @@ namespace GBCLV2.Controls
                 string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
                 UsefulTools.DeleteDirectoryAsync(DirPath);
 
-                if(version.ID.Contains("forge"))
+                if (version.ID.Contains("forge"))
                 {
                     var forgeDir = $"{App.Core.GameRootPath}\\libraries\\{System.IO.Path.GetDirectoryName(version.Libraries[0].Path)}";
                     UsefulTools.DeleteDirectoryAsync(forgeDir);
