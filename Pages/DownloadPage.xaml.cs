@@ -33,7 +33,7 @@ namespace GBCLV2.Pages
 
         public DownloadPage(List<DownloadInfo> FilesToDownload, string Title)
         {
-            ServicePointManager.DefaultConnectionLimit = 128;
+            ServicePointManager.DefaultConnectionLimit = 256;
 
             title = Title;
             Downloads = FilesToDownload;
@@ -102,7 +102,7 @@ namespace GBCLV2.Pages
             var parallelOptions = new ParallelOptions
             {
                 CancellationToken = cts.Token,
-                MaxDegreeOfParallelism = 16
+                MaxDegreeOfParallelism = 32
             };
 
             Task.Run(() =>
@@ -130,8 +130,9 @@ namespace GBCLV2.Pages
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(download.Url);
                 request.Proxy = null;
-                request.Timeout = 10000;
-                request.ReadWriteTimeout = 25000;
+                request.KeepAlive = true;
+                request.Timeout = 25000;
+                request.ReadWriteTimeout = 36000;
                 request.Method = "GET";
                 request.UserAgent = "Mozilla/5.0 (compatible; Windows NT 10.0; .NET CLR 4.0.30319;)";
 
@@ -153,7 +154,7 @@ namespace GBCLV2.Pages
                     {
                         fileStream.Write(buffer, 0, size);
                         size = responseStream.Read(buffer, 0, 2048);
-                        speed += size;
+                        Interlocked.Add(ref speed, size);
                     }
                     responseStream.Close();
                     response.Dispose();

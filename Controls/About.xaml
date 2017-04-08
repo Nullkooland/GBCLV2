@@ -35,7 +35,7 @@
 
     <Image Source="/GBCLV2;component/images/steven.png" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Right" Margin="125,0">
         <Image.Effect>
-            <DropShadowEffect ShadowDepth="0" BlurRadius="9" />
+            <DropShadowEffect ShadowDepth="0" BlurRadius="9" Color="{StaticResource Theme_Color}"/>
         </Image.Effect>
     </Image>
 
