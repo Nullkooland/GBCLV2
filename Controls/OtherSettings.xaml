@@ -18,12 +18,6 @@
         <ColumnDefinition/>
     </Grid.ColumnDefinitions>
 
-    <UIElement/>
-    <UIElement/>
-    <UIElement/>
-    <UIElement/>
-    <UIElement/>
-
     <TextBlock Text="下载源选择" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="1" Margin="7,0,0,0"/>
     <TextBlock Text="启动后行为" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="7,0,0,0"/>
     <TextBlock Text="窗口标题" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="3" Margin="7,0,0,0"/>

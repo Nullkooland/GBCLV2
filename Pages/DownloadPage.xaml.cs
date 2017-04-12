@@ -24,6 +24,7 @@ namespace GBCLV2.Pages
         
         private string title;
 
+        private const int bufferSize = 2048;
         private static int total;
         private static int complete;
         private static int failed;
@@ -102,7 +103,7 @@ namespace GBCLV2.Pages
             var parallelOptions = new ParallelOptions
             {
                 CancellationToken = cts.Token,
-                MaxDegreeOfParallelism = 32
+                MaxDegreeOfParallelism = 16
             };
 
             Task.Run(() =>
@@ -131,8 +132,6 @@ namespace GBCLV2.Pages
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(download.Url);
                 request.Proxy = null;
                 request.KeepAlive = true;
-                request.Timeout = 25000;
-                request.ReadWriteTimeout = 36000;
                 request.Method = "GET";
                 request.UserAgent = "Mozilla/5.0 (compatible; Windows NT 10.0; .NET CLR 4.0.30319;)";
 
@@ -147,13 +146,13 @@ namespace GBCLV2.Pages
                 using (var fileStream = new FileStream(download.Path, FileMode.Create, FileAccess.Write))
                 {
                     var responseStream = response.GetResponseStream();
-                    byte[] buffer = new byte[2048];
-                    int size = responseStream.Read(buffer, 0, 2048);
+                    byte[] buffer = new byte[bufferSize];
+                    int size = responseStream.Read(buffer, 0, bufferSize);
 
                     while (!cts.IsCancellationRequested && size > 0)
                     {
                         fileStream.Write(buffer, 0, size);
-                        size = responseStream.Read(buffer, 0, 2048);
+                        size = responseStream.Read(buffer, 0, bufferSize);
                         Interlocked.Add(ref speed, size);
                     }
                     responseStream.Close();

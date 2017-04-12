@@ -18,13 +18,13 @@ namespace GBCLV2.Modules
 
     class BMCLAPIBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl { get; } = "http://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl { get; } = "http://bmclapi2.bangbang93.com/";
-        public string LibraryBaseUrl { get; } = "http://bmclapi2.bangbang93.com/libraries/";
-        public string MavenBaseUrl { get; } = "http://bmclapi2.bangbang93.com/maven/";
-        public string JsonBaseUrl { get; } = "http://bmclapi2.bangbang93.com/";
-        public string AssetsBaseUrl { get; } = "http://bmclapi2.bangbang93.com/assets/";
-        public string ForgeBaseUrl { get; } = "http://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
+        public string VersionListUrl { get; } = "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl { get; } = "https://bmclapi2.bangbang93.com/";
+        public string LibraryBaseUrl { get; } = "https://bmclapi2.bangbang93.com/libraries/";
+        public string MavenBaseUrl { get; } = "https://bmclapi2.bangbang93.com/maven/";
+        public string JsonBaseUrl { get; } = "https://bmclapi2.bangbang93.com/";
+        public string AssetsBaseUrl { get; } = "https://bmclapi2.bangbang93.com/assets/";
+        public string ForgeBaseUrl { get; } = "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
@@ -32,10 +32,10 @@ namespace GBCLV2.Modules
         public string VersionListUrl { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
         public string VersionBaseUrl { get; } = "https://launcher.mojang.com/";
         public string LibraryBaseUrl { get; } = "https://libraries.minecraft.net/";
-        public string MavenBaseUrl { get; } = "http://files.minecraftforge.net/maven/";
+        public string MavenBaseUrl { get; } = "https://files.minecraftforge.net/maven/";
         public string JsonBaseUrl { get; } = "https://launchermeta.mojang.com/";
         public string AssetsBaseUrl { get; } = "https://resources.download.minecraft.net/";
-        public string ForgeBaseUrl { get; } = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+        public string ForgeBaseUrl { get; } = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     }
 
     public class DownloadInfo

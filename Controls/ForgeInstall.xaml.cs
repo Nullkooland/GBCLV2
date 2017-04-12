@@ -13,7 +13,7 @@ namespace GBCLV2.Controls
 {
     public partial class ForgeInstall : Grid
     {
-        private const string ForgeListUrl = "http://bmclapi2.bangbang93.com/forge/minecraft/";
+        private const string ForgeListUrl = "https://bmclapi2.bangbang93.com/forge/minecraft/";
         private static readonly HttpClient client = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
         private string mcVersion;
 

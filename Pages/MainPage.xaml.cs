@@ -62,7 +62,7 @@ namespace GBCLV2.Pages
                 if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
                     MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
-                    System.Diagnostics.Process.Start("http://www.java.com/zh_CN/download/manual.jsp");
+                    System.Diagnostics.Process.Start("https://www.java.com/zh_CN/download/manual.jsp");
                 }
                 return;
             }

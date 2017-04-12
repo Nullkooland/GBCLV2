@@ -48,5 +48,5 @@
     <TextBlock Text="https://github.com/MineStudio/KMCCC" Grid.Row="5"/>
 
     <TextBlock Text="使用BMCLAPI加速下载" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="25,0"/>
-    <TextBlock Text="http://bmclapi.bangbang93.com/" Grid.Row="7"/>
+    <TextBlock Text="https://bmclapi.bangbang93.com/" Grid.Row="7"/>
 </Grid>
