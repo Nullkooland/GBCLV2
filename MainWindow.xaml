@@ -13,10 +13,10 @@
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation Storyboard.TargetProperty="Opacity" po:Freeze="True"
-                        Duration="0:0:0.5" From="0.0" To="1.0" AccelerationRatio="0.3" DecelerationRatio="0.25"/>
+                        Duration="0:0:0.5" From="0.0" To="1.0" DecelerationRatio="0.2"/>
 
                     <DoubleAnimation Storyboard.TargetProperty="Top" po:Freeze="True"
-                        Duration="0:0:0.3" From="233" To="210" AccelerationRatio="0.3" DecelerationRatio="0.25"/>
+                        Duration="0:0:0.3" From="233" To="210" AccelerationRatio="0.4" DecelerationRatio="0.6"/>
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>
