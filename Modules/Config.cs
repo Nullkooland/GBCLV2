@@ -6,7 +6,7 @@
     using System.Runtime.CompilerServices;
     using KMCCC.Tools;
 
-    public class ConfigModule : INotifyPropertyChanged
+    public class ConfigArgs : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName]string propName = null)
@@ -16,27 +16,27 @@
 
         #region 私有字段
 
-        private string _JavaPath;
-        private int _VersionIndex;
-        private bool _VersionSplit;
-        private uint _MaxMemory;
-        private bool _Offline;
-        private string _UserName;
-        private string _Email;
-        private string _PassWord;
-        private bool _RememberPassWord;
-        private ushort _WinWidth;
-        private ushort _WinHeight;
-        private bool _FullScreen;
-        private string _ServerAddress;
-        private string _AdvancedArgs;
-        private string _WindowTitle;
-        private string _ThemeColor;
-        private bool _UseSystemThemeColor;
-        private bool _UseImageBackground;
-        private string _ImagePath;
-        private int _DownloadSource;
-        private int _AfterLaunchBehavior;
+        private string _javaPath;
+        private int _versionIndex;
+        private bool _isVersionSplit;
+        private uint _maxMemory;
+        private bool _isOfflineMode;
+        private string _userName;
+        private string _passWord;
+        private bool _isRememberPassWord;
+        private ushort _gameWinWidth;
+        private ushort _gameWinHeight;
+        private string _gameWinTitle;
+        private bool _isFullScreen;
+        private string _serverAddress;
+        private bool _isLoginToServer;
+        private string _advancedArgs;
+        private string _themeColor;
+        private bool _isUseSystemThemeColor;
+        private bool _isUseImageBackground;
+        private string _imageFilePath;
+        private int _downloadSource;
+        private int _afterLaunchBehavior;
 
         #endregion
 
@@ -44,106 +44,111 @@
 
         public string JavaPath
         {
-            get => _JavaPath; set { _JavaPath = value; NotifyPropertyChanged(); }
+            get => _javaPath; set { _javaPath = value; NotifyPropertyChanged(); }
         }
 
         public int VersionIndex
         {
-            get => _VersionIndex; set { _VersionIndex = value; NotifyPropertyChanged(); }
+            get => _versionIndex; set { _versionIndex = value; NotifyPropertyChanged(); }
         }
 
-        public bool VersionSplit
+        public bool IsVersionSplit
         {
-            get => _VersionSplit; set => _VersionSplit = value;
+            get => _isVersionSplit; set => _isVersionSplit = value;
         }
 
         public uint MaxMemory
         {
-            get => _MaxMemory;
+            get => _maxMemory;
             set
             {
                 if (value < 1024) value = 1024;
                 if (value > SystemTools.GetAvailableMemory()) value = SystemTools.GetAvailableMemory();
-                _MaxMemory = value;
+                _maxMemory = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public bool Offline
+        public bool IsOfflineMode
         {
-            get => _Offline; set => _Offline = value;
+            get => _isOfflineMode;
+            set
+            {
+                _isOfflineMode = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public string UserName
         {
-            get => _UserName; set => _UserName = value;
-        }
-
-        public string Email
-        {
-            get => _Email; set => _Email = value;
+            get => _userName; set => _userName = value;
         }
 
         public string PassWord
         {
-            get => _PassWord; set => _PassWord = value;
+            get => _passWord; set => _passWord = value;
         }
 
-        public bool RememberPassWord
+        public bool IsRememberPassWord
         {
-            get => _RememberPassWord; set => _RememberPassWord = value;
+            get => _isRememberPassWord; set => _isRememberPassWord = value;
         }
 
-        public ushort WinWidth
+        public ushort GameWinWidth
         {
-            get => _WinWidth; set => _WinWidth = value;
+            get => _gameWinWidth; set => _gameWinWidth = value;
         }
 
-        public ushort WinHeight
+        public ushort GameWinHeight
         {
-            get => _WinHeight; set => _WinHeight = value;
+            get => _gameWinHeight; set => _gameWinHeight = value;
         }
 
-        public bool FullScreen
+        public bool IsFullScreen
         {
-            get => _FullScreen; set => _FullScreen = value;
+            get => _isFullScreen; set => _isFullScreen = value;
         }
 
         public string ServerAddress
         {
-            get => _ServerAddress; set => _ServerAddress = value;
+            get => _serverAddress; set => _serverAddress = value;
+        }
+
+        public bool IsLoginToServer
+        {
+            get => _isLoginToServer; set => _isLoginToServer = value;
         }
 
         public string AdvancedArgs
         {
-            get => _AdvancedArgs; set => _AdvancedArgs = value;
+            get => _advancedArgs; set => _advancedArgs = value;
         }
 
-        public string WindowTitle
+        public string GameWinTitle
         {
-            get => _WindowTitle; set => _WindowTitle = value;
+            get => _gameWinTitle; set => _gameWinTitle = value;
         }
 
         public string ThemeColor
         {
-            get => _ThemeColor; set => _ThemeColor = value;
+            get => _themeColor; set => _themeColor = value;
         }
 
-        public bool UseSystemThemeColor
+        public bool IsUseSystemThemeColor
         {
-            get => _UseSystemThemeColor; set => _UseSystemThemeColor = value;
+            get => _isUseSystemThemeColor; set => _isUseSystemThemeColor = value;
         }
 
-        public bool UseImageBackground
+        public bool IsUseImageBackground
         {
-            get => _UseImageBackground;
+            get => _isUseImageBackground;
             set
             {
                 if (App.Current.MainWindow != null)
                 {
                     if (value)
                     {
-                        MainWindow.ChangeImageBackgroundAsync(_ImagePath);
+                        MainWindow.ChangeImageBackgroundAsync(_imageFilePath);
                     }
                     else
                     {
@@ -151,78 +156,81 @@
                     }
                 }
 
-                _UseImageBackground = value;
+                _isUseImageBackground = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public string ImagePath
+        public string ImageFilePath
         {
-            get => _ImagePath;
+            get => _imageFilePath;
             set
             {
-                if (_UseImageBackground)
+                if (_isUseImageBackground)
                 {
                     MainWindow.ChangeImageBackgroundAsync(value);
                 }
 
-                _ImagePath = value;
+                _imageFilePath = value;
                 NotifyPropertyChanged();
             }
         }
 
         public int DownloadSource
         {
-            get => _DownloadSource; set { _DownloadSource = value; DownloadHelper.SetDownloadSource(value); }
+            get => _downloadSource; set { _downloadSource = value; DownloadHelper.SetDownloadSource(value); }
         }
 
         public int AfterLaunchBehavior
         {
-            get => _AfterLaunchBehavior; set => _AfterLaunchBehavior = value;
+            get => _afterLaunchBehavior; set => _afterLaunchBehavior = value;
         }
 
         #endregion
+    }
 
+    public static class Config
+    {
+        public static ConfigArgs Args { get; set; }
 
-        public void Save()
+        public static string LauncherVersion { get; } = "2.0.7";
+
+        public static void Load()
         {
-            if (_RememberPassWord)
-            {
-                _PassWord = UsefulTools.EncryptString(_PassWord);
-            }
-            else
-            {
-                _PassWord = null;
-            }
-
-            File.WriteAllText("GBCL.json", JsonMapper.ToJson(this));
-        }
-
-        public static ConfigModule LoadConfig()
-        {
-            ConfigModule config;
-
             if (File.Exists("GBCL.json"))
             {
-                config = JsonMapper.ToObject<ConfigModule>(File.ReadAllText("GBCL.json"));
-                config.PassWord = UsefulTools.DecryptString(config.PassWord);
-                if (!File.Exists(config.JavaPath))
+                Args = JsonMapper.ToObject<ConfigArgs>(File.ReadAllText("GBCL.json"));
+                Args.PassWord = UsefulTools.DecryptString(Args.PassWord);
+                if (!File.Exists(Args.JavaPath))
                 {
-                    config.JavaPath = SystemTools.FindJava();
+                    Args.JavaPath = SystemTools.FindJava();
                 }
             }
             else
             {
-                config = new ConfigModule
+                Args = new ConfigArgs
                 {
-                    _MaxMemory = 2048,
-                    _WinWidth = 854,
-                    _WinHeight = 480,
-                    _JavaPath = SystemTools.FindJava(),
-                    _DownloadSource = 1,
+                    MaxMemory = 2048,
+                    GameWinWidth = 854,
+                    GameWinHeight = 480,
+                    JavaPath = SystemTools.FindJava(),
+                    DownloadSource = 1,
                 };
             }
-            return config;
+        }
+
+        public static void Save()
+        {
+            if (Args.IsRememberPassWord)
+            {
+                Args.PassWord = UsefulTools.EncryptString(Args.PassWord);
+            }
+            else
+            {
+                Args.PassWord = null;
+            }
+
+            File.WriteAllText("GBCL.json", JsonMapper.ToJson(Args));
         }
     }
 }

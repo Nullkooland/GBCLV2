@@ -72,8 +72,8 @@ namespace GBCLV2.Modules
                 lostEssentials.Add(new DownloadInfo
                 {
                     Path = JarPath,
-                    Url = BaseUrl.VersionBaseUrl + version.JarUrl
-                });
+                    Url = BaseUrl.VersionBaseUrl + version.Downloads.Client.Url.Substring(28)
+            });
             }
 
             foreach (var lib in version.Libraries)
@@ -84,7 +84,7 @@ namespace GBCLV2.Modules
                     lostEssentials.Add(new DownloadInfo
                     {
                         Path = absolutePath,
-                        Url = (lib.IsForgeLib) ? BaseUrl.MavenBaseUrl + lib.Path : BaseUrl.LibraryBaseUrl + lib.Path
+                        Url = (lib.IsForgeLib) ? (BaseUrl.MavenBaseUrl + lib.Path) : (BaseUrl.LibraryBaseUrl + lib.Path)
                     });
                 }
             }
@@ -116,9 +116,9 @@ namespace GBCLV2.Modules
                 try
                 {
                     string indexUrl;
-                    if (version.AssetsIndexUrl != null)
+                    if (version.AssetsIndex.Url != null)
                     {
-                        indexUrl = BaseUrl.JsonBaseUrl + version.AssetsIndexUrl;
+                        indexUrl = BaseUrl.JsonBaseUrl + version.AssetsIndex.Url.Substring(32);
                     }
                     else
                     {

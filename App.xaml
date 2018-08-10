@@ -5,11 +5,11 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <Color x:Key="Theme_Color"/>
-        <SolidColorBrush x:Key="Theme_Brush"/>
-        <DropShadowEffect x:Key="Focused_Shadow" Opacity="0.3" BlurRadius="12" ShadowDepth="0" Color="{DynamicResource Theme_Color}" po:Freeze="True"/>
+        <Color x:Key="ThemeColor"/>
+        <SolidColorBrush x:Key="ThemeColorBrush"/>
+        <DropShadowEffect x:Key="Focused_Shadow" Opacity="0.3" BlurRadius="12" ShadowDepth="0" Color="{DynamicResource ThemeColor}" po:Freeze="True"/>
 
-        <Style TargetType="TextBlock" x:Key="Info_TextBlock_Style">
+        <Style TargetType="TextBlock" x:Key="InfoTextBlockStyle">
             <Setter Property="IsHitTestVisible" Value="False"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Padding" Value="3,0"/>
@@ -18,7 +18,7 @@
             <Setter Property="Height" Value="24"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
+                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource ThemeColor}"/>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
@@ -28,7 +28,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="{x:Type Page}" x:Key="Page_Style">
+        <Style TargetType="{x:Type Page}" x:Key="PageStyle">
             <Setter Property="Width" Value="640"/>
             <Setter Property="Height" Value="360"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -52,7 +52,7 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType= "{x:Type Button}" x:Key="Button_Style">
+        <Style TargetType= "{x:Type Button}" x:Key="GlowButtonStyle">
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -92,14 +92,14 @@
         </Style>
 
         <Style TargetType="{x:Type CheckBox}">
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Height" Value="17"/>
+            <Setter Property="Height" Value="18"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource Theme_Color}"/>
+                    <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="0" Color="{DynamicResource ThemeColor}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
@@ -107,18 +107,18 @@
                     <ControlTemplate TargetType="{x:Type CheckBox}">
                         <StackPanel Orientation="Horizontal">
                             <Grid Background="Transparent">
-                                <Rectangle Name="bg" Width="17" Height="17" StrokeThickness="1" Stroke="#BDFFFFFF"/>
+                                <Rectangle Name="bg" Width="18" Height="18" StrokeThickness="1" Stroke="#BDFFFFFF"/>
                                 <Path Name="hook" Visibility="Collapsed" Data="M43,5 L20,40 20,40 0,20 6,15 18,26 37,7 43,5 z" Fill="White" Stretch="Uniform"/>
                             </Grid>
                             <TextBlock Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
                                        FontSize="{TemplateBinding FontSize}" Foreground="White" TextOptions.TextFormattingMode="Display"
-                                       Margin="3,0" IsHitTestVisible="False" VerticalAlignment="Center"/>
+                                       Margin="4,0" IsHitTestVisible="False" VerticalAlignment="Center"/>
                         </StackPanel>
                         <ControlTemplate.Triggers>
                             
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bg" Property="Fill" Value="White"/>
-                                <Setter TargetName="hook" Property="Fill" Value="{DynamicResource Theme_Brush}"/>
+                                <Setter TargetName="hook" Property="Fill" Value="{DynamicResource ThemeColorBrush}"/>
                             </Trigger>
 
                             <Trigger Property="IsChecked" Value="True">
@@ -150,7 +150,7 @@
             <Setter Property="Height" Value="24"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="SelectionBrush" Value="{DynamicResource Theme_Brush}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeColorBrush}"/>
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="IsUndoEnabled" Value="False"/>
             <Setter Property="Template">
@@ -165,7 +165,7 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Theme_Brush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                                 <Setter TargetName="border" Property="Background" Value="White"/>
                                 <Setter TargetName="border" Property="Effect" Value="{StaticResource Focused_Shadow}"/>
                             </Trigger>
@@ -185,7 +185,7 @@
             <Setter Property="Height" Value="24"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="SelectionBrush" Value="{DynamicResource Theme_Brush}"/>
+            <Setter Property="SelectionBrush" Value="{DynamicResource ThemeColorBrush}"/>
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -200,7 +200,7 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Theme_Brush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                                 <Setter TargetName="border" Property="Background" Value="White"/>
                                 <Setter TargetName="border" Property="Effect" Value="{StaticResource Focused_Shadow}"/>
                             </Trigger>
@@ -228,7 +228,7 @@
                     <Setter TargetName="Arrow" Property="Fill" Value="White"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="bg" Property="BorderBrush" Value="{DynamicResource Theme_Brush}"/>
+                    <Setter TargetName="bg" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                     <Setter TargetName="bg" Property="Background" Value="White"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
@@ -286,7 +286,7 @@
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="bg" Property="Background" Value="{DynamicResource Theme_Brush}"/>
+                                            <Setter TargetName="bg" Property="Background" Value="{DynamicResource ThemeColorBrush}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -307,7 +307,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}" Width="24" Height="24" Margin="3"/>
                                 <TextBlock Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" TextOptions.TextFormattingMode="Display"
-                                        Style="{DynamicResource Info_TextBlock_Style}" FontSize="14" Height="20"/>
+                                        Style="{DynamicResource InfoTextBlockStyle}" FontSize="14" Height="20"/>
                             </StackPanel>
                         </Border>
 
@@ -383,14 +383,14 @@
             </Setter>
         </Style>
 
-        <Style TargetType="ListBox" x:Key="ListBox_Style">
+        <Style TargetType="ListBox" x:Key="ListBoxStyle">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#80FFFFFF"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
         </Style>
 
-        <Style TargetType="ListView" x:Key="GridListView_Style">
+        <Style TargetType="ListView" x:Key="GridListViewStyle">
             <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
             <Setter Property="SelectionMode" Value="Single"/>
             <Setter Property="ItemContainerStyle" Value="{DynamicResource GridListViewItem_Style}"/>
@@ -398,7 +398,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListView">
                         <Border Background="Transparent" BorderBrush="#80FFFFFF" BorderThickness="1">
-                            <ScrollViewer Padding="{TemplateBinding Padding}" Style="{DynamicResource GridViewScrollViewer_Style}">
+                            <ScrollViewer Padding="{TemplateBinding Padding}" Style="{DynamicResource GridViewScrollViewerStyle}">
                                 <ItemsPresenter/>
                             </ScrollViewer>
                         </Border>
@@ -415,7 +415,7 @@
                     <ControlTemplate TargetType="GridViewColumnHeader">
                         <Border x:Name="border" Height="24" Background="#10FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1">
                             <TextBlock Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" TextOptions.TextFormattingMode="Display"
-                                        Style="{DynamicResource Info_TextBlock_Style}" FontSize="15" Height="20" HorizontalAlignment="Left" Margin="5,0"/>
+                                        Style="{DynamicResource InfoTextBlockStyle}" FontSize="15" Height="20" HorizontalAlignment="Left" Margin="5,0"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -430,7 +430,7 @@
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect ShadowDepth="0" BlurRadius="7" Opacity="0.6" Color="{DynamicResource Theme_Color}"/>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="7" Opacity="0.6" Color="{DynamicResource ThemeColor}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
@@ -453,7 +453,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="GridViewScrollViewer_Style" TargetType="{x:Type ScrollViewer}">
+        <Style x:Key="GridViewScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
             <Setter Property="Focusable" Value="False"/>
 
             <Setter Property="Template">

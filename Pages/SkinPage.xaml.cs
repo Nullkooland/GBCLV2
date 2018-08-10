@@ -2,44 +2,45 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
     public partial class SkinPage : Page
     {
-        private static Color Temp_Color;
+        private static Color tempColor;
 
         public SkinPage()
         {
             InitializeComponent();
-            this.DataContext = App.Config;
+            this.DataContext = Config.Args;
             PresetColorList.ItemsSource = PresetColors;
 
-            Temp_Color = (Color)Application.Current.Resources["Theme_Color"];
+            tempColor = (Color)Application.Current.Resources["ThemeColor"];
 
-            Slider_A.Value = Temp_Color.A;
-            Slider_R.Value = Temp_Color.R;
-            Slider_G.Value = Temp_Color.G;
-            Slider_B.Value = Temp_Color.B;
+            SliderA.Value = tempColor.A;
+            SliderR.Value = tempColor.R;
+            SliderG.Value = tempColor.G;
+            SliderB.Value = tempColor.B;
 
-            Slider_A.ValueChanged += (s, e) =>
+            SliderA.ValueChanged += (s, e) =>
             {
                 if (e.NewValue == 0) return;
-                Temp_Color.A = (byte)Slider_A.Value; Update_ThemeColor();
+                tempColor.A = (byte)SliderA.Value; Update_ThemeColor();
             };
-            Slider_R.ValueChanged += (s, e) => { Temp_Color.R = (byte)Slider_R.Value; Update_ThemeColor(); };
-            Slider_G.ValueChanged += (s, e) => { Temp_Color.G = (byte)Slider_G.Value; Update_ThemeColor(); };
-            Slider_B.ValueChanged += (s, e) => { Temp_Color.B = (byte)Slider_B.Value; Update_ThemeColor(); };
+            SliderR.ValueChanged += (s, e) => { tempColor.R = (byte)SliderR.Value; Update_ThemeColor(); };
+            SliderG.ValueChanged += (s, e) => { tempColor.G = (byte)SliderG.Value; Update_ThemeColor(); };
+            SliderB.ValueChanged += (s, e) => { tempColor.B = (byte)SliderB.Value; Update_ThemeColor(); };
 
             PresetColorList.SelectionChanged += (s, e) =>
              {
                  var SelectedColor = PresetColorList.SelectedItem as MyColor;
-                 Temp_Color = (Color)ColorConverter.ConvertFromString(SelectedColor.Color);
-                 Slider_A.Value = Temp_Color.A;
-                 Slider_R.Value = Temp_Color.R;
-                 Slider_G.Value = Temp_Color.G;
-                 Slider_B.Value = Temp_Color.B;
-                 App.Update_ThemeColorBrush(Temp_Color);
+                 tempColor = (Color)ColorConverter.ConvertFromString(SelectedColor.Color);
+                 SliderA.Value = tempColor.A;
+                 SliderR.Value = tempColor.R;
+                 SliderG.Value = tempColor.G;
+                 SliderB.Value = tempColor.B;
+                 App.Update_ThemeColorBrush(tempColor);
              };
 
             goback_btn.Click += (s, e) => NavigationService.GoBack();
@@ -47,12 +48,12 @@ namespace GBCLV2.Pages
 
         private static void Update_ThemeColor()
         {
-            Application.Current.Resources["Theme_Color"] = Temp_Color;
+            Application.Current.Resources["ThemeColor"] = tempColor;
         }
 
         private void Slider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            App.Update_ThemeColorBrush(Temp_Color);
+            App.Update_ThemeColorBrush(tempColor);
         }
 
         private void GetImageFromDisk(object sender, RoutedEventArgs e)
@@ -65,7 +66,7 @@ namespace GBCLV2.Pages
 
             if (dialog.ShowDialog() ?? false)
             {
-                App.Config.ImagePath = dialog.FileName;
+                Config.Args.ImageFilePath = dialog.FileName;
             }
         }
 

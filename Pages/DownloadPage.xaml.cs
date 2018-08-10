@@ -14,12 +14,12 @@ namespace GBCLV2.Pages
 {
     public partial class DownloadPage : Page
     {
-        public bool Succeeded { get; internal set; }
-        public readonly AutoResetEvent DownloadComplete = new AutoResetEvent(false);
+        public bool Succeeded { get; private set; }
+        public AutoResetEvent DownloadComplete { get; private set; }
 
-        private List<DownloadInfo> Downloads;
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
-        private readonly DispatcherTimer timer = new DispatcherTimer() { Interval = new TimeSpan(5000000) };
+        private List<DownloadInfo> downloads;
+        private static CancellationTokenSource cts = new CancellationTokenSource();
+        private static DispatcherTimer timer = new DispatcherTimer() { Interval = new TimeSpan(5000000) };
 
         
         private string title;
@@ -32,13 +32,14 @@ namespace GBCLV2.Pages
 
         private static bool IsDownloading;
 
-        public DownloadPage(List<DownloadInfo> FilesToDownload, string Title)
+        public DownloadPage(List<DownloadInfo> filesToDownload, string title)
         {
             ServicePointManager.DefaultConnectionLimit = 256;
+            DownloadComplete = new AutoResetEvent(false);
 
-            title = Title;
-            Downloads = FilesToDownload;
-            total = FilesToDownload.Count;
+            this.title = title;
+            downloads = filesToDownload;
+            total = filesToDownload.Count;
 
             InitializeComponent();
 
@@ -110,7 +111,7 @@ namespace GBCLV2.Pages
             {
                 try
                 {
-                    Parallel.ForEach(Downloads, parallelOptions, download => DownloadFile(download));
+                    Parallel.ForEach(downloads, parallelOptions, download => DownloadFile(download));
                 }
                 catch(OperationCanceledException)
                 {
@@ -120,7 +121,7 @@ namespace GBCLV2.Pages
 
         }
 
-        private void DownloadFile(DownloadInfo download)
+        private static void DownloadFile(DownloadInfo download)
         {
             if (!Directory.Exists(Path.GetDirectoryName(download.Path)))
             {
@@ -194,8 +195,6 @@ namespace GBCLV2.Pages
                     NavigationService.GoBack();
 
                     DownloadComplete.Set();
-                    DownloadComplete.Dispose();
-                    cts.Dispose();
                 }
                 else return;
             }
@@ -204,8 +203,6 @@ namespace GBCLV2.Pages
                 NavigationService.GoBack();
 
                 DownloadComplete.Set();
-                DownloadComplete.Dispose();
-                cts.Dispose();
             }
         }
     }

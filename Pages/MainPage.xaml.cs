@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using KMCCC.Authentication;
 using KMCCC.Launcher;
 using GBCLV2.Modules;
+using GBCLV2.Helpers;
 using System.Threading.Tasks;
 
 namespace GBCLV2.Pages
@@ -13,31 +14,26 @@ namespace GBCLV2.Pages
     {
         private static bool Launching;
         private Random rand = new Random();
-        private string[] Excited = new string[]{
-            "(⇀‸↼‶)","(๑˘•◡•˘๑)","( Ծ ‸ Ծ )","_( '-' _)⌒)_","(●—●)","~( ´•︵•` )~","( *・ω・)✄╰ひ╯","(╯>д<)╯┻━┻","_(-ω-`_)⌒)_",
-            "ᕦ(･ㅂ･)ᕤ","(◞‸◟ )","(ㅎ‸ㅎ)","(= ᵒᴥᵒ =)","(๑乛◡乛๑)","( ,,ÒωÓ,, )","ε=ε=(ノ≧∇≦)ノ","(･∀･)","Σ( ￣□￣||)","(。-`ω´-)",
-            "(´• ᗜ •`)","(๑╹∀╹๑)","(´• ᵕ •`)*✲","┑(￣Д ￣)┍","(｡•ˇ‸ˇ•｡)","\\(•ㅂ•)/","(´･ᆺ･`)","ԅ(¯﹃¯ԅ)","୧(๑•∀•๑)૭","ʕ•ﻌ•ʔ"
-        };
 
         public MainPage()
         {
             InitializeComponent();
-            this.DataContext = App.Config;
+            this.DataContext = Config.Args;
 
             Loaded += (s, e) =>
             {
-                if (!Launching && string.IsNullOrWhiteSpace(App.Config.UserName))
+                if (!Launching && string.IsNullOrWhiteSpace(Config.Args.UserName))
                 {
-                    tb.Text = Excited[rand.Next(Excited.Length)];
+                    tb.Text = TextFacesHelper.GetTextFace();
                 }
                 else
                 {
-                    tb.Text = "Hello " + App.Config.UserName;
+                    tb.Text = "Hello " + Config.Args.UserName;
                 }
 
                 if (App.Versions.Any())
                 {
-                    if(!Launching)
+                    if (!Launching)
                     {
                         LaunchButton.IsEnabled = true;
                         LaunchButton.Content = "启动";
@@ -55,9 +51,8 @@ namespace GBCLV2.Pages
         private async void Launch(object sender, RoutedEventArgs e)
         {
             var Core = App.Core;
-            var Config = App.Config;
 
-            if (Config.JavaPath == null)
+            if (Config.Args.JavaPath == null)
             {
                 if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
                     MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
@@ -68,12 +63,12 @@ namespace GBCLV2.Pages
             }
             else
             {
-                Core.JavaPath = Config.JavaPath;
+                Core.JavaPath = Config.Args.JavaPath;
             }
 
             Core.GameLaunch += OnGameLaunch;
 
-            var LaunchVersion = App.Versions[Config.VersionIndex];
+            var LaunchVersion = App.Versions[Config.Args.VersionIndex];
 
             var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion);
             if (lostEssentials.Any())
@@ -105,23 +100,23 @@ namespace GBCLV2.Pages
             var Result = Core.Launch(new LaunchOptions()
             {
                 Version = LaunchVersion,
-                VersionSplit = Config.VersionSplit,
+                VersionSplit = Config.Args.IsVersionSplit,
 
-                Authenticator = (Config.Offline) ?
-                (IAuthenticator)new OfflineAuthenticator(Config.UserName) : new YggdrasilLogin(Config.Email, Config.PassWord, false),
-                MaxMemory = Config.MaxMemory,
+                Authenticator = (Config.Args.IsOfflineMode) ?
+                (IAuthenticator)new OfflineAuthenticator(Config.Args.UserName) : new YggdrasilLogin(Config.Args.UserName, Config.Args.PassWord, false),
+                MaxMemory = Config.Args.MaxMemory,
 
                 Size = new WindowSize
                 {
-                    Width = Config.WinWidth,
-                    Height = Config.WinHeight,
-                    FullScreen = Config.FullScreen
+                    Width = Config.Args.GameWinWidth,
+                    Height = Config.Args.GameWinHeight,
+                    FullScreen = Config.Args.IsFullScreen
                 },
 
-                ServerAddress = Config.ServerAddress,
-                VersionType = "GBCL-v2.0.6",
+                ServerAddress = Config.Args.ServerAddress,
+                VersionType = $"GBCL-v{Config.LauncherVersion}",
 
-            }, x => x.AdvencedArguments.Add(Config.AdvancedArgs));
+            }, x => x.AdvencedArguments.Add(Config.Args.AdvancedArgs));
 
             if (Result.Success)
             {
@@ -137,7 +132,7 @@ namespace GBCLV2.Pages
             }
         }
 
-        private void Goto_Page(object sender, RoutedEventArgs e)
+        private void GotoPage(object sender, RoutedEventArgs e)
         {
             var page = "Pages/" + (sender as Button).Name + ".xaml";
             NavigationService.Navigate(new Uri(page, UriKind.Relative));
@@ -145,12 +140,12 @@ namespace GBCLV2.Pages
 
         private void OnGameLaunch(LaunchHandle handle)
         {
-            if (!string.IsNullOrWhiteSpace(App.Config.WindowTitle))
+            if (!string.IsNullOrWhiteSpace(Config.Args.GameWinTitle))
             {
-                handle.SetTitle(App.Config.WindowTitle);
+                handle.SetTitle(Config.Args.GameWinTitle);
             }
 
-            switch (App.Config.AfterLaunchBehavior)
+            switch (Config.Args.AfterLaunchBehavior)
             {
                 case 0:
                     Dispatcher.Invoke(() =>
@@ -167,13 +162,13 @@ namespace GBCLV2.Pages
                 case 2:
                     Dispatcher.Invoke(() =>
                     {
-                        if (string.IsNullOrWhiteSpace(App.Config.UserName))
+                        if (string.IsNullOrWhiteSpace(Config.Args.UserName))
                         {
-                            tb.Text = Excited[rand.Next(Excited.Length)];
+                            tb.Text = TextFacesHelper.GetTextFace();
                         }
                         else
                         {
-                            tb.Text = "Hello " + App.Config.UserName;
+                            tb.Text = "Hello " + Config.Args.UserName;
                         }
 
                         LaunchButton.IsEnabled = true;

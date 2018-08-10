@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GBCLV2.Pages;
-using GBCLV2.Modules;
+using GBCLV2.Helpers;
 
 namespace GBCLV2
 {
@@ -29,7 +29,7 @@ namespace GBCLV2
             {
                 Win10BlurHelper.EnableBlur(this);
             }
-            else
+            else if (Environment.OSVersion.Version.Major == 7)
             {
                 this.BorderThickness = new Thickness(0.5);
                 this.BorderBrush = Brushes.DarkGray;

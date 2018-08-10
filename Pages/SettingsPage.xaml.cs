@@ -10,12 +10,7 @@ namespace GBCLV2.Pages
         public SettingsPage()
         {
             InitializeComponent();
-        }
-
-        private void Go_Back(object sender, RoutedEventArgs e)
-        {
-            launch_settings.Save_Settings();
-            NavigationService.GoBack();
+            BackButton.Click += (s,e) => NavigationService.GoBack();
         }
 
         private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

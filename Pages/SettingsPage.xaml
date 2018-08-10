@@ -1,14 +1,15 @@
-﻿<Page x:Class="GBCLV2.Pages.SettingsPage"
+﻿<Page
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Controls="clr-namespace:GBCLV2.Controls"
-      Style="{StaticResource Page_Style}" KeepAlive="True">
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="GBCLV2.Pages.SettingsPage"
+      Style="{StaticResource PageStyle}" KeepAlive="True">
 
     <Grid>
         <TabControl x:Name="tabcontrol" SelectionChanged="TabControl_SelectionChanged"
                     Height="325" VerticalAlignment="Bottom" Margin="3" 
                     BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
-            
+
             <TabItem Header="/images/launch.png" Tag="启动设置">
                 <Controls:LaunchSettings x:Name="launch_settings"/>
             </TabItem>
@@ -30,7 +31,7 @@
             </TabItem>
         </TabControl>
 
-        <Button Style="{StaticResource Button_Style}" Click="Go_Back" ToolTip="返回" 
+        <Button x:Name="BackButton" Style="{StaticResource GlowButtonStyle}" ToolTip="返回" 
                 Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png"/>

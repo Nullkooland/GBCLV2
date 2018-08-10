@@ -2,7 +2,7 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-      Style="{StaticResource Page_Style}"
+      Style="{StaticResource PageStyle}"
       Title="SkinPage">
 
     <Page.Resources>
@@ -39,7 +39,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <Style x:Key="Slider_Style" TargetType="Slider">
+        <Style x:Key="SliderStyle" TargetType="Slider">
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Width" Value="465"/>
             <Setter Property="Height" Value="20"/>
@@ -66,7 +66,7 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Theme_Brush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                                 <Setter Property="Effect">
                                     <Setter.Value>
                                         <DropShadowEffect ShadowDepth="0" Opacity="0.75" Color="White"/>
@@ -110,43 +110,46 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="goback_btn" Style="{StaticResource Button_Style}" ToolTip="返回" 
+        <Button x:Name="goback_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="返回" 
                 Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Style="{StaticResource Button_Style}" x:Name="GetImage_Button" Click="GetImageFromDisk" ToolTip="选取图片文件"
+        <Button Style="{StaticResource GlowButtonStyle}" x:Name="GetImage_Button" Click="GetImageFromDisk" ToolTip="选取图片文件"
                 Grid.Row="8" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left" 
-                IsEnabled="{Binding UseImageBackground}">
+                IsEnabled="{Binding IsUseImageBackground}">
             <Button.Background>
                 <ImageBrush ImageSource="/images/open.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Slider x:Name="Slider_A" Grid.Row="1" Grid.Column="1" Style="{StaticResource Slider_Style}"/>
-        <Slider x:Name="Slider_R" Grid.Row="2" Grid.Column="1" Style="{StaticResource Slider_Style}"/>
-        <Slider x:Name="Slider_G" Grid.Row="3" Grid.Column="1" Style="{StaticResource Slider_Style}"/>
-        <Slider x:Name="Slider_B" Grid.Row="4" Grid.Column="1" Style="{StaticResource Slider_Style}"/>
+        <Slider x:Name="SliderA" Grid.Row="1" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider x:Name="SliderR" Grid.Row="2" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider x:Name="SliderG" Grid.Row="3" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider x:Name="SliderB" Grid.Row="4" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
 
-        <TextBlock Text="透明" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="红色" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="绿色" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="蓝色" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource Info_TextBlock_Style}"/>
+        <TextBlock Text="透明" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="红色" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="绿色" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="蓝色" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
 
-        <TextBlock Text="{Binding ElementName=Slider_A, Path=Value}" Grid.Row="1" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="{Binding ElementName=Slider_R, Path=Value}" Grid.Row="2" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="{Binding ElementName=Slider_G, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
-        <TextBlock Text="{Binding ElementName=Slider_B, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource Info_TextBlock_Style}"/>
+        <TextBlock Text="{Binding ElementName=SliderA, Path=Value}" Grid.Row="1" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=SliderR, Path=Value}" Grid.Row="2" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=SliderG, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=SliderB, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
 
-        <CheckBox IsChecked="{Binding UseSystemThemeColor}" Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Margin="9,0"/>
-        <TextBlock Text="预置颜色" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="75,0" Style="{StaticResource Info_TextBlock_Style}"/>
+        <CheckBox Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Margin="9,0"
+                  IsChecked="{Binding IsUseSystemThemeColor, Mode=TwoWay}"/>
+        
+        <TextBlock Text="预置颜色" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="75,0" Style="{StaticResource InfoTextBlockStyle}"/>
         <ComboBox x:Name="PresetColorList" Grid.Row="6" Grid.Column="1" Width="65" HorizontalAlignment="Right" Margin="7,0" DisplayMemberPath="Name"/>
 
-        <CheckBox x:Name="Img_CheckBox" IsChecked="{Binding UseImageBackground}" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
-        <TextBox Text="{Binding ImagePath}"  FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"
-                 IsEnabled="{Binding UseImageBackground}"/>
+        <CheckBox x:Name="Img_CheckBox" IsChecked="{Binding IsUseImageBackground}" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
+        <TextBox FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"
+                 Text="{Binding ImageFilePath, Mode=TwoWay}"
+                 IsEnabled="{Binding IsUseImageBackground, Mode=TwoWay}"/>
 
     </Grid>
 </Page>

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Pages
 {
@@ -31,9 +32,9 @@ namespace GBCLV2.Pages
         {
             InitializeComponent();
 
-            if (App.Versions.Any() && App.Config.VersionSplit)
+            if (App.Versions.Any() && Config.Args.IsVersionSplit)
             {
-                ModsDir = $"{App.Core.GameRootPath}\\versions\\{App.Versions[App.Config.VersionIndex].ID}\\mods\\";
+                ModsDir = $"{App.Core.GameRootPath}\\versions\\{App.Versions[Config.Args.VersionIndex].ID}\\mods\\";
             }
             else
             {
@@ -216,26 +217,23 @@ namespace GBCLV2.Pages
         {
             Task.Run(() =>
             {
-                foreach (string path in filePaths)
+                foreach (string path in filePaths.Where(p => p.EndsWith(".jar") || p.EndsWith(".zip")))
                 {
-                    if (path.EndsWith(".jar") || path.EndsWith(".zip"))
+                    using (var archive = ZipFile.OpenRead(path))
                     {
-                        using (var archive = ZipFile.OpenRead(path))
+                        if (archive.GetEntry("META-INF/") == null)
                         {
-                            if (archive.GetEntry("META-INF/") == null)
-                            {
-                                MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod", MessageBoxButton.OK, MessageBoxImage.Information);
-                                continue;
-                            }
+                            MessageBox.Show(path + "\n不是有效的mod文件", "你可能选了假mod", MessageBoxButton.OK, MessageBoxImage.Information);
+                            continue;
                         }
+                    }
 
-                        string CopyTo = ModsDir + Path.GetFileNameWithoutExtension(path) + ".jar";
+                    string CopyTo = ModsDir + Path.GetFileNameWithoutExtension(path) + ".jar";
 
-                        if (!File.Exists(CopyTo))
-                        {
-                            LoadModInfo(path);
-                            File.Copy(path, CopyTo, true);
-                        }
+                    if (!File.Exists(CopyTo))
+                    {
+                        LoadModInfo(path);
+                        File.Copy(path, CopyTo, true);
                     }
                 }
             });

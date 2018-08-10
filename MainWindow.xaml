@@ -24,17 +24,17 @@
 
     <Canvas>
         <Canvas.Background>
-            <SolidColorBrush Color="{DynamicResource Theme_Color}"/>
+            <SolidColorBrush Color="{DynamicResource ThemeColor}"/>
         </Canvas.Background>
 
         <Frame x:Name="frame" NavigationUIVisibility="Hidden" Focusable="False"/>
-        <Button Style="{StaticResource Button_Style}" x:Name="shutdown_btn" Width="22" Height="22" Canvas.Right="7" Canvas.Top="7">
+        <Button Style="{StaticResource GlowButtonStyle}" x:Name="shutdown_btn" Width="22" Height="22" Canvas.Right="7" Canvas.Top="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/close.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Style="{StaticResource Button_Style}" x:Name="minimize_btn" Width="22" Height="22" Canvas.Right="42" Canvas.Top="7">
+        <Button Style="{StaticResource GlowButtonStyle}" x:Name="minimize_btn" Width="22" Height="22" Canvas.Right="42" Canvas.Top="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/minimize.png" po:Freeze="True"/>
             </Button.Background>

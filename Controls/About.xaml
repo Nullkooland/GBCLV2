@@ -35,18 +35,18 @@
 
     <Image Source="/GBCLV2;component/images/steven.png" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Right" Margin="125,0">
         <Image.Effect>
-            <DropShadowEffect ShadowDepth="0" BlurRadius="9" Color="{StaticResource Theme_Color}"/>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="9" Color="{StaticResource ThemeColor}"/>
         </Image.Effect>
     </Image>
 
-    <TextBlock Text="关于 GBCL V2.0.6" Style="{StaticResource Info_TextBlock_Style}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
+    <TextBlock Name="AboutBox" Style="{StaticResource InfoTextBlockStyle}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
     
-    <TextBlock Text="开源于Github" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="2" Margin="25,0"/>
+    <TextBlock Text="开源于Github" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="2" Margin="25,0"/>
     <TextBlock Text="https://github.com/Goose-Bomb/GBCLV2" Grid.Row="3"/>
 
-    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="4" Margin="25,0"/>
+    <TextBlock Text="使用KMCCC启动核心" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="4" Margin="25,0"/>
     <TextBlock Text="https://github.com/MineStudio/KMCCC" Grid.Row="5"/>
 
-    <TextBlock Text="使用BMCLAPI加速下载" Style="{StaticResource Info_TextBlock_Style}" Grid.Row="6" Margin="25,0"/>
+    <TextBlock Text="使用BMCLAPI加速下载" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="6" Margin="25,0"/>
     <TextBlock Text="https://bmclapi.bangbang93.com/" Grid.Row="7"/>
 </Grid>

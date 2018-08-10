@@ -10,8 +10,7 @@ namespace GBCLV2
 {
     public partial class App : Application
     {
-        public static ConfigModule Config;
-        public static LauncherCore Core;
+        public static LauncherCore Core { get; private set; }
         public static ObservableCollection<Version> Versions = new ObservableCollection<Version>();
 
         private static Mutex mutex;
@@ -24,10 +23,10 @@ namespace GBCLV2
             if (!ret)
             {
                 MessageBox.Show("已经有一个我在运行了", "(>ㅂ< )", MessageBoxButton.OK, MessageBoxImage.Information);
-                System.Environment.Exit(0);
+                this.Shutdown(0);
             }
 
-            Config = ConfigModule.LoadConfig();
+            Config.Load();
             Initialize_LauncherCore();
             Initialize_ThemeColor();
 
@@ -52,13 +51,13 @@ namespace GBCLV2
 
             if (count == 0)
             {
-                Config.VersionIndex = -1;
+                Config.Args.VersionIndex = -1;
             }
             else
             {
-                if (Config.VersionIndex == -1 || Config.VersionIndex >= count)
+                if (Config.Args.VersionIndex == -1 || Config.Args.VersionIndex >= count)
                 {
-                    Config.VersionIndex = 0;
+                    Config.Args.VersionIndex = 0;
                 }
             }
 
@@ -74,19 +73,19 @@ namespace GBCLV2
 
         private void Initialize_ThemeColor()
         {
-            Color Theme_Color;
+            Color ThemeColor;
 
-            if (Config.UseSystemThemeColor || string.IsNullOrEmpty(Config.ThemeColor))
+            if (Config.Args.IsUseSystemThemeColor || string.IsNullOrEmpty(Config.Args.ThemeColor))
             {
-                Theme_Color = SystemParameters.WindowGlassColor;
-                Theme_Color.A = 150;
+                ThemeColor = SystemParameters.WindowGlassColor;
+                ThemeColor.A = 150;
             }
             else
             {
-                Theme_Color = (Color)ColorConverter.ConvertFromString(Config.ThemeColor);
+                ThemeColor = (Color)ColorConverter.ConvertFromString(Config.Args.ThemeColor);
             }
-            Resources["Theme_Color"] = Theme_Color;
-            Update_ThemeColorBrush(Theme_Color);
+            Resources["ThemeColor"] = ThemeColor;
+            Update_ThemeColorBrush(ThemeColor);
         }
 
         public static void Update_ThemeColorBrush(Color _col)
@@ -107,7 +106,7 @@ namespace GBCLV2
             }
 
             _col.A = 255;
-            Current.Resources["Theme_Brush"] = new SolidColorBrush(_col);
+            Current.Resources["ThemeColorBrush"] = new SolidColorBrush(_col);
         }
 
         private void OnGameLog(string line)
@@ -128,7 +127,7 @@ namespace GBCLV2
 
             Current.Dispatcher.Invoke(() =>
             {
-                if (Config.AfterLaunchBehavior == 0)
+                if (Config.Args.AfterLaunchBehavior == 0)
                 {
                     Current.Shutdown();
                 }
@@ -137,7 +136,7 @@ namespace GBCLV2
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Config.ThemeColor = Resources["Theme_Color"].ToString();
+            Config.Args.ThemeColor = Resources["ThemeColor"].ToString();
             Config.Save();
             base.OnExit(e);
         }

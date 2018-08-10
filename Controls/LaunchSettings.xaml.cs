@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using KMCCC.Tools;
 using KMCCC.Launcher;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
@@ -12,72 +13,20 @@ namespace GBCLV2.Controls
         public LaunchSettings()
         {
             InitializeComponent();
-            this.DataContext = App.Config;
+        }
+
+        private void LaunchSettings_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.DataContext = Config.Args;
             VersionBox.ItemsSource = App.Versions;
-
-            if (App.Config.Offline) OfflineMode();
-            else OnlineMode();
-
-            Offline_CheckBox.Checked += (s, e) => OfflineMode();
-            Offline_CheckBox.Unchecked += (s, e) => OnlineMode();
-
-            if (!string.IsNullOrEmpty(App.Config.ServerAddress))
-            {
-                DirectLoginServer_CheckBox.IsChecked = true;
-                ServerAddressBox.Text = App.Config.ServerAddress;
-            }
-        }
-
-        private void OnlineMode()
-        {
-            App.Config.Offline = false;
-            PassWordBox.IsEnabled = true;
-            RememberPassword_CheckBox.IsEnabled = true;
-            PassWord_TextBlcok.IsEnabled = true;
-            UserName_TextBlcok.Text = "邮箱";
-            UserNameBox.Text = App.Config.Email;
-            PassWordBox.Password = App.Config.PassWord;
-
-        }
-
-        private void OfflineMode()
-        {
-            App.Config.Offline = true;
-            PassWordBox.Password = null;
-            PassWordBox.IsEnabled = false;
-            PassWord_TextBlcok.IsEnabled = false;
-            RememberPassword_CheckBox.IsEnabled = false;
-            UserName_TextBlcok.Text = "游戏名";
-            UserNameBox.Text = App.Config.UserName;
-        }
-
-        public void Save_Settings()
-        {
-            if (App.Config.Offline)
-            {
-                App.Config.UserName = UserNameBox.Text;
-            }
-            else
-            {
-                App.Config.Email = UserNameBox.Text;
-                App.Config.PassWord = PassWordBox.Password;
-            }
-
-            if (DirectLoginServer_CheckBox.IsChecked ?? false)
-            {
-                App.Config.ServerAddress = ServerAddressBox.Text;
-            }
-            else
-            {
-                App.Config.ServerAddress = null;
-            }
+            PassWordBox.Password = Config.Args.PassWord;
         }
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
         {
             if (VersionBox.SelectedIndex != -1)
             {
-                version = App.Versions[App.Config.VersionIndex];
+                version = App.Versions[Config.Args.VersionIndex];
             }
             else
             {
@@ -99,7 +48,7 @@ namespace GBCLV2.Controls
             }
             if (count != 0)
             {
-                App.Config.VersionIndex = count - 1;
+                Config.Args.VersionIndex = count - 1;
                 Menu_OpenFolder.IsEnabled = true;
                 Menu_OpenJson.IsEnabled = true;
                 Menu_Delete.IsEnabled = true;
@@ -108,7 +57,7 @@ namespace GBCLV2.Controls
 
         private void OpenVersionFolder(object sender, RoutedEventArgs e)
         {
-            if (App.Config.VersionIndex != -1)
+            if (Config.Args.VersionIndex != -1)
             {
                 string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
                 System.Diagnostics.Process.Start("explorer.exe", DirPath);
@@ -117,7 +66,7 @@ namespace GBCLV2.Controls
 
         private void OpenVersionJson(object sender, RoutedEventArgs e)
         {
-            if (App.Config.VersionIndex != -1)
+            if (Config.Args.VersionIndex != -1)
             {
                 string JsonPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\{version.ID}.json";
                 try
@@ -130,7 +79,7 @@ namespace GBCLV2.Controls
 
         private void DeleteVersion(object sender, RoutedEventArgs e)
         {
-            if (App.Config.VersionIndex != -1)
+            if (Config.Args.VersionIndex != -1)
             {
                 string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
                 UsefulTools.DeleteDirectoryAsync(DirPath);
@@ -141,15 +90,15 @@ namespace GBCLV2.Controls
                     UsefulTools.DeleteDirectoryAsync(forgeDir);
                 }
 
-                App.Versions.RemoveAt(App.Config.VersionIndex);
-                App.Config.VersionIndex = 0;
+                App.Versions.RemoveAt(Config.Args.VersionIndex);
+                Config.Args.VersionIndex = 0;
             }
 
         }
 
         private void Update_CurrentAvailableMemory(object sender, ToolTipEventArgs e)
         {
-            MaxMemoryBox.ToolTip = $"当前可用物理内存：{SystemTools.GetAvailableMemory()} MB";
+            (sender as TextBox).ToolTip = $"当前可用物理内存：{SystemTools.GetAvailableMemory()} MB";
         }
 
         private void GetJavaPathFromDisk(object sender, RoutedEventArgs e)
@@ -162,8 +111,13 @@ namespace GBCLV2.Controls
 
             if (dialog.ShowDialog() ?? false)
             {
-                App.Config.JavaPath = dialog.FileName;
+                Config.Args.JavaPath = dialog.FileName;
             }
+        }
+
+        private void UpdatePassWordToConfig(object sender, RoutedEventArgs e)
+        {
+            Config.Args.PassWord = (sender as PasswordBox).Password;
         }
     }
 }

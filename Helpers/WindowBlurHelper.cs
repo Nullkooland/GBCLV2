@@ -3,14 +3,14 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace GBCLV2.Modules
+namespace GBCLV2.Helpers
 {
     static class Win10BlurHelper
     {
         [DllImport("user32.dll")]
-        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+        private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
 
-        internal enum AccentState
+        private enum AccentState
         {
             ACCENT_DISABLED = 0,
             ACCENT_ENABLE_GRADIENT = 1,
@@ -20,7 +20,7 @@ namespace GBCLV2.Modules
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct AccentPolicy
+        private struct AccentPolicy
         {
             public AccentState AccentState;
             public int AccentFlags;
@@ -29,14 +29,14 @@ namespace GBCLV2.Modules
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct WindowCompositionAttributeData
+        private struct WindowCompositionAttributeData
         {
             public WindowCompositionAttribute Attribute;
             public IntPtr Data;
             public int SizeOfData;
         }
 
-        internal enum WindowCompositionAttribute
+        private enum WindowCompositionAttribute
         {
             // ...
             WCA_ACCENT_POLICY = 19
@@ -74,9 +74,9 @@ namespace GBCLV2.Modules
     static class Win7BlurHelper
     {
         [DllImport("dwmapi.dll")]
-        static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
+        private static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
 
-        struct DWM_BLURBEHIND
+        private struct DWM_BLURBEHIND
         {
             public uint dwFlags;
             public bool fEnable;

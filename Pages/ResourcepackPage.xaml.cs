@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using GBCLV2.Modules;
 
 
 namespace GBCLV2.Pages
@@ -37,9 +38,9 @@ namespace GBCLV2.Pages
             InitializeComponent();
 
             string rootPath;
-            if (App.Versions.Any() && App.Config.VersionSplit)
+            if (App.Versions.Any() && Config.Args.IsVersionSplit)
             {
-                rootPath = $"{App.Core.GameRootPath}\\versions\\{App.Versions[App.Config.VersionIndex].ID}\\";
+                rootPath = $"{App.Core.GameRootPath}\\versions\\{App.Versions[Config.Args.VersionIndex].ID}\\";
             }
             else
             {

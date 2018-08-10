@@ -123,11 +123,11 @@ namespace GBCLV2.Controls
 
             var version = core.GetVersion(versionID);
             App.Versions.Add(version);
-            App.Config.VersionIndex = App.Versions.IndexOf(version);
+            Config.Args.VersionIndex = App.Versions.IndexOf(version);
 
-            var FilesToDownload = DownloadHelper.GetLostEssentials(core, version);
+            var filesToDownload = DownloadHelper.GetLostEssentials(core, version);
 
-            var downloadPage = new Pages.DownloadPage(FilesToDownload, "下载新Minecraft版本");
+            var downloadPage = new Pages.DownloadPage(filesToDownload, "下载新Minecraft版本");
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
             await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
 
@@ -140,10 +140,11 @@ namespace GBCLV2.Controls
                 MessageBox.Show($"{versionID}版本下载失败");
                 Directory.Delete(versionDir, true);
                 App.Versions.Remove(version);
-                App.Config.VersionIndex = 0;
+                Config.Args.VersionIndex = 0;
             }
 
             download_btn.IsEnabled = true;
+            statusBox.Text = "准备下载";
         }
     }
 }

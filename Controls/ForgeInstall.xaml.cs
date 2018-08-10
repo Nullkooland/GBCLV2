@@ -30,15 +30,15 @@ namespace GBCLV2.Controls
         {
             InitializeComponent();
             VersionBox.ItemsSource = App.Versions;
-            VersionBox.DataContext = App.Config;
+            VersionBox.DataContext = Config.Args;
             ForgeList.ItemsSource = VersionForges;
         }
 
         private async void GetVersionForgeListAsync(object sender, SelectionChangedEventArgs e)
         {
-            if (App.Config.VersionIndex == -1) return;
+            if (Config.Args.VersionIndex == -1) return;
 
-            mcVersion = App.Versions[App.Config.VersionIndex].JarID;
+            mcVersion = App.Versions[Config.Args.VersionIndex].JarID;
 
             string json;
             try
@@ -135,7 +135,7 @@ namespace GBCLV2.Controls
 
             var newVersion = core.GetVersion(newVersionID);
             App.Versions.Add(newVersion);
-            App.Config.VersionIndex = App.Versions.IndexOf(newVersion);
+            Config.Args.VersionIndex = App.Versions.IndexOf(newVersion);
 
             MessageBox.Show($"安装{mcVersion}版本Forge成功");
             download_btn.IsEnabled = true;

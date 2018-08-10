@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
@@ -7,10 +8,7 @@ namespace GBCLV2.Controls
         public OtherSettings()
         {
             InitializeComponent();
-            this.DataContext = App.Config;
-
-            DownloadSourceBox.ItemsSource = new string[2] { "官方", "BMCLAPI" };
-            AfterLaunchBehaviorBox.ItemsSource = new string[3] { "隐藏并后台运行", "直接退出", "保持窗体可见" };
+            this.DataContext = Config.Args;
         }
     }
 }

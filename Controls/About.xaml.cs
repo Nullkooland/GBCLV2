@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using GBCLV2.Modules;
 
 namespace GBCLV2.Controls
 {
@@ -7,6 +8,7 @@ namespace GBCLV2.Controls
         public About()
         {
             InitializeComponent();
+            AboutBox.Text = $"关于 GBCL V{Config.LauncherVersion}";
         }
 
         private void Open_Link(object sender, System.Windows.Input.MouseButtonEventArgs e)
