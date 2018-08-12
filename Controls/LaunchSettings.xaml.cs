@@ -1,15 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Tools;
-using KMCCC.Launcher;
 using GBCLV2.Modules;
+using System.Linq;
 
 namespace GBCLV2.Controls
 {
     public partial class LaunchSettings : Grid
     {
-        private Version version;
-
         public LaunchSettings()
         {
             InitializeComponent();
@@ -18,82 +16,49 @@ namespace GBCLV2.Controls
         private void LaunchSettings_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = Config.Args;
-            VersionBox.ItemsSource = App.Versions;
             PassWordBox.Password = Config.Args.PassWord;
         }
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
         {
-            if (VersionBox.SelectedIndex != -1)
-            {
-                version = App.Versions[Config.Args.VersionIndex];
-            }
-            else
-            {
-                Menu_OpenFolder.IsEnabled = false;
-                Menu_OpenJson.IsEnabled = false;
-                Menu_Delete.IsEnabled = false;
-            }
-            VersionOptions.IsOpen = true;
+            VersionOptionsMenu.PlacementTarget = (sender as Button);
+            VersionOptionsMenu.IsOpen = true;
         }
 
         private void RefreshVersion(object sender, RoutedEventArgs e)
         {
-            int count = 0;
-            App.Versions.Clear();
-            foreach (var version in App.Core.GetVersions())
-            {
-                App.Versions.Add(version);
-                count++;
-            }
-            if (count != 0)
-            {
-                Config.Args.VersionIndex = count - 1;
-                Menu_OpenFolder.IsEnabled = true;
-                Menu_OpenJson.IsEnabled = true;
-                Menu_Delete.IsEnabled = true;
-            }
+            App.LoadVersions();
         }
 
         private void OpenVersionFolder(object sender, RoutedEventArgs e)
         {
-            if (Config.Args.VersionIndex != -1)
-            {
-                string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
-                System.Diagnostics.Process.Start("explorer.exe", DirPath);
-            }
+            string DirPath = $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\";
+            System.Diagnostics.Process.Start("explorer.exe", DirPath);
         }
 
         private void OpenVersionJson(object sender, RoutedEventArgs e)
         {
-            if (Config.Args.VersionIndex != -1)
+            string JsonPath = $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\{Config.Args.SelectedVersion.ID}.json";
+            try
             {
-                string JsonPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\{version.ID}.json";
-                try
-                {
-                    System.Diagnostics.Process.Start(JsonPath);
-                }
-                catch { }
+                System.Diagnostics.Process.Start(JsonPath);
             }
+            catch { }
         }
 
         private void DeleteVersion(object sender, RoutedEventArgs e)
         {
-            if (Config.Args.VersionIndex != -1)
+            string DirPath = $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\";
+            UsefulTools.DeleteDirectoryAsync(DirPath);
+
+            if (Config.Args.SelectedVersion.ID.Contains("forge"))
             {
-                string DirPath = $"{App.Core.GameRootPath}\\versions\\{version.ID}\\";
-                UsefulTools.DeleteDirectoryAsync(DirPath);
-
-                if (version.ID.Contains("forge"))
-                {
-                    var forgeDir = $"{App.Core.GameRootPath}\\libraries\\{System.IO.Path.GetDirectoryName(version.Libraries[0].Path)}";
-                    UsefulTools.DeleteDirectoryAsync(forgeDir);
-                }
-
-                App.Versions.RemoveAt(Config.Args.VersionIndex);
-                Config.Args.VersionIndex = 0;
+                var forgeDir = $"{App.Core.GameRootPath}\\libraries\\{System.IO.Path.GetDirectoryName(Config.Args.SelectedVersion.Libraries[0].Path)}";
+                UsefulTools.DeleteDirectoryAsync(forgeDir);
             }
 
+            Config.Args.Versions.RemoveAt(Config.Args.VersionIndex);
+            Config.Args.VersionIndex = Config.Args.Versions.Any() ? 0 : -1;          
         }
 
         private void Update_CurrentAvailableMemory(object sender, ToolTipEventArgs e)

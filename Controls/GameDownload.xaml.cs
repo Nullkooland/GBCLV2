@@ -15,7 +15,7 @@ namespace GBCLV2.Controls
     {
         private static readonly HttpClient client = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
 
-        class VersionInfo
+        class VersionDownloadInfo
         {
             public string ID { get; set; }
             public string ReleaseTime { get; set; }
@@ -23,25 +23,25 @@ namespace GBCLV2.Controls
             public string JsonUrl { get; set; }
         }
 
-        private static List<VersionInfo> AllVersions = new List<VersionInfo>();
+        private static List<VersionDownloadInfo> _availableVersions = new List<VersionDownloadInfo>();
 
         public GameDownload()
         {
             InitializeComponent();
 
-            if (AllVersions.Count != 0)
+            if (_availableVersions.Count != 0)
             {
                 statusBox.Text = "准备下载";
             }
 
-            VersionList.ItemsSource = AllVersions;
+            VersionList.ItemsSource = _availableVersions;
             VersionList.SelectionChanged += (s, e) => e.Handled = true;
             refresh_btn.Click += async (s, e) => await GetVersionListFromNetAsync();
         }
 
         public async Task GetVersionListFromNetAsync()
         {
-            if (refresh_btn.IsEnabled && AllVersions.Count == 0)
+            if (refresh_btn.IsEnabled && _availableVersions.Count == 0)
             {
                 refresh_btn.IsEnabled = false;
             }
@@ -53,26 +53,26 @@ namespace GBCLV2.Controls
                 statusBox.Text = "正在获取所有版本列表";
                 json = await client.GetStringAsync(DownloadHelper.BaseUrl.VersionListUrl);
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                statusBox.Text = "获取版本列表失败";
+                statusBox.Text = "获取版本列表失败：" + ex.Message;
                 refresh_btn.IsEnabled = true;
                 return;
             }
 
-            AllVersions.Clear();
+            _availableVersions.Clear();
 
             foreach (var ver in JsonMapper.ToObject(json)["versions"])
             {
                 var version = ver as JsonData;
-                var info = new VersionInfo
+                var info = new VersionDownloadInfo
                 {
                     ID = version["id"].ToString(),
                     Type = version["type"].ToString(),
                     ReleaseTime = version["releaseTime"].ToString(),
                     JsonUrl = DownloadHelper.BaseUrl.JsonBaseUrl + version["url"].ToString().Substring(32)
                 };
-                AllVersions.Add(info);
+                _availableVersions.Add(info);
             }
 
             refresh_btn.IsEnabled = true;
@@ -91,8 +91,8 @@ namespace GBCLV2.Controls
             download_btn.IsEnabled = false;
 
             var core = App.Core;
-            var versionID = AllVersions[VersionList.SelectedIndex].ID;
-            var jsonUrl = AllVersions[VersionList.SelectedIndex].JsonUrl;
+            var versionID = _availableVersions[VersionList.SelectedIndex].ID;
+            var jsonUrl = _availableVersions[VersionList.SelectedIndex].JsonUrl;
             var versionDir = $"{core.GameRootPath}\\versions\\{versionID}";
             if (!Directory.Exists(versionDir))
             {
@@ -122,16 +122,16 @@ namespace GBCLV2.Controls
             }
 
             var version = core.GetVersion(versionID);
-            App.Versions.Add(version);
-            Config.Args.VersionIndex = App.Versions.IndexOf(version);
+            Config.Args.Versions.Add(version);
+            Config.Args.VersionIndex = Config.Args.Versions.IndexOf(version);
 
             var filesToDownload = DownloadHelper.GetLostEssentials(core, version);
 
-            var downloadPage = new Pages.DownloadPage(filesToDownload, "下载新Minecraft版本");
+            var downloadPage = new Pages.DownloadPage();
             (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
-            await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+            bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(filesToDownload, "下载新Minecraft版本");
 
-            if (downloadPage.Succeeded)
+            if (hasDownloadSucceeded)
             {
                 MessageBox.Show($"{versionID}版本下载成功");
             }
@@ -139,7 +139,7 @@ namespace GBCLV2.Controls
             {
                 MessageBox.Show($"{versionID}版本下载失败");
                 Directory.Delete(versionDir, true);
-                App.Versions.Remove(version);
+                Config.Args.Versions.Remove(version);
                 Config.Args.VersionIndex = 0;
             }
 

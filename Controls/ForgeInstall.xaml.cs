@@ -13,9 +13,9 @@ namespace GBCLV2.Controls
 {
     public partial class ForgeInstall : Grid
     {
-        private const string ForgeListUrl = "https://bmclapi2.bangbang93.com/forge/minecraft/";
-        private static readonly HttpClient client = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
-        private string mcVersion;
+        private const string _forgeListUrl = "https://bmclapi2.bangbang93.com/forge/minecraft/";
+        private static readonly HttpClient _httpClient = new HttpClient { Timeout = new TimeSpan(0, 0, 5) };
+        private string _mcVersion;
 
         class ForgeInfo
         {
@@ -29,8 +29,7 @@ namespace GBCLV2.Controls
         public ForgeInstall()
         {
             InitializeComponent();
-            VersionBox.ItemsSource = App.Versions;
-            VersionBox.DataContext = Config.Args;
+            this.DataContext = Config.Args;
             ForgeList.ItemsSource = VersionForges;
         }
 
@@ -38,17 +37,17 @@ namespace GBCLV2.Controls
         {
             if (Config.Args.VersionIndex == -1) return;
 
-            mcVersion = App.Versions[Config.Args.VersionIndex].JarID;
+            _mcVersion = Config.Args.SelectedVersion.JarID;
 
             string json;
             try
             {
-                statusBox.Text = $"正在获取 {mcVersion} 版本Forge列表";
-                json = await client.GetStringAsync(ForgeListUrl + mcVersion);
+                statusBox.Text = $"正在获取 {_mcVersion} 版本Forge列表";
+                json = await _httpClient.GetStringAsync(_forgeListUrl + _mcVersion);
             }
             catch
             {
-                statusBox.Text = $"获取 {mcVersion} 版本Forge列表失败";
+                statusBox.Text = $"获取 {_mcVersion} 版本Forge列表失败";
                 return;
             }
 
@@ -67,11 +66,11 @@ namespace GBCLV2.Controls
 
             if (VersionForges.Count != 0)
             {
-                statusBox.Text = $"获取 {mcVersion} 版本Forge列表成功";
+                statusBox.Text = $"获取 {_mcVersion} 版本Forge列表成功";
             }
             else
             {
-                statusBox.Text = $"{mcVersion} 版本并没有可用的Forge";
+                statusBox.Text = $"{_mcVersion} 版本并没有可用的Forge";
             }
 
             ForgeList.Items.Refresh();
@@ -88,7 +87,7 @@ namespace GBCLV2.Controls
             var core = App.Core;
 
             var forge = VersionForges[ForgeList.SelectedIndex];
-            var forgeName = $"{mcVersion}-{forge.Version}" + (forge.Branch == null ? null : $"-{forge.Branch}");
+            var forgeName = $"{_mcVersion}-{forge.Version}" + (forge.Branch == null ? null : $"-{forge.Branch}");
 
             var forgeJarPath = $"{core.GameRootPath}\\libraries\\net\\minecraftforge\\forge\\{forgeName}\\forge-{forgeName}.jar";
 
@@ -97,22 +96,22 @@ namespace GBCLV2.Controls
                 new DownloadInfo
                 {
                     Path = forgeJarPath,
-                    Url = $"{DownloadHelper.BaseUrl.ForgeBaseUrl}{forgeName}/forge-{forgeName}-universal.jar"
+                    Url = $"{DownloadHelper.BaseUrl.ForgeBaseUrl}{forgeName}/forge-{forgeName}-universal.jar",
                 }
             };
 
-            var downloadPage = new Pages.DownloadPage(forgeDownload, "下载Forge");
-            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
-            await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+            var downloadPage = new Pages.DownloadPage();
+            (Application.Current.MainWindow.FindName("Frame") as Frame).Navigate(downloadPage);
+            bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(forgeDownload, "下载Forge");
 
-            if (!downloadPage.Succeeded)
+            if (!hasDownloadSucceeded)
             {
-                MessageBox.Show($"下载 {mcVersion} 版本Forge失败");
+                MessageBox.Show($"下载 {_mcVersion} 版本Forge失败");
                 download_btn.IsEnabled = true;
                 return;
             }
 
-            var newVersionID = $"{mcVersion}-forge{forgeName}";
+            var newVersionID = $"{_mcVersion}-forge{forgeName}";
             var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             try
             {
@@ -128,16 +127,16 @@ namespace GBCLV2.Controls
             }
             catch
             {
-                MessageBox.Show($"安装 {mcVersion} 版本Forge失败");
+                MessageBox.Show($"安装 {_mcVersion} 版本Forge失败");
                 download_btn.IsEnabled = true;
                 return;
             }
 
             var newVersion = core.GetVersion(newVersionID);
-            App.Versions.Add(newVersion);
-            Config.Args.VersionIndex = App.Versions.IndexOf(newVersion);
+            Config.Args.Versions.Add(newVersion);
+            Config.Args.VersionIndex = Config.Args.Versions.IndexOf(newVersion);
 
-            MessageBox.Show($"安装{mcVersion}版本Forge成功");
+            MessageBox.Show($"安装{_mcVersion}版本Forge成功");
             download_btn.IsEnabled = true;
         }
     }

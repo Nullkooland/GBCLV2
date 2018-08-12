@@ -32,14 +32,14 @@
                                            Text="{Binding Name}" FontSize="14" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
                                            MaxWidth="240" Height="60" Margin="60,0,0,0" VerticalAlignment="Top"/>
 
-                                <Button x:Name="btn_right" Style="{StaticResource GlowButtonStyle}" Visibility="Collapsed" Click="EnablePack"
+                                <Button x:Name="btn_right" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="EnablePack"
                                         Width="27" Height="27" HorizontalAlignment="Left" Margin="16,0">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
                                     </Button.Background>
                                 </Button>
 
-                                <Button x:Name="btn_left" Style="{StaticResource GlowButtonStyle}" Visibility="Collapsed" Click="DisablePack"
+                                <Button x:Name="btn_left" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="DisablePack"
                                         Width="24" Height="24" HorizontalAlignment="Left" Margin="16,0" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -49,7 +49,7 @@
                                     </Button.RenderTransform>
                                 </Button>
 
-                                <Button x:Name="btn_up" Style="{StaticResource GlowButtonStyle}" Visibility="Collapsed" Click="MovePackUp"
+                                <Button x:Name="btn_up" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackUp"
                                         Width="13" Height="13" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,1" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -59,7 +59,7 @@
                                     </Button.RenderTransform>
                                 </Button>
 
-                                <Button x:Name="btn_down" Style="{StaticResource GlowButtonStyle}" Visibility="Collapsed" Click="MovePackDown"
+                                <Button x:Name="btn_down" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackDown"
                                         Width="13" Height="13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="23,1" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -133,14 +133,14 @@
         <ListBox x:Name="DisabledPacksList" Grid.Column="0"/>
         <ListBox x:Name="EnabledPacksList" Grid.Column="1"/>
 
-        <Button x:Name="refresh_button" Style="{StaticResource GlowButtonStyle}" ToolTip="重新加载资源包" Grid.Row="1" Grid.Column="2"
+        <Button x:Name="refresh_button" Style="{StaticResource GlowIconButtonStyle}" ToolTip="重新加载资源包" Grid.Row="1" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
             </Button.Background>
         </Button>
 
-        <Button Click="Add_New" Style="{StaticResource GlowButtonStyle}" ToolTip="添加资源包" Grid.Row="2" Grid.Column="2"
+        <Button Click="AddNewMods" Style="{StaticResource GlowIconButtonStyle}" ToolTip="添加资源包" Grid.Row="2" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/add.png"/>
@@ -148,14 +148,14 @@
         </Button>
 
 
-        <Button x:Name="openfolder_button" Style="{StaticResource GlowButtonStyle}" ToolTip="打开resourcepacks文件夹" Grid.Row="3" Grid.Column="2"
+        <Button x:Name="openfolder_button" Style="{StaticResource GlowIconButtonStyle}" ToolTip="打开resourcepacks文件夹" Grid.Row="3" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>
             </Button.Background>
         </Button>
 
-        <Button Style="{StaticResource GlowButtonStyle}" Click="Go_Back" ToolTip="返回" 
+        <Button Style="{StaticResource GlowIconButtonStyle}" Click="GoBack" ToolTip="返回" 
                 Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png"/>

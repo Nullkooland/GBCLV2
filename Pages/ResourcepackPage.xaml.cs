@@ -38,9 +38,9 @@ namespace GBCLV2.Pages
             InitializeComponent();
 
             string rootPath;
-            if (App.Versions.Any() && Config.Args.IsVersionSplit)
+            if (Config.Args.HasAnyVersion && Config.Args.IsVersionSplit)
             {
-                rootPath = $"{App.Core.GameRootPath}\\versions\\{App.Versions[Config.Args.VersionIndex].ID}\\";
+                rootPath = $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\";
             }
             else
             {
@@ -265,7 +265,7 @@ namespace GBCLV2.Pages
             }
         }
 
-        private void Add_New(object sender, RoutedEventArgs e)
+        private void AddNewMods(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
@@ -303,7 +303,7 @@ namespace GBCLV2.Pages
             }
         }
 
-        private void Go_Back(object sender, RoutedEventArgs e)
+        private void GoBack(object sender, RoutedEventArgs e)
         {
             if (Enabled_Pack.Any())
             {

@@ -28,14 +28,14 @@
 
     <TextBlock x:Name="statusBox" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Height="20" FontSize="14"/>
 
-    <Button x:Name="refresh_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="刷新列表"
+    <Button x:Name="refresh_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="刷新列表"
             Width="32" Height="32" Grid.Row="1" Grid.Column="1">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
         </Button.Background>
     </Button>
 
-    <Button x:Name="download_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="下载选中版本" Click="DownloadVersionAsync"
+    <Button x:Name="download_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="下载选中版本" Click="DownloadVersionAsync"
             Width="32" Height="32" Grid.Row="2" Grid.Column="1">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/download.png"/>

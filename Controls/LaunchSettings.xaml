@@ -30,7 +30,7 @@
                Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Margin="7,0"/>
     
     <TextBlock Text="MB" 
-               Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Margin="220,0,0,0"/>
+               Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Margin="225,0,0,0"/>
     
     <TextBlock Text="窗口大小" 
                Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Margin="278,0,0,0"/>
@@ -48,7 +48,7 @@
     <TextBlock Text="服务器IP" 
                Style="{StaticResource InfoTextBlockStyle}" Grid.Row="6" Margin="7,0"/>
 
-    <TextBox IsReadOnly="True" Grid.Row="2" Width="500" Margin="90,0,0,0"
+    <TextBox Grid.Row="2" Width="500" Margin="90,0,0,0"
              Text="{Binding JavaPath, Mode=TwoWay}"/>
     
     <TextBox Grid.Row="3" Width="130" Margin="90,0" MaxLength="10" ToolTip="" ToolTipOpening="Update_CurrentAvailableMemory"
@@ -83,26 +83,32 @@
     <CheckBox Content="直入服务器" Grid.Row="6" Margin="507,0,0,0"
               IsChecked="{Binding IsLoginToServer, Mode=TwoWay}"/>
 
-    <ComboBox Name="VersionBox" Grid.Row="1" Width="500" HorizontalAlignment="Left" Margin="90,0,0,0" DisplayMemberPath="ID" 
-              SelectedIndex="{Binding VersionIndex, Mode=TwoWay}"/>
+    <ComboBox Grid.Row="1" Width="500" HorizontalAlignment="Left" Margin="90,0,0,0"
+              ItemsSource="{Binding Versions, Mode=OneWay}" DisplayMemberPath="ID"
+              SelectedIndex="{Binding VersionIndex, Mode=TwoWay}"
+              IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
 
-    <Button Style="{StaticResource GlowButtonStyle}" ToolTip="版本选项" Click="ShowVersionOptions"
-            Width="25" Height="25" HorizontalAlignment="Right" Grid.Row="1" Margin="10,0">
+    <Button Style="{StaticResource GlowIconButtonStyle}" ToolTip="版本选项"
+            Width="25" Height="25" HorizontalAlignment="Right" Grid.Row="1" Margin="10,0"
+            Click="ShowVersionOptions">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/wrench.png" Stretch="UniformToFill"/>
         </Button.Background>
 
         <Button.ContextMenu>
-            <ContextMenu x:Name="VersionOptions">
-                <MenuItem x:Name="Menu_Refresh" Header="刷新" Click="RefreshVersion"/>
-                <MenuItem x:Name="Menu_OpenFolder" Header="进入该版本文件夹" Click="OpenVersionFolder"/>
-                <MenuItem x:Name="Menu_OpenJson" Header="查看该版本json文件" Click="OpenVersionJson"/>
-                <MenuItem x:Name="Menu_Delete" Header="删除该版本" Click="DeleteVersion"/>
+            <ContextMenu Name="VersionOptionsMenu">
+                <MenuItem Header="刷新" Click="RefreshVersion"/>
+                <MenuItem Header="进入该版本文件夹" Click="OpenVersionFolder"
+                          IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
+                <MenuItem Header="查看该版本json文件" Click="OpenVersionJson"
+                          IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
+                <MenuItem Header="删除该版本" Click="DeleteVersion"
+                          IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
             </ContextMenu>
         </Button.ContextMenu>
     </Button>
 
-    <Button Style="{StaticResource GlowButtonStyle}" ToolTip="手动指定Java路径" Click="GetJavaPathFromDisk"
+    <Button Style="{StaticResource GlowIconButtonStyle}" ToolTip="手动指定Java路径" Click="GetJavaPathFromDisk"
             Width="25" Height="25" HorizontalAlignment="Right" Grid.Row="2" Margin="10,0">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/open.png" po:Freeze="True"/>

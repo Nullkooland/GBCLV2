@@ -1,7 +1,10 @@
 ﻿using GBCLV2.Modules;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,113 +15,195 @@ using System.Windows.Threading;
 
 namespace GBCLV2.Pages
 {
-    public partial class DownloadPage : Page
+    public class DownloadStatus : INotifyPropertyChanged
     {
-        public bool Succeeded { get; private set; }
-        public AutoResetEvent DownloadComplete { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private List<DownloadInfo> downloads;
-        private static CancellationTokenSource cts = new CancellationTokenSource();
-        private static DispatcherTimer timer = new DispatcherTimer() { Interval = new TimeSpan(5000000) };
+        private bool _isDownloading;
+        private string _downloadTitle;
+        private string _downloadCompletes;
+        private string _downloadFails;
+        private string _downloadSpeed;
+        private double _downloadProgress;
 
-        
-        private string title;
-
-        private const int bufferSize = 2048;
-        private static int total;
-        private static int complete;
-        private static int failed;
-        private static long speed;
-
-        private static bool IsDownloading;
-
-        public DownloadPage(List<DownloadInfo> filesToDownload, string title)
+        public bool IsDownloading
         {
-            ServicePointManager.DefaultConnectionLimit = 256;
-            DownloadComplete = new AutoResetEvent(false);
-
-            this.title = title;
-            downloads = filesToDownload;
-            total = filesToDownload.Count;
-
-            InitializeComponent();
-
-            timer.Tick += (s, e) =>
+            get => _isDownloading;
+            set
             {
-                if (complete == total)
-                {
-                    Succeeded = true;
-                    IsDownloading = false;
-                    timer.Stop();
-                    Go_Back();
-                    return;
-                }
-
-                if (complete + failed == total)
-                {
-                    IsDownloading = false;
-                    timer.Stop();
-                    titleBox.Text = "下载结束，某些文件下载失败";
-                    speedBox.Text = null;
-                    return;
-                }
-
-                progressBar.Value = complete;
-                statusBox.Text = $"{complete}/{total}个文件下载成功";
-
-                if (failed != 0)
-                {
-                    failsBox.Text = $"{failed}个文件下载失败";
-                }
-
-                if (speed > 524288L)
-                {
-                    speedBox.Text = $"{speed / 524288.0:F1} MB/s";
-                }
-                else if (speed > 512L)
-                {
-                    speedBox.Text = $"{speed / 512.0:F1} KB/s";
-                }
-                else
-                {
-                    speedBox.Text = $"{speed << 1} B/s";
-                }
-                speed = 0;
-            };
-
-            back_btn.Click += (s, e) => Go_Back();
+                _isDownloading = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDownloading)));
+            }
         }
 
-        private void StartDownload(object sender, RoutedEventArgs e)
+        public string DownloadTitle
         {
-            IsDownloading = true;
-            Succeeded = false;
-            titleBox.Text = title;
-            progressBar.Maximum = total;
-            complete = 0;
-            failed = 0;
+            get => _downloadTitle;
+            set
+            {
+                _downloadTitle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadTitle)));
+            }
+        }
 
-            timer.Start();
-            statusBox.Text = $"0/{total}个文件下载成功";
+        public string DownloadCompletes
+        {
+            get => _downloadCompletes;
+            set
+            {
+                _downloadCompletes = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadCompletes)));
+            }
+        }
+
+        public string DownloadFails
+        {
+            get => _downloadFails;
+            set
+            {
+                _downloadFails = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadFails)));
+            }
+        }
+
+        public string DownloadSpeed
+        {
+            get => _downloadSpeed;
+            set
+            {
+                _downloadSpeed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadSpeed)));
+            }
+        }
+
+        public double DownloadProgress
+        {
+            get => _downloadProgress;
+            set
+            {
+                _downloadProgress = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadProgress)));
+            }
+        }
+    }
+
+    public partial class DownloadPage : Page
+    {
+        private static List<DownloadInfo> _downloads;
+        private static ConcurrentBag<DownloadInfo> _faildDownlods = new ConcurrentBag<DownloadInfo>();
+        private static CancellationTokenSource _cts = new CancellationTokenSource();
+        private static DispatcherTimer _timer = new DispatcherTimer() { Interval = new TimeSpan(5000000) };
+
+        private static DownloadStatus _status = new DownloadStatus();
+
+        private static int _totalFiles;
+        private static int _completeFiles;
+        private static int _failedFiles;
+
+        private static long _totalBytes;
+        private static long _downloadBytes;
+        private static long _downloadBytesPreviousTick;
+
+        public DownloadPage()
+        {
+            ServicePointManager.DefaultConnectionLimit = 256;
+            
+            InitializeComponent();
+            this.DataContext = _status;
+
+            _timer.Tick += (s, e) =>
+            {
+                _status.DownloadCompletes = $"{_completeFiles}/{_totalFiles}个文件下载完成";
+                _status.DownloadFails = (_failedFiles == 0) ? null : $"{_failedFiles}个文件下载失败";
+                _status.DownloadSpeed = GetDownloadSpeed();
+                _status.DownloadProgress = (double)_downloadBytes / _totalBytes;
+            };
+
+            back_btn.Click += (s, e) => GoBack();
+        }
+
+        public async Task<bool> StartDownloadAsync(IEnumerable<DownloadInfo> filesToDownload, string title)
+        {
+            _downloads = filesToDownload.ToList();
 
             var parallelOptions = new ParallelOptions
             {
-                CancellationToken = cts.Token,
+                CancellationToken = _cts.Token,
                 MaxDegreeOfParallelism = 16
             };
 
-            Task.Run(() =>
+            while(_downloads.Count > 0)
             {
-                try
-                {
-                    Parallel.ForEach(downloads, parallelOptions, download => DownloadFile(download));
-                }
-                catch(OperationCanceledException)
-                {
+                _status.DownloadTitle = title;
 
-                }
-            });
+                _totalFiles = _downloads.Count;
+                _completeFiles = 0;
+                _failedFiles = 0;
 
+                _totalBytes = 0;
+                foreach (var download in _downloads)
+                {
+                    _totalBytes += download.Size;
+                }
+                _downloadBytes = 0;
+                _downloadBytesPreviousTick = 0;
+
+                _timer.Start();
+                _status.IsDownloading = true;
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        Parallel.ForEach(_downloads, parallelOptions, download => DownloadFile(download));
+                    }
+                    catch (OperationCanceledException)
+                    {
+
+                    }
+                });
+
+                _timer.Stop();
+                _status.IsDownloading = false;
+                _downloads.Clear();
+
+                if (_failedFiles != 0)
+                {
+                    _status.DownloadTitle = "下载结束，某些文件下载失败！";
+                    if (MessageBox.Show("部分文件下载失败\n重试下载？", "(≖＿≖)", MessageBoxButton.YesNo, MessageBoxImage.Asterisk) == MessageBoxResult.Yes)
+                    {
+                        while (!_faildDownlods.IsEmpty)
+                        {
+                            _faildDownlods.TryTake(out DownloadInfo download);
+                            _downloads.Add(download);
+                        }
+                    }
+                }
+            }
+
+            GoBack();
+            return (_failedFiles == 0);
+        }
+
+        private static string GetDownloadSpeed()
+        {
+            if (!_status.IsDownloading) return null;
+
+            var diffBytes = _downloadBytes - _downloadBytesPreviousTick;
+            _downloadBytesPreviousTick = _downloadBytes;
+
+            if (diffBytes > 524288L)
+            {
+                return $"{diffBytes / 524288.0:F1} MB/s";
+            }
+            else if (diffBytes > 512L)
+            {
+                return $"{diffBytes / 512.0:F1} KB/s";
+            }
+            else
+            {
+                return $"{diffBytes << 1} B/s";
+            }
         }
 
         private static void DownloadFile(DownloadInfo download)
@@ -136,10 +221,15 @@ namespace GBCLV2.Pages
                 request.Method = "GET";
                 request.UserAgent = "Mozilla/5.0 (compatible; Windows NT 10.0; .NET CLR 4.0.30319;)";
 
-                cts.Token.Register(() => request.Abort());
+                _cts.Token.Register(() => request.Abort());
                 HttpWebResponse response = request.GetResponse() as HttpWebResponse;
 
-                if (cts.IsCancellationRequested)
+                if(download.Size == 0)
+                {
+                    Interlocked.Add(ref _totalBytes, response.ContentLength);
+                }
+
+                if (_cts.IsCancellationRequested)
                 {
                     return;
                 }
@@ -147,62 +237,63 @@ namespace GBCLV2.Pages
                 using (var fileStream = new FileStream(download.Path, FileMode.Create, FileAccess.Write))
                 {
                     var responseStream = response.GetResponseStream();
+
+                    const int bufferSize = 2048;
                     byte[] buffer = new byte[bufferSize];
                     int size = responseStream.Read(buffer, 0, bufferSize);
 
-                    while (!cts.IsCancellationRequested && size > 0)
+                    while (!_cts.IsCancellationRequested && size > 0)
                     {
                         fileStream.Write(buffer, 0, size);
                         size = responseStream.Read(buffer, 0, bufferSize);
-                        Interlocked.Add(ref speed, size);
+                        Interlocked.Add(ref _downloadBytes, size);
                     }
                     responseStream.Close();
                     response.Dispose();
                 }
             }
-            catch (WebException) when (cts.IsCancellationRequested)
+            catch (WebException) when (_cts.IsCancellationRequested)
             {
                 File.Delete(download.Path);
                 //你自己要取消的~
             }
             catch
             {
+#if DEBUG
                 System.Diagnostics.Debug.WriteLine(download.Url);
-                Interlocked.Increment(ref failed);
+#endif
+                Interlocked.Increment(ref _failedFiles);
                 File.Delete(download.Path);
+                _faildDownlods.Add(download);
                 return;
             }
-
-            if (cts.IsCancellationRequested)
+            if (_cts.IsCancellationRequested)
             {
                 File.Delete(download.Path);
                 return;
             }
 
-            Interlocked.Increment(ref complete);
+            Interlocked.Increment(ref _completeFiles);
         }
 
-        private void Go_Back()
+        private void GoBack()
         {
-            if (IsDownloading)
+            if (_status.IsDownloading)
             {
                 if (MessageBox.Show("正在下载中，你确定要中止吗", "(●—●)", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
                 {
-                    cts.Cancel();
-                    timer.Stop();
-                    IsDownloading = false;
+                    _cts.Cancel();
+                    _timer.Stop();
+                    _status.IsDownloading = false;
 
                     NavigationService.GoBack();
-
-                    DownloadComplete.Set();
                 }
                 else return;
             }
             else
             {
+                _timer.Stop();
                 NavigationService.GoBack();
-
-                DownloadComplete.Set();
             }
         }
     }

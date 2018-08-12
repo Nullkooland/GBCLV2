@@ -12,8 +12,7 @@ namespace GBCLV2.Pages
 {
     public partial class MainPage : Page
     {
-        private static bool Launching;
-        private Random rand = new Random();
+        private static bool _isLaunching;
 
         public MainPage()
         {
@@ -22,7 +21,7 @@ namespace GBCLV2.Pages
 
             Loaded += (s, e) =>
             {
-                if (!Launching && string.IsNullOrWhiteSpace(Config.Args.UserName))
+                if (!_isLaunching && string.IsNullOrWhiteSpace(Config.Args.UserName))
                 {
                     tb.Text = TextFacesHelper.GetTextFace();
                 }
@@ -30,28 +29,11 @@ namespace GBCLV2.Pages
                 {
                     tb.Text = "Hello " + Config.Args.UserName;
                 }
-
-                if (App.Versions.Any())
-                {
-                    if (!Launching)
-                    {
-                        LaunchButton.IsEnabled = true;
-                        LaunchButton.Content = "启动";
-                        VersionBox.ItemsSource = App.Versions;
-                    }
-                }
-                else
-                {
-                    LaunchButton.IsEnabled = false;
-                    LaunchButton.Content = "没有版本";
-                }
             };
         }
 
         private async void Launch(object sender, RoutedEventArgs e)
         {
-            var Core = App.Core;
-
             if (Config.Args.JavaPath == null)
             {
                 if (MessageBox.Show("好气哦，Java在哪里啊 Σ( ￣□￣||)!!\n需要给您打开下载页面吗？", "吓得我喝了杯82年的Java",
@@ -63,43 +45,50 @@ namespace GBCLV2.Pages
             }
             else
             {
-                Core.JavaPath = Config.Args.JavaPath;
+                App.Core.JavaPath = Config.Args.JavaPath;
             }
 
-            Core.GameLaunch += OnGameLaunch;
+            App.Core.GameLaunch += OnGameLaunch;
 
-            var LaunchVersion = App.Versions[Config.Args.VersionIndex];
-
-            var lostEssentials = DownloadHelper.GetLostEssentials(Core, LaunchVersion);
+            var lostEssentials = DownloadHelper.GetLostEssentials(App.Core, Config.Args.SelectedVersion);
             if (lostEssentials.Any())
             {
-                var downloadPage = new DownloadPage(lostEssentials, "下载依赖库");
+                var downloadPage = new DownloadPage();
                 NavigationService.Navigate(downloadPage);
-                await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
-                if (!downloadPage.Succeeded)
+                bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(lostEssentials, "下载依赖库");
+
+                if (!hasDownloadSucceeded)
                 {
                     if (MessageBox.Show("依赖库未全部下载成功，可能无法正常启动\n是否继续启动", "Σ( ￣□￣||)",
                         MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
                     {
                         return;
                     }
-
                 }
             }
 
-            var lostAssets = DownloadHelper.GetLostAssets(Core, LaunchVersion);
+            var lostAssets = DownloadHelper.GetLostAssets(App.Core, Config.Args.SelectedVersion);
 
             if (lostAssets.Any() && MessageBox.Show("资源文件缺失，是否补齐", "(σﾟ∀ﾟ)σ",
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                var downloadPage = new DownloadPage(lostAssets, "下载资源文件");
-                NavigationService.Navigate(downloadPage);
-                await Task.Run(() => downloadPage.DownloadComplete.WaitOne());
+                var downloadPage = new DownloadPage();
+                this.NavigationService?.Navigate(downloadPage);
+                bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(lostAssets, "下载资源文件");
+
+                if (!hasDownloadSucceeded)
+                {
+                    if (MessageBox.Show("资源文件未全部下载成功，游戏可能没有声效\n是否继续启动", "(´･ᆺ･`)",
+                        MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
             }
 
-            var Result = Core.Launch(new LaunchOptions()
+            var Result = App.Core.Launch(new LaunchOptions
             {
-                Version = LaunchVersion,
+                Version = Config.Args.SelectedVersion,
                 VersionSplit = Config.Args.IsVersionSplit,
 
                 Authenticator = (Config.Args.IsOfflineMode) ?
@@ -120,7 +109,7 @@ namespace GBCLV2.Pages
 
             if (Result.Success)
             {
-                Launching = true;
+                _isLaunching = true;
                 LaunchButton.IsEnabled = false;
                 tb.Text = "(。-`ω´-) 启动中...";
                 LaunchButton.Content = "启动中";
@@ -172,8 +161,7 @@ namespace GBCLV2.Pages
                         }
 
                         LaunchButton.IsEnabled = true;
-                        LaunchButton.Content = "启动";
-                        Launching = false;
+                        _isLaunching = false;
                     });
                     break;
             }

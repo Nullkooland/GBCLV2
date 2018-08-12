@@ -7,7 +7,7 @@
 
         <Color x:Key="ThemeColor"/>
         <SolidColorBrush x:Key="ThemeColorBrush"/>
-        <DropShadowEffect x:Key="Focused_Shadow" Opacity="0.3" BlurRadius="12" ShadowDepth="0" Color="{DynamicResource ThemeColor}" po:Freeze="True"/>
+        <DropShadowEffect x:Key="FocusedShadow" Opacity="0.3" BlurRadius="12" ShadowDepth="0" Color="{DynamicResource ThemeColor}" po:Freeze="True"/>
 
         <Style TargetType="TextBlock" x:Key="InfoTextBlockStyle">
             <Setter Property="IsHitTestVisible" Value="False"/>
@@ -52,7 +52,42 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType= "{x:Type Button}" x:Key="GlowButtonStyle">
+        <Style TargetType= "{x:Type Button}" x:Key="GlowNormalButtonStyle">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="border" Background="#54FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1">
+                            <ContentPresenter Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="White"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
+                                <Setter TargetName="border" Property="Background" Value="White"/>
+                                <Setter TargetName="border" Property="Effect" Value="{StaticResource FocusedShadow}"/>
+                                <Setter Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                            
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType= "{x:Type Button}" x:Key="GlowIconButtonStyle">
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -167,7 +202,7 @@
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                                 <Setter TargetName="border" Property="Background" Value="White"/>
-                                <Setter TargetName="border" Property="Effect" Value="{StaticResource Focused_Shadow}"/>
+                                <Setter TargetName="border" Property="Effect" Value="{StaticResource FocusedShadow}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Opacity" Value="0.3"/>
@@ -202,7 +237,7 @@
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                                 <Setter TargetName="border" Property="Background" Value="White"/>
-                                <Setter TargetName="border" Property="Effect" Value="{StaticResource Focused_Shadow}"/>
+                                <Setter TargetName="border" Property="Effect" Value="{StaticResource FocusedShadow}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Opacity" Value="0.3"/>
@@ -336,7 +371,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="ScrollBar_ThumbStyle" TargetType="Thumb">
+        <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="IsTabStop" Value="False"/>
@@ -374,7 +409,7 @@
                                     <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}" Command="ScrollBar.LineDownCommand" Focusable="False"/>
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Style="{StaticResource ScrollBar_ThumbStyle}"/>
+                                    <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
                                 </Track.Thumb>
                             </Track>
                         </Grid>

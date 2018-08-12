@@ -57,35 +57,35 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Button x:Name="refresh_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="重新加载mod" Grid.Row="1" Grid.Column="1"
+        <Button x:Name="refresh_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="重新加载mod" Grid.Row="1" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left" >
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
             </Button.Background>
         </Button>
 
-        <Button Click="Add_New" Style="{StaticResource GlowButtonStyle}" ToolTip="添加新mod" Grid.Row="2" Grid.Column="1"
+        <Button Click="AddNewMods" Style="{StaticResource GlowIconButtonStyle}" ToolTip="添加新mod" Grid.Row="2" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/add.png"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="delete_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="删除选中mod" Grid.Row="3" Grid.Column="1"
+        <Button x:Name="delete_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="删除选中mod" Grid.Row="3" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/delete.png"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="openfolder_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="打开mods文件夹" Grid.Row="4" Grid.Column="1"
+        <Button x:Name="openfolder_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="打开mods文件夹" Grid.Row="4" Grid.Column="1"
                 Width="32" Height="32" HorizontalAlignment="Left">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="goback_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="返回"
+        <Button x:Name="goback_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="返回"
                 Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png"/>

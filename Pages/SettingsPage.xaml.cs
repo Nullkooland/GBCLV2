@@ -15,7 +15,7 @@ namespace GBCLV2.Pages
 
         private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (tabcontrol.SelectedIndex == 1)
+            if ((sender as TabControl).SelectedIndex == 1)
             {
                 await game_download.GetVersionListFromNetAsync();
             }

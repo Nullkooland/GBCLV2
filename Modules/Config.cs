@@ -3,20 +3,19 @@
     using System.IO;
     using LitJson;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using KMCCC.Tools;
+    using KMCCC.Launcher;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     public class ConfigArgs : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged([CallerMemberName]string propName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-        }
 
         #region 私有字段
 
         private string _javaPath;
+        private ObservableCollection<Version> _versions = new ObservableCollection<Version>();
         private int _versionIndex;
         private bool _isVersionSplit;
         private uint _maxMemory;
@@ -44,13 +43,33 @@
 
         public string JavaPath
         {
-            get => _javaPath; set { _javaPath = value; NotifyPropertyChanged(); }
+            get => _javaPath;
+            set
+            {
+                _javaPath = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JavaPath)));
+            }
         }
 
         public int VersionIndex
         {
-            get => _versionIndex; set { _versionIndex = value; NotifyPropertyChanged(); }
+            get => _versionIndex;
+            set
+            {
+                _versionIndex = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VersionIndex)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasAnyVersion)));
+            }
         }
+
+        [JsonIgnore]
+        public ObservableCollection<Version> Versions { get => _versions; set => _versions = value; }
+
+        [JsonIgnore]
+        public Version SelectedVersion { get => _versions[_versionIndex]; }
+
+        [JsonIgnore]
+        public bool HasAnyVersion { get => (_versionIndex != -1); }
 
         public bool IsVersionSplit
         {
@@ -65,7 +84,7 @@
                 if (value < 1024) value = 1024;
                 if (value > SystemTools.GetAvailableMemory()) value = SystemTools.GetAvailableMemory();
                 _maxMemory = value;
-                NotifyPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxMemory)));
             }
         }
 
@@ -75,7 +94,7 @@
             set
             {
                 _isOfflineMode = value;
-                NotifyPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsOfflineMode)));
             }
         }
 
@@ -157,7 +176,7 @@
                 }
 
                 _isUseImageBackground = value;
-                NotifyPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUseImageBackground)));
             }
         }
 
@@ -172,7 +191,7 @@
                 }
 
                 _imageFilePath = value;
-                NotifyPropertyChanged();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageFilePath)));
             }
         }
 

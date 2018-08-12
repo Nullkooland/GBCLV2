@@ -6,7 +6,7 @@
       Style="{StaticResource PageStyle}" KeepAlive="True">
 
     <Grid>
-        <TabControl x:Name="tabcontrol" SelectionChanged="TabControl_SelectionChanged"
+        <TabControl SelectionChanged="TabControl_SelectionChanged"
                     Height="325" VerticalAlignment="Bottom" Margin="3" 
                     BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
 
@@ -31,7 +31,7 @@
             </TabItem>
         </TabControl>
 
-        <Button x:Name="BackButton" Style="{StaticResource GlowButtonStyle}" ToolTip="返回" 
+        <Button x:Name="BackButton" Style="{StaticResource GlowIconButtonStyle}" ToolTip="返回" 
                 Width="22" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png"/>

@@ -110,14 +110,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="goback_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="返回" 
+        <Button x:Name="goback_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="返回" 
                 Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Style="{StaticResource GlowButtonStyle}" x:Name="GetImage_Button" Click="GetImageFromDisk" ToolTip="选取图片文件"
+        <Button Style="{StaticResource GlowIconButtonStyle}" x:Name="GetImage_Button" Click="GetImageFromDisk" ToolTip="选取图片文件"
                 Grid.Row="8" Grid.Column="2" Width="24" Height="24" HorizontalAlignment="Left" 
                 IsEnabled="{Binding IsUseImageBackground}">
             <Button.Background>

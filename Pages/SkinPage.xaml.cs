@@ -40,7 +40,7 @@ namespace GBCLV2.Pages
                  SliderR.Value = tempColor.R;
                  SliderG.Value = tempColor.G;
                  SliderB.Value = tempColor.B;
-                 App.Update_ThemeColorBrush(tempColor);
+                 App.UpdateThemeColorBrush(tempColor);
              };
 
             goback_btn.Click += (s, e) => NavigationService.GoBack();
@@ -53,7 +53,7 @@ namespace GBCLV2.Pages
 
         private void Slider_Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            App.Update_ThemeColorBrush(tempColor);
+            App.UpdateThemeColorBrush(tempColor);
         }
 
         private void GetImageFromDisk(object sender, RoutedEventArgs e)

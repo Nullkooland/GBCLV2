@@ -42,6 +42,7 @@ namespace GBCLV2.Modules
     {
         public string Path { get; set; }
         public string Url { get; set; }
+        public int Size { get; set; }
     }
 
     static class DownloadHelper
@@ -62,7 +63,7 @@ namespace GBCLV2.Modules
             }
         }
 
-        public static List<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
+        public static IEnumerable<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
         {
             var lostEssentials = new List<DownloadInfo>();
 
@@ -72,7 +73,8 @@ namespace GBCLV2.Modules
                 lostEssentials.Add(new DownloadInfo
                 {
                     Path = JarPath,
-                    Url = BaseUrl.VersionBaseUrl + version.Downloads.Client.Url.Substring(28)
+                    Url = BaseUrl.VersionBaseUrl + version.Downloads.Client.Url.Substring(28),
+                    Size = version.Downloads.Client.Size,
             });
             }
 
@@ -84,7 +86,8 @@ namespace GBCLV2.Modules
                     lostEssentials.Add(new DownloadInfo
                     {
                         Path = absolutePath,
-                        Url = (lib.IsForgeLib) ? (BaseUrl.MavenBaseUrl + lib.Path) : (BaseUrl.LibraryBaseUrl + lib.Path)
+                        Url = (lib.IsForgeLib) ? (BaseUrl.MavenBaseUrl + lib.Path) : (BaseUrl.LibraryBaseUrl + lib.Path),
+                        Size = lib.Size,
                     });
                 }
             }
@@ -98,13 +101,29 @@ namespace GBCLV2.Modules
                     {
                         Path = absolutePath,
                         Url = BaseUrl.LibraryBaseUrl + native.Path,
+                        Size = native.Size,
                     });
                 }
             }
             return lostEssentials;
         }
 
-        public static List<DownloadInfo> GetLostAssets(LauncherCore core, Version version)
+        public class AssetsList
+        {
+            [JsonPropertyName("objects")]
+            public Dictionary<string, AssetInfo> Assets { get; set; }
+        }
+
+        public class AssetInfo
+        {
+            [JsonPropertyName("hash")]
+            public string Hash { get; set; }
+
+            [JsonPropertyName("size")]
+            public int Size { get; set; }
+        }
+
+        public static IEnumerable<DownloadInfo> GetLostAssets(LauncherCore core, Version version)
         {
             var lostAssets = new List<DownloadInfo>();
 
@@ -146,12 +165,9 @@ namespace GBCLV2.Modules
                 indexJson = File.ReadAllText(indexPath);
             }
 
-            var assets = JsonMapper.ToObject(indexJson)["objects"];
-
-            for (int i = 0; i < assets.Count; i++)
+            foreach(var asset in JsonMapper.ToObject<AssetsList>(indexJson).Assets)
             {
-                var hash = assets[i][0].ToString();
-                var relativePath = $"{hash.Substring(0, 2)}\\{hash}";
+                var relativePath = $"{asset.Value.Hash.Substring(0, 2)}\\{asset.Value.Hash}";
                 var absolutePath = $"{core.GameRootPath}\\assets\\objects\\{relativePath}";
 
                 if (!File.Exists(absolutePath))
@@ -159,10 +175,12 @@ namespace GBCLV2.Modules
                     lostAssets.Add(new DownloadInfo
                     {
                         Path = absolutePath,
-                        Url = BaseUrl.AssetsBaseUrl + relativePath
+                        Url = BaseUrl.AssetsBaseUrl + relativePath,
+                        Size = asset.Value.Size,
                     });
                 }
             }
+
             return lostAssets;
         }
     }

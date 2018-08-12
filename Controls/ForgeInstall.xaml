@@ -17,9 +17,11 @@
 
     <TextBlock Text="安装Forge到选择的版本" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="0" VerticalAlignment="Top"/>
     
-    <ComboBox x:Name="VersionBox" Width="375" DisplayMemberPath="ID" 
-              HorizontalAlignment="Right" VerticalAlignment="Top" Margin="1,0" SelectionChanged="GetVersionForgeListAsync"
-              SelectedIndex="{Binding VersionIndex, Mode=TwoWay}" />
+    <ComboBox Width="375" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="1,0" 
+              ItemsSource="{Binding Versions, Mode=OneWay}" DisplayMemberPath="ID"
+              SelectedIndex="{Binding VersionIndex, Mode=TwoWay}"
+              IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"
+              SelectionChanged="GetVersionForgeListAsync"/>
 
     <ListView x:Name="ForgeList" Style="{StaticResource GridListViewStyle}"
               Width="580" Height="235" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
@@ -33,7 +35,7 @@
 
     <TextBlock x:Name="statusBox" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Height="20" FontSize="14"/>
 
-    <Button x:Name="download_btn" Style="{StaticResource GlowButtonStyle}" ToolTip="下载安装选中Forge版本" Click="InstallForgeAsync"
+    <Button x:Name="download_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="下载安装选中Forge版本" Click="InstallForgeAsync"
             Width="32" Height="32" Grid.Row="2" Grid.Column="1">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/download.png"/>

@@ -22,8 +22,7 @@ namespace GBCLV2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var mp = new MainPage();
-            frame.Navigate(mp);
+            Frame.Navigate(new MainPage());
 
             if (Environment.OSVersion.Version.Major == 10)
             {

@@ -2,24 +2,23 @@
 using System.Windows.Media;
 using System.Threading;
 using KMCCC.Launcher;
-using System.Collections.ObjectModel;
 using System.IO;
 using GBCLV2.Modules;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace GBCLV2
 {
     public partial class App : Application
     {
         public static LauncherCore Core { get; private set; }
-        public static ObservableCollection<Version> Versions = new ObservableCollection<Version>();
-
-        private static Mutex mutex;
-        private static FileStream log_FileStream;
-        private static StreamWriter Logger;
+ 
+        private static Mutex _mutex;
+        private static StreamWriter _logger;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            mutex = new Mutex(true, "GBCLV2", out bool ret);
+            _mutex = new Mutex(true, "GBCLV2", out bool ret);
             if (!ret)
             {
                 MessageBox.Show("已经有一个我在运行了", "(>ㅂ< )", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -27,39 +26,23 @@ namespace GBCLV2
             }
 
             Config.Load();
-            Initialize_LauncherCore();
-            Initialize_ThemeColor();
+            Config.Args.Versions = new ObservableCollection<Version>();
+
+            InitializeLauncherCore();
+            InitializeThemeColor();
 
             Dispatcher.UnhandledException += UnhandledExceptionHandler;
 
             base.OnStartup(e);
         }
 
-        private void Initialize_LauncherCore()
+        private void InitializeLauncherCore()
         {
             Core = LauncherCore.Create();
             Core.GameExit += OnGameExit;
             Core.GameLog += OnGameLog;
 
-            uint count = 0;
-
-            foreach (Version ver in Core.GetVersions())
-            {
-                Versions.Add(ver);
-                count++;
-            }
-
-            if (count == 0)
-            {
-                Config.Args.VersionIndex = -1;
-            }
-            else
-            {
-                if (Config.Args.VersionIndex == -1 || Config.Args.VersionIndex >= count)
-                {
-                    Config.Args.VersionIndex = 0;
-                }
-            }
+            LoadVersions();
 
             var logPath = Core.GameRootPath + @"\logs\";
             if (!Directory.Exists(logPath))
@@ -67,11 +50,10 @@ namespace GBCLV2
                 Directory.CreateDirectory(logPath);
             }
 
-            log_FileStream = new FileStream(logPath + "mcrun.log", FileMode.Create);
-            Logger = new StreamWriter(log_FileStream);
+            _logger = new StreamWriter(new FileStream(logPath + "mcrun.log", FileMode.Create));
         }
 
-        private void Initialize_ThemeColor()
+        private void InitializeThemeColor()
         {
             Color ThemeColor;
 
@@ -85,10 +67,28 @@ namespace GBCLV2
                 ThemeColor = (Color)ColorConverter.ConvertFromString(Config.Args.ThemeColor);
             }
             Resources["ThemeColor"] = ThemeColor;
-            Update_ThemeColorBrush(ThemeColor);
+            UpdateThemeColorBrush(ThemeColor);
         }
 
-        public static void Update_ThemeColorBrush(Color _col)
+        public static void LoadVersions()
+        {
+            Config.Args.Versions.Clear();
+            foreach (var ver in Core.GetVersions())
+            {
+                Config.Args.Versions.Add(ver);
+            }
+
+            if (!Config.Args.Versions.Any())
+            {
+                Config.Args.VersionIndex = -1;
+            }
+            else if (Config.Args.VersionIndex == -1 || Config.Args.VersionIndex >= Config.Args.Versions.Count)
+            {
+                Config.Args.VersionIndex = 0;
+            }
+        }
+
+        public static void UpdateThemeColorBrush(Color _col)
         {
             float Gray = _col.R * 0.299f + _col.G * 0.577f + _col.B * 0.124f;
 
@@ -111,7 +111,7 @@ namespace GBCLV2
 
         private void OnGameLog(string line)
         {
-            Logger.WriteLine(line);
+            _logger.WriteLine(line);
         }
 
         private void OnGameExit(int ExitCode)
@@ -144,7 +144,7 @@ namespace GBCLV2
         void UnhandledExceptionHandler(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show($"异常信息：{e.Exception.Message}\n异常源：{e.Exception.StackTrace}", "程序发生了无法处理的异常！", MessageBoxButton.OK, MessageBoxImage.Error);
-            //Shutdown(1);
+            Shutdown(-1);
             e.Handled = true;
         }
     }
