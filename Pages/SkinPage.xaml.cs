@@ -18,32 +18,32 @@ namespace GBCLV2.Pages
 
             tempColor = (Color)Application.Current.Resources["ThemeColor"];
 
-            SliderA.Value = tempColor.A;
-            SliderR.Value = tempColor.R;
-            SliderG.Value = tempColor.G;
-            SliderB.Value = tempColor.B;
+            _colorASlider.Value = tempColor.A;
+            _colorRSlider.Value = tempColor.R;
+            _colorGSlider.Value = tempColor.G;
+            _colorBSlider.Value = tempColor.B;
 
-            SliderA.ValueChanged += (s, e) =>
+            _colorASlider.ValueChanged += (s, e) =>
             {
                 if (e.NewValue == 0) return;
-                tempColor.A = (byte)SliderA.Value; Update_ThemeColor();
+                tempColor.A = (byte)_colorASlider.Value; Update_ThemeColor();
             };
-            SliderR.ValueChanged += (s, e) => { tempColor.R = (byte)SliderR.Value; Update_ThemeColor(); };
-            SliderG.ValueChanged += (s, e) => { tempColor.G = (byte)SliderG.Value; Update_ThemeColor(); };
-            SliderB.ValueChanged += (s, e) => { tempColor.B = (byte)SliderB.Value; Update_ThemeColor(); };
+            _colorRSlider.ValueChanged += (s, e) => { tempColor.R = (byte)_colorRSlider.Value; Update_ThemeColor(); };
+            _colorGSlider.ValueChanged += (s, e) => { tempColor.G = (byte)_colorGSlider.Value; Update_ThemeColor(); };
+            _colorBSlider.ValueChanged += (s, e) => { tempColor.B = (byte)_colorBSlider.Value; Update_ThemeColor(); };
 
             PresetColorList.SelectionChanged += (s, e) =>
              {
                  var SelectedColor = PresetColorList.SelectedItem as MyColor;
                  tempColor = (Color)ColorConverter.ConvertFromString(SelectedColor.Color);
-                 SliderA.Value = tempColor.A;
-                 SliderR.Value = tempColor.R;
-                 SliderG.Value = tempColor.G;
-                 SliderB.Value = tempColor.B;
+                 _colorASlider.Value = tempColor.A;
+                 _colorRSlider.Value = tempColor.R;
+                 _colorGSlider.Value = tempColor.G;
+                 _colorBSlider.Value = tempColor.B;
                  App.UpdateThemeColorBrush(tempColor);
              };
 
-            goback_btn.Click += (s, e) => NavigationService.GoBack();
+            _backButton.Click += (s, e) => NavigationService.GoBack();
         }
 
         private static void Update_ThemeColor()

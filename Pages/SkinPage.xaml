@@ -110,7 +110,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="goback_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="返回" 
+        <Button x:Name="_backButton" Style="{StaticResource GlowIconButtonStyle}" ToolTip="返回" 
                 Width="22" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7">
             <Button.Background>
                 <ImageBrush ImageSource="/images/back.png" po:Freeze="True"/>
@@ -125,28 +125,28 @@
             </Button.Background>
         </Button>
 
-        <Slider x:Name="SliderA" Grid.Row="1" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
-        <Slider x:Name="SliderR" Grid.Row="2" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
-        <Slider x:Name="SliderG" Grid.Row="3" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
-        <Slider x:Name="SliderB" Grid.Row="4" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider Name="_colorASlider" Grid.Row="1" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider Name="_colorRSlider" Grid.Row="2" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider Name="_colorGSlider" Grid.Row="3" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
+        <Slider Name="_colorBSlider" Grid.Row="4" Grid.Column="1" Style="{StaticResource SliderStyle}"/>
 
         <TextBlock Text="透明" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
         <TextBlock Text="红色" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
         <TextBlock Text="绿色" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
         <TextBlock Text="蓝色" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right" Style="{StaticResource InfoTextBlockStyle}"/>
 
-        <TextBlock Text="{Binding ElementName=SliderA, Path=Value}" Grid.Row="1" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
-        <TextBlock Text="{Binding ElementName=SliderR, Path=Value}" Grid.Row="2" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
-        <TextBlock Text="{Binding ElementName=SliderG, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
-        <TextBlock Text="{Binding ElementName=SliderB, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=_colorASlider, Path=Value}" Grid.Row="1" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=_colorRSlider, Path=Value}" Grid.Row="2" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=_colorGSlider, Path=Value}" Grid.Row="3" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
+        <TextBlock Text="{Binding ElementName=_colorBSlider, Path=Value}" Grid.Row="4" Grid.Column="2" Style="{StaticResource InfoTextBlockStyle}"/>
 
         <CheckBox Content="启动时使用系统主题色" Grid.Row="6" Grid.Column="1" Margin="9,0"
                   IsChecked="{Binding IsUseSystemThemeColor, Mode=TwoWay}"/>
         
         <TextBlock Text="预置颜色" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Margin="75,0" Style="{StaticResource InfoTextBlockStyle}"/>
-        <ComboBox x:Name="PresetColorList" Grid.Row="6" Grid.Column="1" Width="65" HorizontalAlignment="Right" Margin="7,0" DisplayMemberPath="Name"/>
+        <ComboBox Name="PresetColorList" Grid.Row="6" Grid.Column="1" Width="65" HorizontalAlignment="Right" Margin="7,0" DisplayMemberPath="Name"/>
 
-        <CheckBox x:Name="Img_CheckBox" IsChecked="{Binding IsUseImageBackground}" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
+        <CheckBox IsChecked="{Binding IsUseImageBackground}" Content="使用图片背景" Grid.Row="7" Grid.Column="1" Margin="9,0"/>
         <TextBox FontSize="12" Grid.Row="8" Grid.Column="1" Height="23" Width="465" Margin="9,0,0,0"
                  Text="{Binding ImageFilePath, Mode=TwoWay}"
                  IsEnabled="{Binding IsUseImageBackground, Mode=TwoWay}"/>

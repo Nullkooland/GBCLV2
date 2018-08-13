@@ -32,14 +32,14 @@
                                            Text="{Binding Name}" FontSize="14" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
                                            MaxWidth="240" Height="60" Margin="60,0,0,0" VerticalAlignment="Top"/>
 
-                                <Button x:Name="btn_right" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="EnablePack"
+                                <Button x:Name="_rightButton" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="EnablePack"
                                         Width="27" Height="27" HorizontalAlignment="Left" Margin="16,0">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
                                     </Button.Background>
                                 </Button>
 
-                                <Button x:Name="btn_left" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="DisablePack"
+                                <Button x:Name="_leftButton" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="DisablePack"
                                         Width="24" Height="24" HorizontalAlignment="Left" Margin="16,0" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -49,7 +49,7 @@
                                     </Button.RenderTransform>
                                 </Button>
 
-                                <Button x:Name="btn_up" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackUp"
+                                <Button x:Name="_upButton" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackUp"
                                         Width="13" Height="13" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,1" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -59,7 +59,7 @@
                                     </Button.RenderTransform>
                                 </Button>
 
-                                <Button x:Name="btn_down" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackDown"
+                                <Button x:Name="_downButton" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="MovePackDown"
                                         Width="13" Height="13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="23,1" RenderTransformOrigin="0.5,0.5">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/GBCLV2;component/images/right.png"/>
@@ -86,7 +86,7 @@
                                 </MultiDataTrigger.Conditions>
 
                                 <MultiDataTrigger.Setters>
-                                    <Setter TargetName="btn_right" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="_rightButton" Property="Visibility" Value="Visible"/>
                                 </MultiDataTrigger.Setters>
 
                             </MultiDataTrigger>
@@ -98,9 +98,9 @@
                                 </MultiDataTrigger.Conditions>
 
                                 <MultiDataTrigger.Setters>
-                                    <Setter TargetName="btn_left" Property="Visibility" Value="Visible"/>
-                                    <Setter TargetName="btn_up" Property="Visibility" Value="Visible"/>
-                                    <Setter TargetName="btn_down" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="_leftButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="_upButton" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="_downButton" Property="Visibility" Value="Visible"/>
                                 </MultiDataTrigger.Setters>
 
                             </MultiDataTrigger>
@@ -130,10 +130,10 @@
             <ColumnDefinition Width="48"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="DisabledPacksList" Grid.Column="0"/>
-        <ListBox x:Name="EnabledPacksList" Grid.Column="1"/>
+        <ListBox x:Name="_disabledPacksList" Grid.Column="0"/>
+        <ListBox x:Name="_enabledPacksList" Grid.Column="1"/>
 
-        <Button x:Name="refresh_button" Style="{StaticResource GlowIconButtonStyle}" ToolTip="重新加载资源包" Grid.Row="1" Grid.Column="2"
+        <Button x:Name="_refreshButton" Style="{StaticResource GlowIconButtonStyle}" ToolTip="重新加载资源包" Grid.Row="1" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/refresh.png"/>
@@ -148,7 +148,7 @@
         </Button>
 
 
-        <Button x:Name="openfolder_button" Style="{StaticResource GlowIconButtonStyle}" ToolTip="打开resourcepacks文件夹" Grid.Row="3" Grid.Column="2"
+        <Button x:Name="_openFolderButton" Style="{StaticResource GlowIconButtonStyle}" ToolTip="打开resourcepacks文件夹" Grid.Row="3" Grid.Column="2"
                 Width="32" Height="32" HorizontalAlignment="Left" Margin="8,0">
             <Button.Background>
                 <ImageBrush ImageSource="/GBCLV2;component/images/openfolder.png"/>

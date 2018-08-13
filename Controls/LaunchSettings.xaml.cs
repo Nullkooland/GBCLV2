@@ -16,7 +16,7 @@ namespace GBCLV2.Controls
         private void LaunchSettings_Loaded(object sender, RoutedEventArgs e)
         {
             this.DataContext = Config.Args;
-            PassWordBox.Password = Config.Args.PassWord;
+            _passWordBox.Password = Config.Args.PassWord;
         }
 
         private void ShowVersionOptions(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ namespace GBCLV2.Controls
 
         private void UpdatePassWordToConfig(object sender, RoutedEventArgs e)
         {
-            Config.Args.PassWord = (sender as PasswordBox).Password;
+            Config.Args.PassWord = _passWordBox.Password;
         }
     }
 }

@@ -54,14 +54,14 @@ namespace GBCLV2.Pages
                 Directory.CreateDirectory(PacksDir);
             }
 
-            EnabledPacksList.ItemsSource = Enabled_Pack;
-            DisabledPacksList.ItemsSource = Disabled_Pack;
+            _enabledPacksList.ItemsSource = Enabled_Pack;
+            _disabledPacksList.ItemsSource = Disabled_Pack;
 
             LoadOptions();
             Task.Run(() => LoadResPacks());
 
-            refresh_button.Click += (s, e) => LoadResPacks();
-            openfolder_button.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe", PacksDir);
+            _refreshButton.Click += (s, e) => LoadResPacks();
+            _openFolderButton.Click += (s, e) => System.Diagnostics.Process.Start("explorer.exe", PacksDir);
         }
 
         private void LoadOptions()

@@ -23,7 +23,7 @@
     <TextBlock Text="窗口标题" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Margin="7,0,0,0"/>
     <TextBlock Text="附加参数" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="4" Margin="7,0,0,0"/>
 
-    <ComboBox x:Name="DownloadSourceBox" Grid.Row="1" Grid.Column="1" Width="490" HorizontalAlignment="Left" 
+    <ComboBox Grid.Row="1" Grid.Column="1" Width="490" HorizontalAlignment="Left" 
               SelectedIndex="{Binding DownloadSource, Mode=TwoWay}">
         <ComboBox.Items>
             <ComboBoxItem Content="官方"/>
@@ -31,7 +31,7 @@
         </ComboBox.Items>
     </ComboBox>
 
-    <ComboBox x:Name="AfterLaunchBehaviorBox" Grid.Row="2" Grid.Column="1" Width="490" HorizontalAlignment="Left" 
+    <ComboBox Grid.Row="2" Grid.Column="1" Width="490" HorizontalAlignment="Left" 
               SelectedIndex="{Binding AfterLaunchBehavior, Mode=TwoWay}">
         <ComboBox.Items>
             <ComboBoxItem Content="隐藏并后台运行"/>

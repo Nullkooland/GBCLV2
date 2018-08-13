@@ -63,7 +63,7 @@
     <TextBox Grid.Row="4" Width="410" Margin="90,0,0,0"
              Text="{Binding UserName, Mode=TwoWay}"/>
     
-    <PasswordBox Name="PassWordBox" Grid.Row="5" Width="410"  Margin="90,0,0,0"
+    <PasswordBox Name="_passWordBox" Grid.Row="5" Width="410"  Margin="90,0,0,0"
                  IsEnabled="{Binding IsOfflineMode, Mode=OneWay, Converter={StaticResource NegativeConverter}}"
                  LostFocus="UpdatePassWordToConfig"/>
     

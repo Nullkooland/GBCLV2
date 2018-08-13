@@ -7,22 +7,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GBCLV2.Pages;
 using GBCLV2.Helpers;
+using System.Windows.Controls;
 
 namespace GBCLV2
 {
     public partial class MainWindow : Window
     {
+        public Frame Frame { get => _frame; }
+
         public MainWindow()
         {
             InitializeComponent();
             MouseLeftButtonDown += (s, e) => DragMove();
-            minimize_btn.Click += (s, e) => this.WindowState = WindowState.Minimized;
-            shutdown_btn.Click += (s, e) => Application.Current.Shutdown();
+            _minimizeButton.Click += (s, e) => this.WindowState = WindowState.Minimized;
+            _shutdownButton.Click += (s, e) => Application.Current.Shutdown();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(new MainPage());
+            _frame.Navigate(new MainPage());
 
             if (Environment.OSVersion.Version.Major == 10)
             {
@@ -42,12 +45,12 @@ namespace GBCLV2
             {
                 if (!Directory.Exists("bg\\")) return;
 
-                string[] img_files = Directory.EnumerateFiles("bg\\")
+                string[] imageFiles = Directory.EnumerateFiles("bg\\")
                 .Where(file => file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".bmp")).ToArray();
 
-                if (img_files.Any())
+                if (imageFiles.Any())
                 {
-                    FilePath = AppDomain.CurrentDomain.BaseDirectory + img_files[new Random().Next(img_files.Length)];
+                    FilePath = AppDomain.CurrentDomain.BaseDirectory + imageFiles[new Random().Next(imageFiles.Length)];
                 }
                 else return;
             }

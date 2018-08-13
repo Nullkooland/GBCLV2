@@ -31,32 +31,32 @@ namespace GBCLV2.Controls
 
             if (_availableVersions.Count != 0)
             {
-                statusBox.Text = "准备下载";
+                _statusBox.Text = "准备下载";
             }
 
-            VersionList.ItemsSource = _availableVersions;
-            VersionList.SelectionChanged += (s, e) => e.Handled = true;
-            refresh_btn.Click += async (s, e) => await GetVersionListFromNetAsync();
+            _downloadVersionList.ItemsSource = _availableVersions;
+            _downloadVersionList.SelectionChanged += (s, e) => e.Handled = true;
+            _refreshButton.Click += async (s, e) => await GetVersionListFromNetAsync();
         }
 
         public async Task GetVersionListFromNetAsync()
         {
-            if (refresh_btn.IsEnabled && _availableVersions.Count == 0)
+            if (_refreshButton.IsEnabled && _availableVersions.Count == 0)
             {
-                refresh_btn.IsEnabled = false;
+                _refreshButton.IsEnabled = false;
             }
             else return;
 
             string json;
             try
             {
-                statusBox.Text = "正在获取所有版本列表";
+                _statusBox.Text = "正在获取所有版本列表";
                 json = await client.GetStringAsync(DownloadHelper.BaseUrl.VersionListUrl);
             }
             catch (HttpRequestException ex)
             {
-                statusBox.Text = "获取版本列表失败：" + ex.Message;
-                refresh_btn.IsEnabled = true;
+                _statusBox.Text = "获取版本列表失败：" + ex.Message;
+                _refreshButton.IsEnabled = true;
                 return;
             }
 
@@ -75,24 +75,24 @@ namespace GBCLV2.Controls
                 _availableVersions.Add(info);
             }
 
-            refresh_btn.IsEnabled = true;
-            statusBox.Text = "准备下载";
-            VersionList.Items.Refresh();
+            _refreshButton.IsEnabled = true;
+            _statusBox.Text = "准备下载";
+            _downloadVersionList.Items.Refresh();
         }
 
         private async void DownloadVersionAsync(object sender, RoutedEventArgs e)
         {
-            if (VersionList.SelectedIndex == -1)
+            if (_downloadVersionList.SelectedIndex == -1)
             {
                 MessageBox.Show("未选取任何版本!", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            download_btn.IsEnabled = false;
+            _downloadButton.IsEnabled = false;
 
             var core = App.Core;
-            var versionID = _availableVersions[VersionList.SelectedIndex].ID;
-            var jsonUrl = _availableVersions[VersionList.SelectedIndex].JsonUrl;
+            var versionID = _availableVersions[_downloadVersionList.SelectedIndex].ID;
+            var jsonUrl = _availableVersions[_downloadVersionList.SelectedIndex].JsonUrl;
             var versionDir = $"{core.GameRootPath}\\versions\\{versionID}";
             if (!Directory.Exists(versionDir))
             {
@@ -104,20 +104,20 @@ namespace GBCLV2.Controls
             if (File.Exists(jsonPath) && File.Exists(jsonPath.Replace("json", "jar")))
             {
                 MessageBox.Show("所选版本已经躺在你的硬盘里了", "(｡•ˇ‸ˇ•｡)", MessageBoxButton.OK, MessageBoxImage.Information);
-                download_btn.IsEnabled = true;
+                _downloadButton.IsEnabled = true;
                 return;
             }
 
-            statusBox.Text = $"正在请求{versionID}版本json文件";
+            _statusBox.Text = $"正在请求{versionID}版本json文件";
             try
             {
                 File.WriteAllText(jsonPath, await client.GetStringAsync(jsonUrl));
             }
             catch
             {
-                statusBox.Text = $"获取{versionID}版本json文件失败";
+                _statusBox.Text = $"获取{versionID}版本json文件失败";
                 Directory.Delete(versionDir, true);
-                download_btn.IsEnabled = true;
+                _downloadButton.IsEnabled = true;
                 return;
             }
 
@@ -128,7 +128,7 @@ namespace GBCLV2.Controls
             var filesToDownload = DownloadHelper.GetLostEssentials(core, version);
 
             var downloadPage = new Pages.DownloadPage();
-            (Application.Current.MainWindow.FindName("frame") as Frame).Navigate(downloadPage);
+            (Application.Current.MainWindow as MainWindow).Frame.Navigate(downloadPage);
             bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(filesToDownload, "下载新Minecraft版本");
 
             if (hasDownloadSucceeded)
@@ -143,8 +143,8 @@ namespace GBCLV2.Controls
                 Config.Args.VersionIndex = 0;
             }
 
-            download_btn.IsEnabled = true;
-            statusBox.Text = "准备下载";
+            _downloadButton.IsEnabled = true;
+            _statusBox.Text = "准备下载";
         }
     }
 }

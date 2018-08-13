@@ -8,7 +8,7 @@ namespace GBCLV2.Controls
         public About()
         {
             InitializeComponent();
-            AboutBox.Text = $"关于 GBCL V{Config.LauncherVersion}";
+            _aboutBox.Text = $"关于 GBCL V{Config.LauncherVersion}";
         }
 
         private void Open_Link(object sender, System.Windows.Input.MouseButtonEventArgs e)

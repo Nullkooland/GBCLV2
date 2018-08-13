@@ -39,7 +39,7 @@
         </Image.Effect>
     </Image>
 
-    <TextBlock Name="AboutBox" Style="{StaticResource InfoTextBlockStyle}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
+    <TextBlock Name="_aboutBox" Style="{StaticResource InfoTextBlockStyle}" FontSize="36" Height="42" Grid.Row="1" Margin="25,0"/>
     
     <TextBlock Text="开源于Github" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="2" Margin="25,0"/>
     <TextBlock Text="https://github.com/Goose-Bomb/GBCLV2" Grid.Row="3"/>

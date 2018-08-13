@@ -23,11 +23,11 @@ namespace GBCLV2.Pages
             {
                 if (!_isLaunching && string.IsNullOrWhiteSpace(Config.Args.UserName))
                 {
-                    tb.Text = TextFacesHelper.GetTextFace();
+                    _titleBox.Text = TextFacesHelper.GetTextFace();
                 }
                 else
                 {
-                    tb.Text = "Hello " + Config.Args.UserName;
+                    _titleBox.Text = "Hello " + Config.Args.UserName;
                 }
             };
         }
@@ -110,20 +110,20 @@ namespace GBCLV2.Pages
             if (Result.Success)
             {
                 _isLaunching = true;
-                LaunchButton.IsEnabled = false;
-                tb.Text = "(。-`ω´-) 启动中...";
-                LaunchButton.Content = "启动中";
+                _launchButton.IsEnabled = false;
+                _titleBox.Text = "(。-`ω´-) 启动中...";
+                _launchButton.Content = "启动中";
             }
             else
             {
                 MessageBox.Show(Result.ErrorMessage, Result.ErrorType.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
-                LaunchButton.IsEnabled = true;
+                _launchButton.IsEnabled = true;
             }
         }
 
         private void GotoPage(object sender, RoutedEventArgs e)
         {
-            var page = "Pages/" + (sender as Button).Name + ".xaml";
+            var page = "Pages/" + (sender as Button).Tag + ".xaml";
             NavigationService.Navigate(new Uri(page, UriKind.Relative));
         }
 
@@ -153,14 +153,14 @@ namespace GBCLV2.Pages
                     {
                         if (string.IsNullOrWhiteSpace(Config.Args.UserName))
                         {
-                            tb.Text = TextFacesHelper.GetTextFace();
+                            _titleBox.Text = TextFacesHelper.GetTextFace();
                         }
                         else
                         {
-                            tb.Text = "Hello " + Config.Args.UserName;
+                            _titleBox.Text = "Hello " + Config.Args.UserName;
                         }
 
-                        LaunchButton.IsEnabled = true;
+                        _launchButton.IsEnabled = true;
                         _isLaunching = false;
                     });
                     break;

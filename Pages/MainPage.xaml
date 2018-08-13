@@ -26,35 +26,35 @@
                   SelectedIndex="{Binding VersionIndex, Mode=TwoWay}"
                   IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
 
-        <Button x:Name="LaunchButton" Content="启动" Style="{StaticResource GlowNormalButtonStyle}"
+        <Button Name="_launchButton" Content="启动" Style="{StaticResource GlowNormalButtonStyle}"
                 Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" ToolTip="Let's Play!" FontSize="15" 
                 IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
 
-        <Button x:Name="ResourcepackPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="资源包管理器" Margin="130,0" Click="GotoPage">
+        <Button Tag="ResourcepackPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="资源包管理器" Margin="130,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/resourcepack.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="ModPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="MOD管理器" Margin="90,0" Click="GotoPage">
+        <Button Tag="ModPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="MOD管理器" Margin="90,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/mod.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="SkinPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="外观选项" Margin="50,0" Click="GotoPage">
+        <Button Tag="SkinPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="外观选项" Margin="50,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/skin.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button x:Name="SettingsPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="游戏选项" Margin="10,0" Click="GotoPage">
+        <Button Tag="SettingsPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="游戏选项" Margin="10,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/settings.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <TextBlock x:Name="tb" Text="GBCL" Grid.Row="0" FontSize="40" Foreground="White" MaxWidth="600" TextAlignment="Center" Width="620" Height="80">
+        <TextBlock Name="_titleBox" Text="GBCL" Grid.Row="0" FontSize="40" Foreground="White" MaxWidth="600" TextAlignment="Center" Width="620" Height="80">
             <TextBlock.Effect>
                 <DropShadowEffect RenderingBias="Quality" Opacity="0.6" BlurRadius="12" Color="{DynamicResource ThemeColor}" ShadowDepth="0" po:Freeze="True"/>
             </TextBlock.Effect>

@@ -11,7 +11,7 @@
                     BorderThickness="0" Background="Transparent" TabStripPlacement="Bottom">
 
             <TabItem Header="/images/launch.png" Tag="启动设置">
-                <Controls:LaunchSettings x:Name="launch_settings"/>
+                <Controls:LaunchSettings/>
             </TabItem>
 
             <TabItem Header="/images/other.png" Tag="其他设置">
@@ -19,7 +19,7 @@
             </TabItem>
 
             <TabItem Header="/images/cloud.png" Tag="游戏下载">
-                <Controls:GameDownload x:Name="game_download"/>
+                <Controls:GameDownload x:Name="_gameDownloadControl"/>
             </TabItem>
 
             <TabItem Header="/images/bomb.png" Tag="Forge安装">

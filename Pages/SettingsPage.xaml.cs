@@ -17,7 +17,7 @@ namespace GBCLV2.Pages
         {
             if ((sender as TabControl).SelectedIndex == 1)
             {
-                await game_download.GetVersionListFromNetAsync();
+                await _gameDownloadControl.GetVersionListFromNetAsync();
             }
             e.Handled = true;
         }

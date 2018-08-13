@@ -81,7 +81,7 @@ namespace GBCLV2.Pages
             get => _downloadProgress;
             set
             {
-                _downloadProgress = value;
+                _downloadProgress = double.IsNaN(value) ? 0.0 : value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadProgress)));
             }
         }
@@ -91,7 +91,8 @@ namespace GBCLV2.Pages
     {
         private static List<DownloadInfo> _downloads;
         private static ConcurrentBag<DownloadInfo> _faildDownlods = new ConcurrentBag<DownloadInfo>();
-        private static CancellationTokenSource _cts = new CancellationTokenSource();
+
+        private static CancellationTokenSource _cts;
         private static DispatcherTimer _timer = new DispatcherTimer() { Interval = new TimeSpan(5000000) };
 
         private static DownloadStatus _status = new DownloadStatus();
@@ -107,7 +108,8 @@ namespace GBCLV2.Pages
         public DownloadPage()
         {
             ServicePointManager.DefaultConnectionLimit = 256;
-            
+            _cts = new CancellationTokenSource();
+
             InitializeComponent();
             this.DataContext = _status;
 
@@ -119,7 +121,17 @@ namespace GBCLV2.Pages
                 _status.DownloadProgress = (double)_downloadBytes / _totalBytes;
             };
 
-            back_btn.Click += (s, e) => GoBack();
+            _backButton.Click += (s, e) =>
+            {
+                if (_status.IsDownloading)
+                {
+                    if (MessageBox.Show("正在下载中，你确定要中止吗", "(●—●)", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
+                    {
+                        _cts.Cancel();
+                    }
+                    else return;
+                }
+            };
         }
 
         public async Task<bool> StartDownloadAsync(IEnumerable<DownloadInfo> filesToDownload, string title)
@@ -181,7 +193,7 @@ namespace GBCLV2.Pages
                 }
             }
 
-            GoBack();
+            NavigationService.GoBack();
             return (_failedFiles == 0);
         }
 
@@ -274,27 +286,6 @@ namespace GBCLV2.Pages
             }
 
             Interlocked.Increment(ref _completeFiles);
-        }
-
-        private void GoBack()
-        {
-            if (_status.IsDownloading)
-            {
-                if (MessageBox.Show("正在下载中，你确定要中止吗", "(●—●)", MessageBoxButton.OKCancel, MessageBoxImage.Asterisk) == MessageBoxResult.OK)
-                {
-                    _cts.Cancel();
-                    _timer.Stop();
-                    _status.IsDownloading = false;
-
-                    NavigationService.GoBack();
-                }
-                else return;
-            }
-            else
-            {
-                _timer.Stop();
-                NavigationService.GoBack();
-            }
         }
     }
 }

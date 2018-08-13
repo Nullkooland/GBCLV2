@@ -23,19 +23,19 @@
               IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"
               SelectionChanged="GetVersionForgeListAsync"/>
 
-    <ListView x:Name="ForgeList" Style="{StaticResource GridListViewStyle}"
+    <ListView x:Name="_forgeList" Style="{StaticResource GridListViewStyle}"
               Width="580" Height="235" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0">
         <ListView.View>
             <GridView>
                 <GridViewColumn Header="Forge版本" Width="260" DisplayMemberBinding="{Binding Version, Mode=OneWay}"/>
-                <GridViewColumn Header="修改日期" Width="300" DisplayMemberBinding="{Binding ModifiedTime, Mode=OneWay}"/>
+                <GridViewColumn Header="修改日期" Width="310" DisplayMemberBinding="{Binding ModifiedTime, Mode=OneWay}"/>
             </GridView>
         </ListView.View>
     </ListView>
 
-    <TextBlock x:Name="statusBox" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Height="20" FontSize="14"/>
+    <TextBlock x:Name="_statusBox" Style="{StaticResource InfoTextBlockStyle}" Grid.Row="3" Height="20" FontSize="14"/>
 
-    <Button x:Name="download_btn" Style="{StaticResource GlowIconButtonStyle}" ToolTip="下载安装选中Forge版本" Click="InstallForgeAsync"
+    <Button x:Name="_downloadButton" Style="{StaticResource GlowIconButtonStyle}" ToolTip="下载安装选中Forge版本" Click="InstallForgeAsync"
             Width="32" Height="32" Grid.Row="2" Grid.Column="1">
         <Button.Background>
             <ImageBrush ImageSource="/GBCLV2;component/images/download.png"/>

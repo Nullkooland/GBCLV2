@@ -16,7 +16,7 @@ namespace GBCLV2.Pages
 {
     public partial class ModPage : Page
     {
-        private class Mod
+        private class ModInfo
         {
             public bool IsEnabled { get; set; }
             public string FileName { get; set; }
@@ -25,7 +25,7 @@ namespace GBCLV2.Pages
             public string Url { get; set; }
         }
 
-        private ObservableCollection<Mod> _currentMods = new ObservableCollection<Mod>();
+        private ObservableCollection<ModInfo> _currentMods = new ObservableCollection<ModInfo>();
         private string _modsDir;
 
         public ModPage()
@@ -46,10 +46,10 @@ namespace GBCLV2.Pages
 
             Task.Run(() => GetModsFromDisk());
 
-            refresh_btn.Click += (s, e) => GetModsFromDisk();
-            delete_btn.Click += (s, e) => DeleteMods();
-            goback_btn.Click += (s, e) => NavigationService.GoBack();
-            openfolder_btn.Click += (s, e) =>
+            _refreshButton.Click += (s, e) => GetModsFromDisk();
+            _deleteButton.Click += (s, e) => DeleteMods();
+            _backButton.Click += (s, e) => NavigationService.GoBack();
+            _openFolderButton.Click += (s, e) =>
             {
                 if (!Directory.Exists(_modsDir))
                 {
@@ -69,7 +69,7 @@ namespace GBCLV2.Pages
 
             NameBox.MouseLeftButtonDown += (s, e) =>
             {
-                System.Diagnostics.Process.Start((ModList.SelectedItem as Mod).Url);
+                System.Diagnostics.Process.Start((ModList.SelectedItem as ModInfo).Url);
                 e.Handled = true;
             };
         }
@@ -93,7 +93,7 @@ namespace GBCLV2.Pages
 
         private void LoadModInfo(string path)
         {
-            Mod mod = new Mod()
+            ModInfo mod = new ModInfo()
             {
                 FileName = Path.GetFileNameWithoutExtension(path),
                 IsEnabled = path.EndsWith(".disabled") ? false : true
@@ -142,7 +142,7 @@ namespace GBCLV2.Pages
 
             while (ModList.SelectedIndex != -1)
             {
-                Mod mod = ModList.SelectedItem as Mod;
+                ModInfo mod = ModList.SelectedItem as ModInfo;
                 paths[i++] = _modsDir + mod.FileName + (mod.IsEnabled ? ".jar" : ".disabled");
                 _currentMods.Remove(mod);
             }
@@ -158,7 +158,7 @@ namespace GBCLV2.Pages
 
         private void ModList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Mod mod = ModList.SelectedItem as Mod;
+            ModInfo mod = ModList.SelectedItem as ModInfo;
             NameBox.Text = mod?.Name;
             DescriptionBox.Text = mod?.Description;
 
@@ -180,7 +180,7 @@ namespace GBCLV2.Pages
         private void RewriteExtension(object sender, RoutedEventArgs e)
         {
             var checkbox = sender as CheckBox;
-            Mod mod = (Mod)checkbox.DataContext;
+            ModInfo mod = (ModInfo)checkbox.DataContext;
 
             if (checkbox.IsChecked ?? false)
             {

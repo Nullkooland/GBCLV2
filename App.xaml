@@ -252,7 +252,7 @@
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Grid>
                 <Border x:Name="bg" Background="#54FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1">
-                    <Path x:Name="Arrow" Grid.Column="1" Data="M 0 0 L 4 4 L 8 0 Z" Fill="#99FFFFFF" 
+                    <Path x:Name="arrow" Grid.Column="1" Data="M 0 0 L 4 4 L 8 0 Z" Fill="#99FFFFFF" 
                           Width="10" Height="6" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"/>
                 </Border>
             </Grid>
@@ -260,11 +260,12 @@
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter TargetName="bg" Property="BorderBrush" Value="White"/>
-                    <Setter TargetName="Arrow" Property="Fill" Value="White"/>
+                    <Setter TargetName="arrow" Property="Fill" Value="White"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter TargetName="bg" Property="BorderBrush" Value="{DynamicResource ThemeColorBrush}"/>
                     <Setter TargetName="bg" Property="Background" Value="White"/>
+                    <Setter TargetName="arrow" Property="Fill" Value="{DynamicResource ThemeColorBrush}"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Opacity" Value="0.3"/>
@@ -290,21 +291,21 @@
                                               Text="{TemplateBinding Text}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               Margin="2,0" 
-                                              IsHitTestVisible="False"
-                                              />
+                                              IsHitTestVisible="False"/>
 
                             <Popup x:Name="PART_Popup" MaxHeight="150"
                                    Focusable="False" 
                                    AllowsTransparency="True" 
                                    IsOpen="{TemplateBinding IsDropDownOpen}" 
                                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
-                                <ScrollViewer>
-                                    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                                        <Border Background="#CCFFFFFF" BorderBrush="#70BFBFBF" BorderThickness="1"/>
-                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                    </Grid>
+                                
+                                <ScrollViewer Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Background="#BFFFFFFF">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
+
                             </Popup>
+                            
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -316,7 +317,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ComboBoxItem">
-                                    <Grid Name="bg" Height="24">
+                                    <Grid Name="bg" Height="24" Margin="1">
                                         <ContentPresenter Margin="2,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                     </Grid>
                                     <ControlTemplate.Triggers>
@@ -379,7 +380,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Rectangle x:Name="rect" Width="10" Fill="#90BDBDBD" RadiusX="5" RadiusY="5"/>
+                        <Rectangle x:Name="rect" Fill="#90BDBDBD"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="rect" Property="Fill" Value="White"/>
@@ -395,22 +396,32 @@
         </ControlTemplate>
 
         <Style TargetType="ScrollBar">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Width" Value="8"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ScrollBar">
-                        <Grid>
-                            <Border Width="10" HorizontalAlignment="Center" CornerRadius="5" Background="#55555555"/>
-                            <Track HorizontalAlignment="Center" Name="PART_Track" Width="{TemplateBinding Width}" Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}"
-                                    Value="{TemplateBinding Value}"  IsDirectionReversed="true">
+                        <Grid Margin="1">
+                            <Border Width="{TemplateBinding Width}" HorizontalAlignment="Center" Background="#55555555"/>
+                            <Track HorizontalAlignment="Center" Name="PART_Track" 
+                                   Width="{TemplateBinding Width}" 
+                                   Maximum="{TemplateBinding Maximum}" 
+                                   Minimum="{TemplateBinding Minimum}"
+                                   Value="{TemplateBinding Value}"
+                                   IsDirectionReversed="true">
+                                
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}" Command="ScrollBar.LineUpCommand" Focusable="False"/>
+                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}"
+                                                  Command="ScrollBar.LineUpCommand" Focusable="False"/>
                                 </Track.DecreaseRepeatButton>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}" Command="ScrollBar.LineDownCommand" Focusable="False"/>
+                                    <RepeatButton Template="{StaticResource ScrollBar_RepeatButton}"
+                                                  Command="ScrollBar.LineDownCommand" Focusable="False"/>
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
                                     <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
                                 </Track.Thumb>
+                                
                             </Track>
                         </Grid>
                     </ControlTemplate>
@@ -426,9 +437,10 @@
         </Style>
 
         <Style TargetType="ListView" x:Key="GridListViewStyle">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
             <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="ItemContainerStyle" Value="{DynamicResource GridListViewItem_Style}"/>
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource GridListViewItemStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListView">
@@ -448,7 +460,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GridViewColumnHeader">
-                        <Border x:Name="border" Height="24" Background="#10FFFFFF" BorderBrush="#80FFFFFF" BorderThickness="1">
+                        <Border x:Name="border" Height="24" Background="#20FFFFFF">
                             <TextBlock Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" TextOptions.TextFormattingMode="Display"
                                         Style="{DynamicResource InfoTextBlockStyle}" FontSize="15" Height="20" HorizontalAlignment="Left" Margin="5,0"/>
                         </Border>
@@ -457,7 +469,7 @@
             </Setter>
         </Style>
 
-        <Style TargetType="ListViewItem" x:Key="GridListViewItem_Style">
+        <Style TargetType="ListViewItem" x:Key="GridListViewItemStyle">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Foreground" Value="White"/>
@@ -471,7 +483,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Border x:Name="border" Height="21" Width="560" BorderThickness="1" Background="Transparent">
+                        <Border x:Name="border" BorderThickness="1" Background="Transparent" Margin="1,0,0,0">
                             <GridViewRowPresenter/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -490,7 +502,6 @@
 
         <Style x:Key="GridViewScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
             <Setter Property="Focusable" Value="False"/>
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -501,11 +512,11 @@
                             </Grid.ColumnDefinitions>
 
                             <DockPanel>
-                                <GridViewHeaderRowPresenter x:Name="PART_Header" DockPanel.Dock="Top" 
+                                <GridViewHeaderRowPresenter x:Name="PART_Header" DockPanel.Dock="Top"
                                                             Columns="{Binding TemplatedParent.View.Columns, RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
-                                                    Content="{TemplateBinding Content}"
-                                                    KeyboardNavigation.DirectionalNavigation="Local"/>
+                                                        Content="{TemplateBinding Content}"
+                                                        KeyboardNavigation.DirectionalNavigation="Local"/>
                             </DockPanel>
                             <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1"
                                        Maximum="{TemplateBinding ScrollableHeight}"
