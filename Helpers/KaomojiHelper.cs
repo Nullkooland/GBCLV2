@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GBCLV2.Helpers
 {
-    static class TextFacesHelper
+    static class KaomojiHelper
     {
-        private static readonly string[] _textFaces =
+        private static readonly string[] _kaomojis =
         {
             " (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
             "(⇀‸↼‶)",
@@ -50,10 +50,10 @@ namespace GBCLV2.Helpers
 
         private static Random random = new Random();
 
-        public static string GetTextFace()
+        public static string GetKaomoji()
         {
-            int index = random.Next(_textFaces.Length);
-            return _textFaces[index];
+            int index = random.Next(_kaomojis.Length);
+            return _kaomojis[index];
         }
     }
 }

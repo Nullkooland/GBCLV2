@@ -47,11 +47,11 @@ namespace GBCLV2.Modules
 
     static class DownloadHelper
     {
-        public static IDownloadBaseUrl BaseUrl;
+        public static IDownloadBaseUrl BaseUrl { get; private set; }
 
-        public static void SetDownloadSource(int DownloadSource)
+        public static void SetDownloadSource(int sourceType)
         {
-            switch (DownloadSource)
+            switch (sourceType)
             {
                 case 0:
                     BaseUrl = new OfficialBaseUrl();
@@ -63,11 +63,11 @@ namespace GBCLV2.Modules
             }
         }
 
-        public static IEnumerable<DownloadInfo> GetLostEssentials(LauncherCore core, Version version)
+        public static IEnumerable<DownloadInfo> GetLostEssentials(Version version)
         {
             var lostEssentials = new List<DownloadInfo>();
 
-            var JarPath = $"{core.GameRootPath}\\versions\\{version.JarID}\\{version.JarID}.jar";
+            var JarPath = $"{App.Core.GameRootPath}\\versions\\{version.JarID}\\{version.JarID}.jar";
             if (!File.Exists(JarPath))
             {
                 lostEssentials.Add(new DownloadInfo
@@ -80,7 +80,7 @@ namespace GBCLV2.Modules
 
             foreach (var lib in version.Libraries)
             {
-                var absolutePath = $"{core.GameRootPath}\\libraries\\{lib.Path}";
+                var absolutePath = $"{App.Core.GameRootPath}\\libraries\\{lib.Path}";
                 if (!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
@@ -94,7 +94,7 @@ namespace GBCLV2.Modules
 
             foreach (var native in version.Natives)
             {
-                var absolutePath = $"{core.GameRootPath}\\libraries\\{native.Path}";
+                var absolutePath = $"{App.Core.GameRootPath}\\libraries\\{native.Path}";
                 if (!File.Exists(absolutePath))
                 {
                     lostEssentials.Add(new DownloadInfo
@@ -108,26 +108,29 @@ namespace GBCLV2.Modules
             return lostEssentials;
         }
 
-        public class AssetsList
+        public class Assets
         {
             [JsonPropertyName("objects")]
-            public Dictionary<string, AssetInfo> Assets { get; set; }
+            public Dictionary<string, Asset> Objects { get; set; }
         }
 
-        public class AssetInfo
+        public class Asset
         {
             [JsonPropertyName("hash")]
             public string Hash { get; set; }
+
+            [JsonIgnore]
+            public string HashPrefix { get => Hash.Substring(0, 2); }
 
             [JsonPropertyName("size")]
             public int Size { get; set; }
         }
 
-        public static IEnumerable<DownloadInfo> GetLostAssets(LauncherCore core, Version version)
+        public static IEnumerable<DownloadInfo> GetLostAssets(Version version)
         {
             var lostAssets = new List<DownloadInfo>();
 
-            var indexPath = $"{core.GameRootPath}\\assets\\indexes\\{version.Assets}.json";
+            var indexPath = $"{App.Core.GameRootPath}\\assets\\indexes\\{version.AssetsID}.json";
             string indexJson;
 
             if (!File.Exists(indexPath))
@@ -141,7 +144,7 @@ namespace GBCLV2.Modules
                     }
                     else
                     {
-                        indexUrl = $"{BaseUrl.JsonBaseUrl}indexs/{version.Assets}.json";
+                        indexUrl = $"{BaseUrl.JsonBaseUrl}indexs/{version.AssetsID}.json";
                     }
 
                     var client = new System.Net.Http.HttpClient() { Timeout = new System.TimeSpan(0, 0, 5) };
@@ -165,10 +168,11 @@ namespace GBCLV2.Modules
                 indexJson = File.ReadAllText(indexPath);
             }
 
-            foreach(var asset in JsonMapper.ToObject<AssetsList>(indexJson).Assets)
+            foreach(var asset in JsonMapper.ToObject<Assets>(indexJson).Objects)
             {
-                var relativePath = $"{asset.Value.Hash.Substring(0, 2)}\\{asset.Value.Hash}";
-                var absolutePath = $"{core.GameRootPath}\\assets\\objects\\{relativePath}";
+                var relativePath = $"{asset.Value.HashPrefix}\\{asset.Value.Hash}";
+                var absolutePath = (version.AssetsID == "legacy") ? $"{App.Core.GameRootPath}\\assets\\virtual\\legacy\\{asset.Key}" 
+                                                                  : $"{App.Core.GameRootPath}\\assets\\objects\\{relativePath}";
 
                 if (!File.Exists(absolutePath))
                 {

@@ -60,12 +60,12 @@ namespace GBCLV2.Pages
 
             ModList.Drop += (s, e) => CopyMods(e.Data.GetData(DataFormats.FileDrop) as string[]);
             ModList.PreviewKeyDown += (s, e) =>
-           {
+            {
                if (e.Key == System.Windows.Input.Key.Delete)
                {
                    DeleteMods();
                }
-           };
+            };
 
             NameBox.MouseLeftButtonDown += (s, e) =>
             {

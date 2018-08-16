@@ -120,7 +120,7 @@
     </Compile>
     <Compile Include="Helpers\BindingConverters.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
-    <Compile Include="Helpers\TextFacesHelper.cs" />
+    <Compile Include="Helpers\KaomojiHelper.cs" />
     <Compile Include="Modules\Config.cs" />
     <Compile Include="Modules\Download.cs" />
     <Compile Include="Helpers\WindowBlurHelper.cs" />

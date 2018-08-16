@@ -125,11 +125,11 @@ namespace GBCLV2.Controls
             Config.Args.Versions.Add(version);
             Config.Args.VersionIndex = Config.Args.Versions.IndexOf(version);
 
-            var filesToDownload = DownloadHelper.GetLostEssentials(core, version);
+            var filesToDownload = DownloadHelper.GetLostEssentials(version);
 
             var downloadPage = new Pages.DownloadPage();
             (Application.Current.MainWindow as MainWindow).Frame.Navigate(downloadPage);
-            bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(filesToDownload, "下载新Minecraft版本");
+            bool hasDownloadSucceeded = await downloadPage.StartDownloadAsync(filesToDownload, "下载新的Minecraft版本");
 
             if (hasDownloadSucceeded)
             {

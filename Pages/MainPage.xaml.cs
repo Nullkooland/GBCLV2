@@ -23,7 +23,7 @@ namespace GBCLV2.Pages
             {
                 if (!_isLaunching && string.IsNullOrWhiteSpace(Config.Args.UserName))
                 {
-                    _titleBox.Text = TextFacesHelper.GetTextFace();
+                    _titleBox.Text = KaomojiHelper.GetKaomoji();
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace GBCLV2.Pages
 
             App.Core.GameLaunch += OnGameLaunch;
 
-            var lostEssentials = DownloadHelper.GetLostEssentials(App.Core, Config.Args.SelectedVersion);
+            var lostEssentials = DownloadHelper.GetLostEssentials(Config.Args.SelectedVersion);
             if (lostEssentials.Any())
             {
                 var downloadPage = new DownloadPage();
@@ -67,7 +67,7 @@ namespace GBCLV2.Pages
                 }
             }
 
-            var lostAssets = DownloadHelper.GetLostAssets(App.Core, Config.Args.SelectedVersion);
+            var lostAssets = DownloadHelper.GetLostAssets(Config.Args.SelectedVersion);
 
             if (lostAssets.Any() && MessageBox.Show("资源文件缺失，是否补齐", "(σﾟ∀ﾟ)σ",
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -153,7 +153,7 @@ namespace GBCLV2.Pages
                     {
                         if (string.IsNullOrWhiteSpace(Config.Args.UserName))
                         {
-                            _titleBox.Text = TextFacesHelper.GetTextFace();
+                            _titleBox.Text = KaomojiHelper.GetKaomoji();
                         }
                         else
                         {

@@ -81,7 +81,7 @@ namespace GBCLV2.Pages
             get => _downloadProgress;
             set
             {
-                _downloadProgress = double.IsNaN(value) ? 0.0 : value;
+                _downloadProgress = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DownloadProgress)));
             }
         }
@@ -118,7 +118,7 @@ namespace GBCLV2.Pages
                 _status.DownloadCompletes = $"{_completeFiles}/{_totalFiles}个文件下载完成";
                 _status.DownloadFails = (_failedFiles == 0) ? null : $"{_failedFiles}个文件下载失败";
                 _status.DownloadSpeed = GetDownloadSpeed();
-                _status.DownloadProgress = (double)_downloadBytes / _totalBytes;
+                _status.DownloadProgress = (_totalBytes == 0) ? 0.0 : (double)_downloadBytes / _totalBytes;
             };
 
             _backButton.Click += (s, e) =>

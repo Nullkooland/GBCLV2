@@ -39,9 +39,9 @@ namespace GBCLV2
             }
         }
 
-        public static async void ChangeImageBackgroundAsync(string FilePath)
+        public static async void ChangeImageBackgroundAsync(string imageFilePath)
         {
-            if (!File.Exists(FilePath))
+            if (!File.Exists(imageFilePath))
             {
                 if (!Directory.Exists("bg\\")) return;
 
@@ -50,7 +50,7 @@ namespace GBCLV2
 
                 if (imageFiles.Any())
                 {
-                    FilePath = AppDomain.CurrentDomain.BaseDirectory + imageFiles[new Random().Next(imageFiles.Length)];
+                    imageFilePath = AppDomain.CurrentDomain.BaseDirectory + imageFiles[new Random().Next(imageFiles.Length)];
                 }
                 else return;
             }
@@ -61,7 +61,7 @@ namespace GBCLV2
                 {
                     var img = new BitmapImage();
                     img.BeginInit();
-                    img.UriSource = new Uri(FilePath, UriKind.Absolute);
+                    img.UriSource = new Uri(imageFilePath, UriKind.Absolute);
                     img.DecodePixelWidth = 688;
                     img.DecodePixelHeight = 387;
                     img.CacheOption = BitmapCacheOption.OnLoad;
