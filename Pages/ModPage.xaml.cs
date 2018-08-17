@@ -101,13 +101,13 @@ namespace GBCLV2.Pages
 
             using (var archive = ZipFile.OpenRead(path))
             {
-                ZipArchiveEntry entry = archive.GetEntry("mcmod.info");
+                var entry = archive.GetEntry("mcmod.info");
                 if (entry != null)
                 {
-                    string str = new StreamReader(entry.Open(), System.Text.Encoding.UTF8).ReadToEnd();
+                    string json = new StreamReader(entry.Open(), System.Text.Encoding.UTF8).ReadToEnd();
                     try
                     {
-                        JsonData ModInfo = JsonMapper.ToObject(str.Substring(1, str.Length - 1));
+                        JsonData ModInfo = JsonMapper.ToObject(json.Substring(1, json.Length - 1));
 
                         mod.Name = ModInfo["name"]?.ToString();
                         mod.Description = ModInfo["description"]?.ToString();

@@ -31,9 +31,9 @@ namespace GBCLV2
             {
                 Win10BlurHelper.EnableBlur(this);
             }
-            else if (Environment.OSVersion.Version.Major == 7)
+            else
             {
-                this.BorderThickness = new Thickness(0.5);
+                this.BorderThickness = new Thickness(1);
                 this.BorderBrush = Brushes.DarkGray;
                 Win7BlurHelper.EnableAeroGlass(this);
             }

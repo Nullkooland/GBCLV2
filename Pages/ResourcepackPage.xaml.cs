@@ -28,26 +28,21 @@ namespace GBCLV2.Pages
         private ObservableCollection<ResPack> Enabled_Pack = new ObservableCollection<ResPack>();
         private ObservableCollection<ResPack> Disabled_Pack = new ObservableCollection<ResPack>();
 
-        private string PacksDir;
-        private string OptionsDir;
+        private string RootPath
+        {
+            get => (Config.Args.HasAnyVersion && Config.Args.IsVersionSplit) ? 
+                $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\" : App.Core.GameRootPath + "\\";
+        }
+
+        private string PacksDir { get => RootPath + "resourcepacks\\"; }
+        private string OptionsFilePath { get => RootPath + "options.txt"; }
+
         private static string LineToReplace;
         private static string[] EnabledPackNames;
 
         public ResourcepackPage()
         {
             InitializeComponent();
-
-            string rootPath;
-            if (Config.Args.HasAnyVersion && Config.Args.IsVersionSplit)
-            {
-                rootPath = $"{App.Core.GameRootPath}\\versions\\{Config.Args.SelectedVersion.ID}\\";
-            }
-            else
-            {
-                rootPath = App.Core.GameRootPath + "\\";
-            }
-            PacksDir = rootPath + "resourcepacks\\";
-            OptionsDir = rootPath + "options.txt";
 
             if (!Directory.Exists(PacksDir))
             {
@@ -66,8 +61,8 @@ namespace GBCLV2.Pages
 
         private void LoadOptions()
         {
-            if (!File.Exists(OptionsDir)) return;
-            StreamReader sr = new StreamReader(OptionsDir, Encoding.Default);
+            if (!File.Exists(OptionsFilePath)) return;
+            StreamReader sr = new StreamReader(OptionsFilePath, Encoding.Default);
             while (!sr.EndOfStream)
             {
                 string line = sr.ReadLine();
@@ -93,7 +88,6 @@ namespace GBCLV2.Pages
 
         private void LoadResPacks()
         {
-
             Dispatcher.BeginInvoke((Action)delegate ()
             {
                 Enabled_Pack.Clear();
@@ -210,22 +204,18 @@ namespace GBCLV2.Pages
                 var PackInfo = JsonMapper.ToObject(str)[0];
                 _pack.Format = (int)PackInfo["pack_format"];
 
-                string MC_Version = "适用版本：";
+                string mcVersion = "适用版本：";
 
-                if (_pack.Format == 1)
+                switch(_pack.Format)
                 {
-                    MC_Version += "1.8及以下\n";
-                }
-                else if (_pack.Format == 2)
-                {
-                    MC_Version += "1.9-1.10\n";
-                }
-                else if (_pack.Format == 3)
-                {
-                    MC_Version += "1.11及以上\n";
+                    case 1: mcVersion += "1.8及以下\n"; break;
+                    case 2: mcVersion += "1.9-1.10\n"; break;
+                    case 3: mcVersion += "1.11-1.12\n"; break;
+                    case 4: mcVersion += "1.13"; break;
+                    default: break;
                 }
 
-                _pack.Description = MC_Version + PackInfo["description"].ToString();
+                _pack.Description = mcVersion + PackInfo["description"].ToString();
             }
         }
 
@@ -320,9 +310,9 @@ namespace GBCLV2.Pages
 
                 if (LineToReplace != null)
                 {
-                    if (File.Exists(OptionsDir))
+                    if (File.Exists(OptionsFilePath))
                     {
-                        options_text = File.ReadAllText(OptionsDir, Encoding.Default).Replace(LineToReplace, s);
+                        options_text = File.ReadAllText(OptionsFilePath, Encoding.Default).Replace(LineToReplace, s);
                     }
                     else
                     {
@@ -331,7 +321,7 @@ namespace GBCLV2.Pages
 
                     try
                     {
-                        File.WriteAllText(OptionsDir, options_text, Encoding.Default);
+                        File.WriteAllText(OptionsFilePath, options_text, Encoding.Default);
                     }
                     catch
                     {

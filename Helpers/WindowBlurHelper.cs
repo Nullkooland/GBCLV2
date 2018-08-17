@@ -8,7 +8,7 @@ namespace GBCLV2.Helpers
     static class Win10BlurHelper
     {
         [DllImport("user32.dll")]
-        private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+        private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData pData);
 
         private enum AccentState
         {
@@ -74,8 +74,15 @@ namespace GBCLV2.Helpers
     static class Win7BlurHelper
     {
         [DllImport("dwmapi.dll")]
-        private static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
+        private static extern int DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND pBlurBehind);
 
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS pMarInset);
+
+        [StructLayout(LayoutKind.Sequential)]
         private struct DWM_BLURBEHIND
         {
             public uint dwFlags;
@@ -84,17 +91,38 @@ namespace GBCLV2.Helpers
             public bool fTransitionOnMaximized;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MARGINS
+        {
+            public int Left;     // width of left border that retains its size  
+            public int Right;    // width of right border that retains its size  
+            public int Top;      // height of top border that retains its size  
+            public int Bottom;   // height of bottom border that retains its size  
+        };
+
         public static void EnableAeroGlass(Window _window)
         {
-            var WindowPtr = new WindowInteropHelper(_window).Handle;
+            var windowPtr = new WindowInteropHelper(_window).Handle;
 
-            var Blur = new DWM_BLURBEHIND()
+            int val = 1;
+            DwmSetWindowAttribute(windowPtr, 3, ref val, sizeof(int));
+
+            var blur = new DWM_BLURBEHIND
             {
-                dwFlags = 0x00000001 | 0x00000002,
+                dwFlags = 0x00000001,
                 fEnable = true
             };
 
-            DwmEnableBlurBehindWindow(WindowPtr, ref Blur);
+            var margin = new MARGINS
+            {
+                Left = 0,
+                Right = 0,
+                Top = 0,
+                Bottom = 0,
+            };
+
+            DwmEnableBlurBehindWindow(windowPtr, ref blur);
+            DwmExtendFrameIntoClientArea(windowPtr, ref margin);
         }
     }
 }

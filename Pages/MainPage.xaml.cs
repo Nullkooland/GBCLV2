@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using KMCCC.Authentication;
 using KMCCC.Launcher;
+using KMCCC.Tools;
 using GBCLV2.Modules;
 using GBCLV2.Helpers;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace GBCLV2.Pages
 
             Loaded += (s, e) =>
             {
-                if (!_isLaunching && string.IsNullOrWhiteSpace(Config.Args.UserName))
+                if (!_isLaunching && 
+                    (string.IsNullOrWhiteSpace(Config.Args.UserName) || UsefulTools.IsValidEmailAddress(Config.Args.UserName)))
                 {
                     _titleBox.Text = KaomojiHelper.GetKaomoji();
                 }

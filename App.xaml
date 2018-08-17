@@ -300,7 +300,7 @@
                                    PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                                 
                                 <ScrollViewer Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Background="#BFFFFFFF">
+                                              Background="#CFFFFFFF">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
 

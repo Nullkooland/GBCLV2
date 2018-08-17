@@ -269,9 +269,10 @@ namespace GBCLV2.Pages
                 File.Delete(download.Path);
                 //你自己要取消的~
             }
-            catch
+            catch (Exception ex)
             {
 #if DEBUG
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 System.Diagnostics.Debug.WriteLine(download.Url);
 #endif
                 Interlocked.Increment(ref _failedFiles);

@@ -30,25 +30,25 @@
                 Grid.Row="2" Width="80" Height="26" HorizontalAlignment="Right" Margin="10,0" Click="Launch" ToolTip="Let's Play!" FontSize="15" 
                 IsEnabled="{Binding HasAnyVersion, Mode=OneWay}"/>
 
-        <Button Tag="ResourcepackPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="资源包管理器" Margin="130,0" Click="GotoPage">
+        <Button Tag="ResourcepackPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="资源包管理器" Margin="128,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/resourcepack.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Tag="ModPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="MOD管理器" Margin="90,0" Click="GotoPage">
+        <Button Tag="ModPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="MOD管理器" Margin="88,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/mod.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Tag="SkinPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="外观选项" Margin="50,0" Click="GotoPage">
+        <Button Tag="SkinPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="外观选项" Margin="48,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/skin.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
 
-        <Button Tag="SettingsPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="游戏选项" Margin="10,0" Click="GotoPage">
+        <Button Tag="SettingsPage" Style="{StaticResource _GlowIconButtonStyle}" ToolTip="游戏选项" Margin="8,0" Click="GotoPage">
             <Button.Background>
                 <ImageBrush ImageSource="/images/settings.png" po:Freeze="True"/>
             </Button.Background>

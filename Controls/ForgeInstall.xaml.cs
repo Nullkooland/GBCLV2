@@ -3,7 +3,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using LitJson;
 using System.Windows.Controls;
@@ -59,7 +58,7 @@ namespace GBCLV2.Controls
                 VersionForges.Add(new ForgeInfo
                 {
                     Branch = allForge[i]["branch"]?.ToString(),
-                    Version = allForge[i]["version"].ToString(),
+                    Version = allForge[i]["version"].ToString().ToLower(),
                     ModifiedTime = allForge[i]["modified"].ToString()
                 });
             }
@@ -87,16 +86,28 @@ namespace GBCLV2.Controls
             var core = App.Core;
 
             var forge = VersionForges[_forgeList.SelectedIndex];
-            var forgeName = $"{_mcVersion}-{forge.Version}" + (forge.Branch == null ? null : $"-{forge.Branch}");
+            var forgeName = $"{_mcVersion}-{forge.Version}";
+            var newVersionID = $"{_mcVersion}-forge{forgeName}";
 
+            foreach(var version in Config.Args.Versions)
+            {
+                if(version.ID == newVersionID)
+                {
+                    MessageBox.Show($"{forgeName} 版本的forge已经安装！", "┑(￣Д ￣)┍");
+                    return;
+                }
+            }
+
+            var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             var forgeJarPath = $"{core.GameRootPath}\\libraries\\net\\minecraftforge\\forge\\{forgeName}\\forge-{forgeName}.jar";
 
+            var downloadName = forgeName + (forge.Branch == null ? null : $"-{forge.Branch}");
             var forgeDownload = new List<DownloadInfo>()
             {
                 new DownloadInfo
                 {
                     Path = forgeJarPath,
-                    Url = $"{DownloadHelper.BaseUrl.ForgeBaseUrl}{forgeName}/forge-{forgeName}-universal.jar",
+                    Url = $"{DownloadHelper.BaseUrl.ForgeBaseUrl}{downloadName}/forge-{downloadName}-universal.jar",
                 }
             };
 
@@ -111,8 +122,6 @@ namespace GBCLV2.Controls
                 return;
             }
 
-            var newVersionID = $"{_mcVersion}-forge{forgeName}";
-            var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             try
             {
                 if (!Directory.Exists(newVersionPath))
@@ -120,14 +129,31 @@ namespace GBCLV2.Controls
                     Directory.CreateDirectory(newVersionPath);
                 }
 
+                JsonData jsonData;
+                string jsonText;
+
                 using (var archive = ZipFile.OpenRead(forgeJarPath))
                 {
-                    archive.GetEntry("version.json").ExtractToFile($"{newVersionPath}\\{newVersionID}.json");
+                    var entry = archive.GetEntry("version.json");
+                    using (var sr = new StreamReader(entry.Open(), System.Text.Encoding.UTF8))
+                    {
+                        jsonData = JsonMapper.ToObject(sr.ReadToEnd());
+                    }
                 }
+
+                jsonData["id"] = newVersionID;
+                jsonText = jsonData.ToJson();
+
+                if (!jsonData.ContainsKey("inheritsFrom"))
+                {
+                    jsonText = jsonText.Substring(0, jsonText.Length - 1) + $",\"inheritsFrom\": \"{_mcVersion}\"}}";
+                }
+
+                File.WriteAllText($"{newVersionPath}\\{newVersionID}.json", jsonText, System.Text.Encoding.UTF8);
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show($"安装 {_mcVersion} 版本Forge失败");
+                MessageBox.Show($"安装 {_mcVersion} 版本Forge失败\n{ex.Message}");
                 _downloadButton.IsEnabled = true;
                 return;
             }

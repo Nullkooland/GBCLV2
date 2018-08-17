@@ -40,7 +40,6 @@
                 <ImageBrush ImageSource="/images/minimize.png" po:Freeze="True"/>
             </Button.Background>
         </Button>
-
     </Canvas>
 
 </Window>

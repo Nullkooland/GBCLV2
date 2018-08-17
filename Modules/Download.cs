@@ -18,24 +18,24 @@ namespace GBCLV2.Modules
 
     class BMCLAPIBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl { get; } = "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl { get; } = "https://bmclapi2.bangbang93.com/";
-        public string LibraryBaseUrl { get; } = "https://bmclapi2.bangbang93.com/libraries/";
-        public string MavenBaseUrl { get; } = "https://bmclapi2.bangbang93.com/maven/";
-        public string JsonBaseUrl { get; } = "https://bmclapi2.bangbang93.com/";
-        public string AssetsBaseUrl { get; } = "https://bmclapi2.bangbang93.com/assets/";
-        public string ForgeBaseUrl { get; } = "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
+        public string VersionListUrl => "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl => "https://bmclapi2.bangbang93.com/";
+        public string LibraryBaseUrl => "https://bmclapi2.bangbang93.com/libraries/";
+        public string MavenBaseUrl => "https://bmclapi2.bangbang93.com/maven/";
+        public string JsonBaseUrl => "https://bmclapi2.bangbang93.com/";
+        public string AssetsBaseUrl => "https://bmclapi2.bangbang93.com/assets/";
+        public string ForgeBaseUrl => "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/";
     }
 
     class OfficialBaseUrl : IDownloadBaseUrl
     {
-        public string VersionListUrl { get; } = "https://launchermeta.mojang.com/mc/game/version_manifest.json";
-        public string VersionBaseUrl { get; } = "https://launcher.mojang.com/";
-        public string LibraryBaseUrl { get; } = "https://libraries.minecraft.net/";
-        public string MavenBaseUrl { get; } = "https://files.minecraftforge.net/maven/";
-        public string JsonBaseUrl { get; } = "https://launchermeta.mojang.com/";
-        public string AssetsBaseUrl { get; } = "https://resources.download.minecraft.net/";
-        public string ForgeBaseUrl { get; } = "https://files.minecraftforge.net/maven/net/minecraftforge/forge/";
+        public string VersionListUrl => "https://launchermeta.mojang.com/mc/game/version_manifest.json";
+        public string VersionBaseUrl => "https://launcher.mojang.com/";
+        public string LibraryBaseUrl => "https://libraries.minecraft.net/";
+        public string MavenBaseUrl => "https://files.minecraftforge.net/maven/";
+        public string JsonBaseUrl => "https://launchermeta.mojang.com/";
+        public string AssetsBaseUrl => "https://resources.download.minecraft.net/";
+        public string ForgeBaseUrl => "https://files.minecraftforge.net/maven/net/minecraftforge/forge/";
     }
 
     public class DownloadInfo

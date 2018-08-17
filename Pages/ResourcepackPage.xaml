@@ -6,7 +6,7 @@
     <Page.Resources>
         <Style TargetType="ListBox" BasedOn="{StaticResource ListBoxStyle}">
             <Setter Property="Width" Value="289"/>
-            <Setter Property="Height" Value="317"/>
+            <Setter Property="Height" Value="316"/>
             <Setter Property="Grid.Row" Value="1"/>
             <Setter Property="Grid.RowSpan" Value="5"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -21,16 +21,16 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="border" Height="62.5" Background="Transparent" BorderThickness="1">
-                            <Grid >
-                                <Image x:Name="cover" Source="{Binding Cover}" Width="58" Height="58" HorizontalAlignment="Left" Margin="1">
+                        <Border x:Name="border" Background="Transparent" BorderThickness="1" Margin="1">
+                            <Grid>
+                                <Image x:Name="cover" Source="{Binding Cover}" Width="58" Height="58" HorizontalAlignment="Left">
                                     <Image.Effect>
                                         <DropShadowEffect ShadowDepth="0" BlurRadius="7"/>
                                     </Image.Effect>
                                 </Image>
                                 <TextBlock Style="{StaticResource InfoTextBlockStyle}" TextOptions.TextFormattingMode="Display"
                                            Text="{Binding Name}" FontSize="14" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
-                                           MaxWidth="240" Height="60" Margin="60,0,0,0" VerticalAlignment="Top"/>
+                                           MaxWidth="240" Height="58" Margin="60,0,0,0" VerticalAlignment="Top"/>
 
                                 <Button x:Name="_rightButton" Style="{StaticResource GlowIconButtonStyle}" Visibility="Collapsed" Click="EnablePack"
                                         Width="27" Height="27" HorizontalAlignment="Left" Margin="16,0">
@@ -68,7 +68,6 @@
                                         <RotateTransform Angle="90"/>
                                     </Button.RenderTransform>
                                 </Button>
-
                             </Grid>
                         </Border>
 
