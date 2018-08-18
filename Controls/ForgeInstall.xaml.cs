@@ -101,7 +101,7 @@ namespace GBCLV2.Controls
             var newVersionPath = $"{core.GameRootPath}\\versions\\{newVersionID}";
             var forgeJarPath = $"{core.GameRootPath}\\libraries\\net\\minecraftforge\\forge\\{forgeName}\\forge-{forgeName}.jar";
 
-            var downloadName = forgeName + (forge.Branch == null ? null : $"-{forge.Branch}");
+            var downloadName = forgeName + ((forge.Branch == null) ? null : $"-{forge.Branch}");
             var forgeDownload = new List<DownloadInfo>()
             {
                 new DownloadInfo
